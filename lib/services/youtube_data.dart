@@ -58,7 +58,7 @@ class YoutubeData {
 
   static String _getVideoID(String url) {
     String pattern =
-        r"http(?:s)?:\/\/(?:m.)?(?:www\.)?youtu(?:\.be\/|be\.com\/(?:watch\?(?:feature=youtu.be\&)?v=|v\/|embed\/|user\/(?:[\w#]+\/)+))([^&#?\n]+)";
+        r"http(?:s)?:\/\/(?:m.)?(?:w{3}\.)?youtu(?:\.be\/|be\.com\/(?:(?:shorts\/)|(?:watch\?(?:feature=youtu.be\&)?v=|v\/|embed\/|user\/(?:[\w#]+\/)+)))([^&#?\n]+)";
     RegExp exp = RegExp(pattern);
     Iterable<RegExpMatch> matches = exp.allMatches(url);
     if (matches.isEmpty) {
