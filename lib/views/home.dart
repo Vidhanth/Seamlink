@@ -70,7 +70,7 @@ class Home extends StatelessWidget {
                                       ),
                                     ),
                                   ],
-                                  isMacOS
+                                  isDesktop
                                       ? SizedBox()
                                       : Text(
                                           'Seamlink',
