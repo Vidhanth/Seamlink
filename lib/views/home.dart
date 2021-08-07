@@ -1,4 +1,3 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';

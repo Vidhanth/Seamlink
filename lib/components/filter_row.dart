@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:seamlink/constants/enum.dart';
 import 'package:seamlink/controllers/SidebarController.dart';
 
+// ignore: must_be_immutable
 class FilterRow extends StatelessWidget {
   FilterRow({Key? key}) : super(key: key);
 

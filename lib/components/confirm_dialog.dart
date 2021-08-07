@@ -6,6 +6,7 @@ import 'package:seamlink/components/input_field.dart';
 import 'package:seamlink/constants/colors.dart';
 import 'package:seamlink/services/utils.dart';
 
+// ignore: must_be_immutable
 class BottomDialog extends StatelessWidget {
   BottomDialog({
     Key? key,

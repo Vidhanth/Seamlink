@@ -28,7 +28,7 @@ class Sidebar extends StatelessWidget {
       color: Colors.transparent,
       child: Container(
         decoration: BoxDecoration(
-          color: primarySidebarBg,
+          color: isMobile ? primaryBg : primarySidebarBg,
           boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 200)],
         ),
         width: isDesktop
