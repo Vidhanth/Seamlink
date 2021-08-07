@@ -106,31 +106,43 @@ class _MainActivityState extends State<MainActivity> {
       ),
       color: primaryBg,
       home: Builder(
-        builder: (context) => Row(
-          children: [
-            if (isDesktop) Sidebar(),
-            Expanded(
-              child: Column(
-                children: [
-                  if (isMacOS) ...[CustomTitleBar()],
-                  Expanded(
-                    child: FutureBuilder(
-                      future: getInitialSharedText(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) return SizedBox();
-                        return snapshot.data.toString().isEmpty
-                            ? Home()
-                            : NewLink(
-                                sharedText: snapshot.data.toString(),
-                              );
-                      },
+        builder: (context) {
+          return Row(
+            children: [
+              isDesktop
+                  ? Obx(() {
+                      return Sidebar();
+                    })
+                  : SizedBox(),
+              Expanded(
+                child: Column(
+                  children: [
+                    if (isMacOS) ...[
+                      Obx(() => CustomTitleBar(
+                            macStyle:
+                                Get.find<UserController>().username.isNotEmpty,
+                            title: Get.find<UserController>().username.value,
+                          ))
+                    ],
+                    Expanded(
+                      child: FutureBuilder(
+                        future: getInitialSharedText(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) return SizedBox();
+                          return snapshot.data.toString().isEmpty
+                              ? Home()
+                              : NewLink(
+                                  sharedText: snapshot.data.toString(),
+                                );
+                        },
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          );
+        },
       ),
     );
   }

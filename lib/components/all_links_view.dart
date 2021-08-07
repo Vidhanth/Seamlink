@@ -4,6 +4,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:seamlink/components/link_tile.dart';
+import 'package:seamlink/constants/enum.dart';
 import 'package:seamlink/controllers/HomeController.dart';
 import 'package:seamlink/models/link.dart';
 import 'package:seamlink/services/utils.dart';
@@ -14,11 +15,15 @@ import 'package:url_launcher/url_launcher.dart';
 class AllLinksView extends StatelessWidget {
   final List<Link> allLinks;
   final String searchText;
+  final NoteType selectedType;
+  final int labelIndex;
 
   const AllLinksView({
     Key? key,
     required this.allLinks,
     required this.searchText,
+    required this.selectedType,
+    required this.labelIndex,
   }) : super(key: key);
 
   @override
@@ -26,40 +31,61 @@ class AllLinksView extends StatelessWidget {
     List<Link> linksList = [];
 
     allLinks.forEach((link) {
-      if (link.contains(searchText)) linksList.add(link);
+      bool typeMatch = true;
+      bool labelMatch = true;
+
+      if (labelIndex == -1) {
+        labelMatch = true;
+      } else {
+        labelMatch = link.labels.contains(labelIndex);
+      }
+
+      if (selectedType == NoteType.ALL)
+        typeMatch = true;
+      else
+        typeMatch = link.type! == selectedType;
+      if (link.contains(searchText) && typeMatch && labelMatch) {
+        linksList.add(link);
+      }
     });
 
     if (linksList.isEmpty) {
       return LayoutBuilder(builder: (context, constraints) {
-        return Column(
+        return Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              height: (constraints.maxHeight / 2) - 100,
-            ),
-            Icon(
-              searchText.isNotEmpty
-                  ? Icons.search_off_rounded
-                  : Icons.shopping_cart_outlined,
-              size: 80,
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              searchText.isNotEmpty ? 'No results' : 'Nothing here',
-              style: GoogleFonts.poppins(),
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            InkWell(
-              onTap: () {
-                Get.find<HomeController>().refreshLinks();
-              },
-              child: Text(
-                'Refresh',
-                style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-              ),
+            Column(
+              children: [
+                SizedBox(
+                  height: (constraints.maxHeight / 2) - 100,
+                ),
+                Icon(
+                  searchText.isNotEmpty
+                      ? Icons.search_off_rounded
+                      : Icons.shopping_cart_outlined,
+                  size: 80,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  searchText.isNotEmpty ? 'No results' : 'Nothing here',
+                  style: GoogleFonts.poppins(),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                InkWell(
+                  onTap: () {
+                    Get.find<HomeController>().refreshLinks();
+                  },
+                  child: Text(
+                    'Refresh',
+                    style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
             ),
           ],
         );
@@ -98,7 +124,16 @@ class AllLinksView extends StatelessWidget {
               showLinkOptions(context, linksList[index]);
             },
             onTertiaryTap: () async {
-              await openAndDelete(context, linksList[index]);
+              if (linksList[index].url.isValidLink)
+                await openAndDelete(context, linksList[index]);
+              else
+                Get.to(
+                  () => NewLink(
+                    link: linksList[index],
+                  ),
+                  transition: Transition.rightToLeftWithFade,
+                  curve: Curves.fastOutSlowIn,
+                );
             },
           );
         },
@@ -142,7 +177,16 @@ class AllLinksView extends StatelessWidget {
               showLinkOptions(context, linksList[index]);
             },
             onTertiaryTap: () async {
-              await openAndDelete(context, linksList[index]);
+              if (linksList[index].url.isValidLink)
+                await openAndDelete(context, linksList[index]);
+              else
+                Get.to(
+                  () => NewLink(
+                    link: linksList[index],
+                  ),
+                  transition: Transition.rightToLeftWithFade,
+                  curve: Curves.fastOutSlowIn,
+                );
             },
           );
         },

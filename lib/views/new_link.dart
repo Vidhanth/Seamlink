@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -6,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:seamlink/components/color_picker.dart';
 import 'package:seamlink/components/custom_titlebar.dart';
+import 'package:seamlink/components/label_picker.dart';
 import 'package:seamlink/constants/colors.dart';
 import 'package:seamlink/controllers/NewLinkController.dart';
 import 'package:seamlink/models/link.dart';
@@ -26,6 +28,7 @@ class NewLink extends StatelessWidget {
     titleController = TextEditingController(text: link?.title);
     linkController = TextEditingController(text: link?.url ?? sharedText);
     controller.selectedColorIndex.value = link?.colorIndex ?? 0;
+    controller.selectedLabelIndex.value += link?.labels ?? [];
     if (link != null) {
       controller.autoTitle(link!.autotitle);
     } else if (linkController.text.trim().isValidLink) {
@@ -75,19 +78,20 @@ class NewLink extends StatelessWidget {
                             link!.title == title &&
                             link!.colorIndex ==
                                 controller.selectedColorIndex.value &&
-                            link!.autotitle == controller.autoTitle.value) {
+                            link!.autotitle == controller.autoTitle.value &&
+                            listEquals(
+                                link!.labels, controller.selectedLabelIndex)) {
                           await hideKeyboard(context);
                           Get.back();
                           return;
                         }
                       }
-
                       bool result = await saveLink(
                         context,
                         linkController.text.trim(),
                         controller.autoTitle.value ? '' : title,
                         controller.selectedColorIndex.value,
-                        <String>[],
+                        controller.selectedLabelIndex,
                         controller.autoTitle.value,
                         uid: link?.uid,
                       );
@@ -117,6 +121,7 @@ class NewLink extends StatelessWidget {
               ),
               body: SafeArea(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
                       padding:
@@ -156,7 +161,9 @@ class NewLink extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            link != null ? 'Edit link' : 'New link',
+                            link != null
+                                ? 'Edit ${noteOrLink(link!.url)}'
+                                : 'New note',
                             style: GoogleFonts.poppins(
                               fontSize: 50,
                               fontWeight: FontWeight.bold,
@@ -255,6 +262,19 @@ class NewLink extends StatelessWidget {
                             ],
                           ),
                         ),
+                      ),
+                    ),
+                    Obx(
+                      () => LabelPicker(
+                        onLabelSelected: (index) {
+                          if (!controller.selectedLabelIndex.contains(index)) {
+                            controller.selectedLabelIndex.add(index);
+                          } else {
+                            controller.selectedLabelIndex.remove(index);
+                          }
+                          controller.selectedLabelIndex.sort();
+                        },
+                        selectedIndices: controller.selectedLabelIndex.value,
                       ),
                     ),
                     Padding(

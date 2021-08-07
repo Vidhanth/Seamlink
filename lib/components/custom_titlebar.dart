@@ -6,11 +6,12 @@ import 'package:seamlink/components/search_bar.dart';
 import 'package:seamlink/constants/colors.dart';
 import 'package:seamlink/services/utils.dart';
 
+// ignore: must_be_immutable
 class CustomTitleBar extends StatelessWidget {
   bool? macStyle;
   String? title;
-  CustomTitleBar({Key? key, this.macStyle, this.title}) : super(key: key) {
-    macStyle ??= isMacOS;
+  CustomTitleBar({Key? key, this.macStyle = true, this.title})
+      : super(key: key) {
     title ??= "s e a m l i n k   d e s k t o p".toUpperCase();
   }
 
@@ -49,8 +50,10 @@ class CustomTitleBar extends StatelessWidget {
                       : Expanded(
                           child: Padding(
                             padding: EdgeInsets.only(
-                                top: 15, bottom: 10, left: 20, right: 20),
-                            child: SearchBar(),
+                                top: 15, bottom: 10, left: 25, right: 25),
+                            child: SearchBar(
+                              focusNode: FocusNode(),
+                            ),
                           ),
                         ),
                 ],

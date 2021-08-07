@@ -2,26 +2,48 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:seamlink/components/button.dart';
+import 'package:seamlink/components/input_field.dart';
 import 'package:seamlink/constants/colors.dart';
 import 'package:seamlink/services/utils.dart';
 
 class BottomDialog extends StatelessWidget {
-  const BottomDialog({
+  BottomDialog({
     Key? key,
-    required this.onConfirm,
+    this.onConfirm,
     required this.title,
     this.message,
     this.confirmText,
     this.cancelText,
+    this.showTextField = false,
+    this.onSubmitted,
+    this.hint,
     required this.onCancel,
-  }) : super(key: key);
+    this.onOptional,
+    this.optionalText,
+  }) : super(key: key) {
+    if (onSubmitted == null) {
+      onSubmitted = (controller) {};
+    } else {
+      _textController = TextEditingController();
+    }
+    onConfirm ??= () {
+      Get.back(result: true);
+    };
+  }
 
-  final Function onConfirm;
+  Function? onConfirm;
   final Function onCancel;
+  final Function? onOptional;
+  final String? optionalText;
   final String title;
   final String? message;
   final String? confirmText;
   final String? cancelText;
+  final bool? showTextField;
+  final String? hint;
+  Function(TextEditingController)? onSubmitted;
+
+  late TextEditingController? _textController;
 
   @override
   Widget build(BuildContext context) {
@@ -89,6 +111,22 @@ class BottomDialog extends StatelessWidget {
             height: 20,
           ),
         ],
+        if (showTextField!) ...[
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: InputField(
+              controller: _textController,
+              onSubmitted: onSubmitted!,
+              autofocus: true,
+              hint: hint ?? 'Label',
+              style: GoogleFonts.poppins(),
+              radius: 20,
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+        ],
         Row(
           children: [
             Flexible(
@@ -98,7 +136,7 @@ class BottomDialog extends StatelessWidget {
                 },
                 color: accent.withOpacity(0.15),
                 textColor: accent.withOpacity(0.7),
-                text: "NO",
+                text: cancelText ?? "NO",
                 padding: EdgeInsets.symmetric(
                   vertical: 15,
                   horizontal: 10,
@@ -108,14 +146,36 @@ class BottomDialog extends StatelessWidget {
             SizedBox(
               width: 10,
             ),
+            if (optionalText != null && onOptional != null) ...[
+              Flexible(
+                child: Button(
+                  onTap: () {
+                    onOptional!.call();
+                  },
+                  color: accent.withOpacity(0.15),
+                  textColor: accent.withOpacity(0.7),
+                  text: optionalText!,
+                  padding: EdgeInsets.symmetric(
+                    vertical: 15,
+                    horizontal: 10,
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+            ],
             Flexible(
               child: Button(
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
                 onTap: () {
-                  onConfirm.call();
+                  if (showTextField!)
+                    onSubmitted!.call(_textController!);
+                  else
+                    onConfirm!.call();
                 },
                 color: accent,
-                text: 'YES',
+                text: confirmText ?? 'YES',
               ),
             ),
           ],

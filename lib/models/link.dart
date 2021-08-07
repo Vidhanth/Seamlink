@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:seamlink/constants/enum.dart';
+import 'package:seamlink/services/extensions.dart';
+
 List<Link> linkFromJson(json) => List<Link>.from(json.map((x) {
       return Link.fromJson(x);
     }));
@@ -19,6 +22,7 @@ class Link {
     required this.autotitle,
     this.subtitle,
     this.message,
+    this.type,
   });
 
   String uid;
@@ -26,22 +30,26 @@ class Link {
   String title;
   DateTime timestamp;
   String user;
-  List<String> labels;
+  List<int> labels;
   int colorIndex;
   bool autotitle;
   String? subtitle;
   String? message;
+  NoteType? type;
 
-  factory Link.fromJson(Map<String, dynamic> json) => Link(
-        uid: json["uid"],
-        url: json["url"],
-        title: json["title"],
-        timestamp: DateTime.parse(json["timestamp"]),
-        user: json["user"],
-        labels: List<String>.from(json["labels"].map((x) => x)),
-        colorIndex: json["color"],
-        autotitle: json["autotitle"],
-      );
+  factory Link.fromJson(Map<String, dynamic> json) {
+    return Link(
+      uid: json["uid"],
+      url: json["url"],
+      title: json["title"],
+      timestamp: DateTime.parse(json["timestamp"]),
+      user: json["user"],
+      labels: List<int>.from(json["labels"].map((x) => x)),
+      colorIndex: json["color"],
+      autotitle: json["autotitle"],
+      type: json["url"].toString().isValidLink ? NoteType.LINK : NoteType.NOTE,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "uid": uid,

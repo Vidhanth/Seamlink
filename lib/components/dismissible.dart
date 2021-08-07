@@ -130,9 +130,7 @@ class Dismissible extends StatefulWidget {
     this.crossAxisEndOffset = 0.0,
     this.dragStartBehavior = DragStartBehavior.start,
     this.behavior = HitTestBehavior.opaque,
-  })  : assert(key != null),
-        assert(secondaryBackground == null || background != null),
-        assert(dragStartBehavior != null),
+  })  : assert(secondaryBackground == null || background != null),
         super(key: key);
 
   /// The widget below this widget in the tree.
@@ -230,46 +228,6 @@ class Dismissible extends StatefulWidget {
 
   @override
   _DismissibleState createState() => _DismissibleState();
-}
-
-class _DismissibleClipper extends CustomClipper<Rect> {
-  _DismissibleClipper({
-    required this.axis,
-    required this.moveAnimation,
-  })  : assert(axis != null),
-        assert(moveAnimation != null),
-        super(reclip: moveAnimation);
-
-  final Axis axis;
-  final Animation<Offset> moveAnimation;
-
-  @override
-  Rect getClip(Size size) {
-    assert(axis != null);
-    switch (axis) {
-      case Axis.horizontal:
-        final double offset = moveAnimation.value.dx * size.width;
-        if (offset < 0)
-          return Rect.fromLTRB(
-              size.width + offset, 0.0, size.width, size.height);
-        return Rect.fromLTRB(0.0, 0.0, offset, size.height);
-      case Axis.vertical:
-        final double offset = moveAnimation.value.dy * size.height;
-        if (offset < 0)
-          return Rect.fromLTRB(
-              0.0, size.height + offset, size.width, size.height);
-        return Rect.fromLTRB(0.0, 0.0, size.width, offset);
-    }
-  }
-
-  @override
-  Rect getApproximateClipRect(Size size) => getClip(size);
-
-  @override
-  bool shouldReclip(_DismissibleClipper oldClipper) {
-    return oldClipper.axis != axis ||
-        oldClipper.moveAnimation.value != moveAnimation.value;
-  }
 }
 
 enum _FlingGestureKind { none, forward, reverse }
@@ -424,7 +382,6 @@ class _DismissibleState extends State<Dismissible>
   }
 
   _FlingGestureKind _describeFlingGesture(Velocity velocity) {
-    assert(widget.direction != null);
     if (_dragExtent == 0.0) {
       // If it was a fling, then it was a fling that was let loose at the exact
       // middle of the range (i.e. when there's no displacement). In that case,
@@ -448,7 +405,6 @@ class _DismissibleState extends State<Dismissible>
       assert(vy != 0.0);
       flingDirection = _extentToDirection(vy);
     }
-    assert(_dismissDirection != null);
     if (flingDirection == _dismissDirection) return _FlingGestureKind.forward;
     return _FlingGestureKind.reverse;
   }

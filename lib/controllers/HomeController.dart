@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:seamlink/controllers/SidebarController.dart';
 import 'package:seamlink/models/link.dart';
 import 'package:seamlink/models/result.dart';
 import 'package:seamlink/services/client.dart';
@@ -32,6 +33,7 @@ class HomeController extends GetxController {
   void refreshLinks({String? sortBy, bool? ascending}) async {
     isLoading(true);
     final list = await Client.fetchLinks(sortBy: sortBy, ascending: ascending);
+    Get.find<SidebarController>().refreshLabels();
     if (list is List<dynamic>) {
       var newList = linkFromJson(list);
       linksList.value = newList;

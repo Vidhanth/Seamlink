@@ -12,19 +12,19 @@ import 'package:seamlink/services/client.dart';
 import 'package:seamlink/services/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class NoUserScreen extends StatefulWidget {
+class AuthView extends StatefulWidget {
   final state;
 
-  NoUserScreen({
+  AuthView({
     Key? key,
     this.state,
   }) : super(key: key);
 
   @override
-  _NoUserScreenState createState() => _NoUserScreenState();
+  _AuthViewState createState() => _AuthViewState();
 }
 
-class _NoUserScreenState extends State<NoUserScreen> {
+class _AuthViewState extends State<AuthView> {
   TextEditingController userController = TextEditingController();
 
   FocusNode userFocus = FocusNode();
@@ -171,9 +171,6 @@ class _NoUserScreenState extends State<NoUserScreen> {
       if (isUserValid) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('username', user);
-        Future.delayed(3.seconds, () async {
-          await prefs.remove('username');
-        });
         Get.find<UserController>().username(user);
         Get.find<HomeController>().refreshLinks();
       } else {

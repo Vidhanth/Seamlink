@@ -5,7 +5,9 @@ import 'package:seamlink/components/input_field.dart';
 import 'package:seamlink/controllers/HomeController.dart';
 
 class SearchBar extends StatelessWidget {
-  SearchBar({Key? key}) : super(key: key);
+  final FocusNode focusNode;
+
+  SearchBar({Key? key, required this.focusNode}) : super(key: key);
 
   final TextEditingController controller = TextEditingController();
   final homeController = Get.find<HomeController>();
@@ -13,6 +15,7 @@ class SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InputField(
+      focusNode: focusNode,
       hint: "Search",
       margin: EdgeInsets.only(right: 0),
       onChanged: (query) {

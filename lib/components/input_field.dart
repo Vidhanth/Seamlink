@@ -23,6 +23,7 @@ class InputField extends StatelessWidget {
   final Icon? prefixIcon;
   final FocusNode? focusNode;
   final Function? onSubmitted;
+  final bool? autofocus;
 
   const InputField({
     this.bgColor = Colors.black12,
@@ -46,6 +47,7 @@ class InputField extends StatelessWidget {
     this.prefixIcon,
     this.focusNode,
     this.onSubmitted,
+    this.autofocus,
   });
 
   @override
@@ -58,6 +60,7 @@ class InputField extends StatelessWidget {
             Theme(
               data: Theme.of(context).copyWith(primaryColor: accent),
               child: TextField(
+                autofocus: autofocus ?? false,
                 focusNode: focusNode ?? FocusNode(),
                 showCursor: showCursor,
                 onSubmitted: (string) {

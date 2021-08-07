@@ -75,11 +75,10 @@ class LinkOptions extends StatelessWidget {
         _buildOption(link.url.isValidLink ? "Delete link" : "Delete note",
             LineIcons.trash, () async {
           Get.back();
-          String noteOrLink = link.url.isValidLink ? "link" : "note";
           if (await confirmDialog(
                 context,
-                "Delete $noteOrLink?",
-                "Are you sure you want to delete this $noteOrLink? This cannot be undone.",
+                "Delete ${noteOrLink(link.url)}?",
+                "Are you sure you want to delete this ${noteOrLink(link.url)}? This cannot be undone.",
               ) ??
               false) {
             await Get.find<HomeController>().deleteLink(context, link.uid);
