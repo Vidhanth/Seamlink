@@ -309,6 +309,7 @@ Future<bool?> editLabelDialog(
       message: message,
       optionalText: "DELETE",
       onOptional: () {
+        Get.back();
         deleteLabel(context, index);
       },
       confirmText: "DONE",
