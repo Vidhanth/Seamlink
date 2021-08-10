@@ -75,7 +75,7 @@ class FilterRow extends StatelessWidget {
               : FadeIn(
                   child: FilterChip(
                     onSelected: (val) {
-                      sidebarController.labelIndex(-1);
+                      sidebarController.labelIndex(-2);
                     },
                     padding: EdgeInsets.symmetric(
                       vertical: 4,
