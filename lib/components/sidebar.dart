@@ -161,13 +161,29 @@ class Sidebar extends StatelessWidget {
                     child: ListView.builder(
                       controller: scrollController,
                       physics: BouncingScrollPhysics(),
-                      itemCount: controller.labels.length + 2,
+                      itemCount: controller.labels.length + 3,
                       itemBuilder: (context, index) {
                         if (index == 0) {
                           return Obx(() => LabelTile(
                                 label: 'All',
-                                isSelected: controller.labelIndex.value == -1,
+                                isSelected: controller.labelIndex.value == -2,
                                 icon: LineIcons.tags,
+                                onTap: () {
+                                  controller.labelIndex(-2);
+                                  if (isMobile) {
+                                    Get.find<HomeController>()
+                                        .showSidebar
+                                        .toggle();
+                                  }
+                                },
+                              ));
+                        }
+                        if (index == 1) {
+                          return Obx(() => LabelTile(
+                                label: 'Untagged',
+                                isSelected: controller.labelIndex.value == -1,
+                                icon: LineIcons.tag,
+                                iconSecondary: Icons.close_outlined,
                                 onTap: () {
                                   controller.labelIndex(-1);
                                   if (isMobile) {
@@ -178,7 +194,7 @@ class Sidebar extends StatelessWidget {
                                 },
                               ));
                         }
-                        index--;
+                        index -= 2;
                         if (index == controller.labels.length)
                           return LabelTile(
                             label: 'Create new',

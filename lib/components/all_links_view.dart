@@ -34,8 +34,10 @@ class AllLinksView extends StatelessWidget {
       bool typeMatch = true;
       bool labelMatch = true;
 
-      if (labelIndex == -1) {
+      if (labelIndex == -2) {
         labelMatch = true;
+      } else if (labelIndex == -1) {
+        labelMatch = link.labels.isEmpty;
       } else {
         labelMatch = link.labels.contains(labelIndex);
       }

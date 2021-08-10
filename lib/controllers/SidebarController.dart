@@ -7,7 +7,7 @@ import 'package:seamlink/services/client.dart';
 class SidebarController extends GetxController {
   var selectedType = NoteType.ALL.obs;
   var labels = [].obs;
-  var labelIndex = (-1).obs;
+  var labelIndex = (-2).obs;
   var editMode = false.obs;
 
   Future refreshLabels() async {

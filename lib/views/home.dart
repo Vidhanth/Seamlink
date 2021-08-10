@@ -115,7 +115,7 @@ class Home extends StatelessWidget {
                                                         sidebarController
                                                                 .labelIndex
                                                                 .value !=
-                                                            -1)
+                                                            -2)
                                                     ? EdgeInsets.only(
                                                         left: 25,
                                                         top: 0,
@@ -130,7 +130,7 @@ class Home extends StatelessWidget {
                                                         sidebarController
                                                                 .labelIndex
                                                                 .value !=
-                                                            -1)
+                                                            -2)
                                                     ? 50
                                                     : 0,
                                                 duration: 300.milliseconds,

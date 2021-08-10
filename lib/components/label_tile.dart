@@ -7,6 +7,7 @@ class LabelTile extends StatelessWidget {
   final String label;
   final bool isSelected;
   final IconData? icon;
+  final IconData? iconSecondary;
   final Function onTap;
   final Function? onLongPress;
   final bool? editing;
@@ -16,6 +17,7 @@ class LabelTile extends StatelessWidget {
     required this.label,
     required this.isSelected,
     this.icon,
+    this.iconSecondary,
     required this.onTap,
     this.onLongPress,
     this.editing,
@@ -47,7 +49,17 @@ class LabelTile extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
-              Icon(icon ?? LineIcons.tag),
+              Stack(
+                alignment: Alignment.bottomRight,
+                children: [
+                  Icon(icon ?? LineIcons.tag),
+                  if (iconSecondary != null)
+                    Icon(
+                      iconSecondary!,
+                      size: 10,
+                    ),
+                ],
+              ),
               SizedBox(
                 width: 5,
               ),

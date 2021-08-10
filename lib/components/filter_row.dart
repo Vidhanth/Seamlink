@@ -47,30 +47,55 @@ class FilterRow extends StatelessWidget {
               ),
             ),
           ),
-        if (sidebarController.labelIndex.value != (-1))
-          FadeIn(
-            child: FilterChip(
-              onSelected: (val) {
-                sidebarController.labelIndex(-1);
-              },
-              padding: EdgeInsets.symmetric(
-                vertical: 4,
-                horizontal: 2,
-              ),
-              labelPadding: EdgeInsets.only(
-                right: 4,
-                left: 2,
-              ),
-              avatar: Icon(
-                Icons.remove_circle,
-                size: 20,
-              ),
-              labelStyle: GoogleFonts.poppins(),
-              label: Text(
-                sidebarController.labels[sidebarController.labelIndex.value],
-              ),
-            ),
-          ),
+        if (sidebarController.labelIndex.value != (-2))
+          sidebarController.labelIndex.value == -1
+              ? FadeIn(
+                  child: FilterChip(
+                    onSelected: (val) {
+                      sidebarController.labelIndex(-2);
+                    },
+                    padding: EdgeInsets.symmetric(
+                      vertical: 4,
+                      horizontal: 2,
+                    ),
+                    labelPadding: EdgeInsets.only(
+                      right: 4,
+                      left: 2,
+                    ),
+                    avatar: Icon(
+                      Icons.remove_circle,
+                      size: 20,
+                    ),
+                    labelStyle: GoogleFonts.poppins(),
+                    label: Text(
+                      'Untagged',
+                    ),
+                  ),
+                )
+              : FadeIn(
+                  child: FilterChip(
+                    onSelected: (val) {
+                      sidebarController.labelIndex(-1);
+                    },
+                    padding: EdgeInsets.symmetric(
+                      vertical: 4,
+                      horizontal: 2,
+                    ),
+                    labelPadding: EdgeInsets.only(
+                      right: 4,
+                      left: 2,
+                    ),
+                    avatar: Icon(
+                      Icons.remove_circle,
+                      size: 20,
+                    ),
+                    labelStyle: GoogleFonts.poppins(),
+                    label: Text(
+                      sidebarController
+                          .labels[sidebarController.labelIndex.value],
+                    ),
+                  ),
+                ),
       ],
     );
   }
