@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -96,90 +97,116 @@ class AllLinksView extends StatelessWidget {
     }
 
     if (!isScreenWide(context)) {
-      return ListView.builder(
-        padding: EdgeInsets.only(bottom: 40, top: 10),
-        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-        itemBuilder: (context, index) {
-          return LinkTile(
-            onDismissed: (direction) async {
-              await Get.find<HomeController>()
-                  .deleteLink(context, linksList[index].uid);
-            },
-            searchText: searchText,
-            link: linksList[index],
-            onTap: () async {
-              if (linksList[index].url.isValidLink) {
-                launch(linksList[index].url);
-              } else {
-                Navigate.to(
-                  page: NewLink(link: linksList[index]),
-                );
-              }
-            },
-            onLongPress: () {
-              showLinkOptions(context, linksList[index]);
-            },
-            onSecondaryTap: () {
-              showLinkOptions(context, linksList[index]);
-            },
-            onTertiaryTap: () async {
-              if (linksList[index].url.isValidLink)
-                await openAndDelete(context, linksList[index]);
-              else
-                Navigate.to(
-                  page: NewLink(link: linksList[index]),
-                );
-            },
-          );
-        },
-        itemCount: linksList.length,
+      return AnimationLimiter(
+        child: ListView.builder(
+          padding: EdgeInsets.only(bottom: 40, top: 10),
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          itemBuilder: (context, index) {
+            return AnimationConfiguration.staggeredList(
+              position: index,
+              child: SlideAnimation(
+                duration: 400.milliseconds,
+                child: FadeInAnimation(
+                  duration: 400.milliseconds,
+                  child: LinkTile(
+                    onDismissed: (direction) async {
+                      await Get.find<HomeController>()
+                          .deleteLink(context, linksList[index].uid);
+                    },
+                    searchText: searchText,
+                    link: linksList[index],
+                    onTap: () async {
+                      if (linksList[index].url.isValidLink) {
+                        launch(linksList[index].url);
+                      } else {
+                        Navigate.to(
+                          page: NewLink(link: linksList[index]),
+                        );
+                      }
+                    },
+                    onLongPress: () {
+                      showLinkOptions(context, linksList[index]);
+                    },
+                    onSecondaryTap: () {
+                      showLinkOptions(context, linksList[index]);
+                    },
+                    onTertiaryTap: () async {
+                      if (linksList[index].url.isValidLink)
+                        await openAndDelete(context, linksList[index]);
+                      else
+                        Navigate.to(
+                          page: NewLink(link: linksList[index]),
+                        );
+                    },
+                  ),
+                ),
+              ),
+            );
+          },
+          itemCount: linksList.length,
+        ),
       );
     } else {
-      return StaggeredGridView.countBuilder(
-        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-        crossAxisCount:
-            (MediaQuery.of(context).size.width / 300).floor().clamp(2, 5),
-        itemCount: linksList.length,
-        mainAxisSpacing: 15,
-        crossAxisSpacing: 15,
-        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-        itemBuilder: (context, index) {
-          return LinkTile(
-            onDismissed: (direction) async {
-              await Get.find<HomeController>()
-                  .deleteLink(context, linksList[index].uid);
-            },
-            margin: EdgeInsets.zero,
-            searchText: searchText,
-            link: linksList[index],
-            onTap: () async {
-              if (linksList[index].url.isValidLink) {
-                launch(linksList[index].url);
-              } else {
-                Navigate.to(
-                  page: NewLink(link: linksList[index]),
-                );
-              }
-            },
-            onLongPress: () {
-              showLinkOptions(context, linksList[index]);
-            },
-            onSecondaryTap: () {
-              showLinkOptions(context, linksList[index]);
-            },
-            onTertiaryTap: () async {
-              if (linksList[index].url.isValidLink)
-                await openAndDelete(context, linksList[index]);
-              else
-                Navigate.to(
-                  page: NewLink(link: linksList[index]),
-                );
-            },
-          );
-        },
-        staggeredTileBuilder: (index) {
-          return StaggeredTile.fit(1);
-        },
+      return AnimationLimiter(
+        child: StaggeredGridView.countBuilder(
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          crossAxisCount:
+              (MediaQuery.of(context).size.width / 300).floor().clamp(2, 5),
+          itemCount: linksList.length,
+          mainAxisSpacing: 15,
+          crossAxisSpacing: 15,
+          padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+          itemBuilder: (context, index) {
+            return AnimationConfiguration.staggeredGrid(
+              position: index,
+              columnCount:
+                  (MediaQuery.of(context).size.width / 300).floor().clamp(2, 5),
+              child: FadeInAnimation(
+                duration: 400.milliseconds,
+                child: SlideAnimation(
+                  duration: 400.milliseconds,
+                  child: LinkTile(
+                    onDismissed: (direction) async {
+                      await Get.find<HomeController>()
+                          .deleteLink(context, linksList[index].uid);
+                    },
+                    margin: EdgeInsets.zero,
+                    searchText: searchText,
+                    link: linksList[index],
+                    onTap: () async {
+                      if (linksList[index].url.isValidLink) {
+                        launch(linksList[index].url);
+                      } else {
+                        Navigate.to(
+                          page: NewLink(link: linksList[index]),
+                        );
+                      }
+                    },
+                    onLongPress: () {
+                      showLinkOptions(context, linksList[index]);
+                    },
+                    onSecondaryTap: () {
+                      showLinkOptions(context, linksList[index]);
+                    },
+                    onTertiaryTap: () async {
+                      if (linksList[index].url.isValidLink)
+                        await openAndDelete(context, linksList[index]);
+                      else
+                        Navigate.to(
+                          page: NewLink(link: linksList[index]),
+                        );
+                    },
+                  ),
+                ),
+              ),
+            );
+          },
+          staggeredTileBuilder: (index) {
+            return StaggeredTile.fit(1);
+          },
+        ),
       );
     }
   }

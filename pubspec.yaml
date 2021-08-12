@@ -29,6 +29,7 @@ dependencies:
   line_icons: ^2.0.1
   bitsdojo_window:
   shared_preferences:
+  flutter_staggered_animations: ^1.0.0
   window_size:
     git:
       url: git://github.com/google/flutter-desktop-embedding.git
