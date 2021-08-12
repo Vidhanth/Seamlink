@@ -197,7 +197,9 @@ class NewLink extends StatelessWidget {
                       child: TextField(
                         controller: linkController,
                         cursorColor: accent,
-                        autofocus: true,
+                        autofocus: ((link?.url.isEmpty ?? true) &&
+                                (sharedText?.isEmpty ?? true)) ||
+                            isDesktop,
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.normal,
                           fontSize: 20,
