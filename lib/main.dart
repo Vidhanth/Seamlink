@@ -9,6 +9,7 @@ import 'package:seamlink/components/custom_titlebar.dart';
 import 'package:seamlink/components/sidebar.dart';
 import 'package:seamlink/controllers/HomeController.dart';
 import 'package:seamlink/controllers/UserController.dart';
+import 'package:seamlink/services/navigation.dart';
 import 'package:seamlink/services/utils.dart';
 import 'package:seamlink/views/home.dart';
 import 'package:seamlink/views/new_link.dart';
@@ -77,12 +78,10 @@ class _MainActivityState extends State<MainActivity> {
     if (isMobile) {
       _sharedTextSub =
           ReceiveSharingIntent.getTextStream().listen((String value) {
-        Get.to(
-          () => NewLink(
+        Navigate.to(
+          page: NewLink(
             sharedText: value,
           ),
-          transition: Transition.rightToLeftWithFade,
-          curve: Curves.fastOutSlowIn,
         );
       }, onError: (err) {
         print("getLinkStream error: $err");

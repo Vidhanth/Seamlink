@@ -7,6 +7,7 @@ import 'package:seamlink/components/link_tile.dart';
 import 'package:seamlink/constants/enum.dart';
 import 'package:seamlink/controllers/HomeController.dart';
 import 'package:seamlink/models/link.dart';
+import 'package:seamlink/services/navigation.dart';
 import 'package:seamlink/services/utils.dart';
 import 'package:seamlink/services/extensions.dart';
 import 'package:seamlink/views/new_link.dart';
@@ -110,12 +111,8 @@ class AllLinksView extends StatelessWidget {
               if (linksList[index].url.isValidLink) {
                 launch(linksList[index].url);
               } else {
-                Get.to(
-                  () => NewLink(
-                    link: linksList[index],
-                  ),
-                  transition: Transition.rightToLeftWithFade,
-                  curve: Curves.fastOutSlowIn,
+                Navigate.to(
+                  page: NewLink(link: linksList[index]),
                 );
               }
             },
@@ -129,12 +126,8 @@ class AllLinksView extends StatelessWidget {
               if (linksList[index].url.isValidLink)
                 await openAndDelete(context, linksList[index]);
               else
-                Get.to(
-                  () => NewLink(
-                    link: linksList[index],
-                  ),
-                  transition: Transition.rightToLeftWithFade,
-                  curve: Curves.fastOutSlowIn,
+                Navigate.to(
+                  page: NewLink(link: linksList[index]),
                 );
             },
           );
@@ -163,12 +156,8 @@ class AllLinksView extends StatelessWidget {
               if (linksList[index].url.isValidLink) {
                 launch(linksList[index].url);
               } else {
-                Get.to(
-                  () => NewLink(
-                    link: linksList[index],
-                  ),
-                  transition: Transition.rightToLeftWithFade,
-                  curve: Curves.fastOutSlowIn,
+                Navigate.to(
+                  page: NewLink(link: linksList[index]),
                 );
               }
             },
@@ -182,12 +171,8 @@ class AllLinksView extends StatelessWidget {
               if (linksList[index].url.isValidLink)
                 await openAndDelete(context, linksList[index]);
               else
-                Get.to(
-                  () => NewLink(
-                    link: linksList[index],
-                  ),
-                  transition: Transition.rightToLeftWithFade,
-                  curve: Curves.fastOutSlowIn,
+                Navigate.to(
+                  page: NewLink(link: linksList[index]),
                 );
             },
           );

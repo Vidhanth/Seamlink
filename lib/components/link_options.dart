@@ -5,6 +5,7 @@ import 'package:line_icons/line_icons.dart';
 import 'package:seamlink/controllers/HomeController.dart';
 import 'package:seamlink/models/link.dart';
 import 'package:seamlink/services/extensions.dart';
+import 'package:seamlink/services/navigation.dart';
 import 'package:seamlink/services/utils.dart';
 import 'package:seamlink/views/new_link.dart';
 
@@ -58,12 +59,8 @@ class LinkOptions extends StatelessWidget {
             link.url.isValidLink ? "Edit link" : "Edit note", LineIcons.edit,
             () async {
           Get.back();
-          Get.to(
-            () => NewLink(
-              link: link,
-            ),
-            transition: Transition.rightToLeftWithFade,
-            curve: Curves.fastOutSlowIn,
+          Navigate.to(
+            page: NewLink(link: link),
           );
         }),
         _buildOption(link.url.isValidLink ? "Copy link" : "Copy contents",
