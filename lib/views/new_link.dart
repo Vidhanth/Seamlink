@@ -31,7 +31,7 @@ class NewLink extends StatelessWidget {
     controller.selectedLabelIndex.value += link?.labels ?? [];
     if (link != null) {
       controller.autoTitle(link!.autotitle);
-    } else if (linkController.text.trim().isValidLink) {
+    } else if (sharedText?.isValidLink ?? false) {
       controller.autoTitle(true);
     }
   }
@@ -52,73 +52,6 @@ class NewLink extends StatelessWidget {
           ],
           Expanded(
             child: Scaffold(
-              floatingActionButton: Obx(
-                () => IgnorePointer(
-                  ignoring: controller.isSaving.value,
-                  child: FloatingActionButton(
-                    backgroundColor: accent,
-                    child: controller.isSaving.value
-                        ? SpinKitChasingDots(
-                            color: Colors.white,
-                            size: 20,
-                          )
-                        : Icon(
-                            Icons.check_rounded,
-                          ),
-                    onPressed: () async {
-                      if (linkController.text.trim().isEmpty) {
-                        showSnackBar(context, "Please enter a link",
-                            error: true);
-                        return;
-                      }
-                      controller.isSaving(true);
-                      String title = titleController.text.trim();
-                      if (link != null) {
-                        if (link!.url == linkController.text.trim() &&
-                            link!.title == title &&
-                            link!.colorIndex ==
-                                controller.selectedColorIndex.value &&
-                            link!.autotitle == controller.autoTitle.value &&
-                            listEquals(
-                                link!.labels, controller.selectedLabelIndex)) {
-                          await hideKeyboard(context);
-                          Get.back();
-                          return;
-                        }
-                      }
-                      bool result = await saveLink(
-                        context,
-                        linkController.text.trim(),
-                        controller.autoTitle.value ? '' : title,
-                        controller.selectedColorIndex.value,
-                        controller.selectedLabelIndex,
-                        controller.autoTitle.value,
-                        uid: link?.uid,
-                      );
-                      if (result) {
-                        controller.isSaving(false);
-                        if (sharedText?.isEmpty ?? true) {
-                          Get.back();
-                        } else {
-                          if (isAndroid) {
-                            if (Navigator.canPop(context))
-                              Get.back();
-                            else
-                              SystemNavigator.pop();
-                          } else {
-                            if (Navigator.canPop(context))
-                              Get.back();
-                            else
-                              Get.off(() => Home());
-                          }
-                        }
-                      } else {
-                        controller.isSaving(false);
-                      }
-                    },
-                  ),
-                ),
-              ),
               body: SafeArea(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,6 +106,7 @@ class NewLink extends StatelessWidget {
                       ),
                     ),
                     TextField(
+                      scrollPhysics: BouncingScrollPhysics(),
                       controller: titleController,
                       onChanged: (title) {
                         controller.autoTitle(title.trim().isEmpty &&
@@ -186,7 +120,7 @@ class NewLink extends StatelessWidget {
                       cursorColor: accent,
                       decoration: InputDecoration(
                         contentPadding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                         border: OutlineInputBorder(borderSide: BorderSide.none),
                         hintText: 'Title',
                         hintStyle:
@@ -195,7 +129,11 @@ class NewLink extends StatelessWidget {
                     ),
                     Expanded(
                       child: TextField(
+                        scrollPhysics: BouncingScrollPhysics(),
                         controller: linkController,
+                        onChanged: (newLink) {
+                          controller.autoTitle(newLink.isValidLink);
+                        },
                         cursorColor: accent,
                         autofocus: ((link?.url.isEmpty ?? true) &&
                                 (sharedText?.isEmpty ?? true)) ||
@@ -204,23 +142,23 @@ class NewLink extends StatelessWidget {
                           fontWeight: FontWeight.normal,
                           fontSize: 20,
                         ),
-                        maxLines: 10,
+                        maxLines: 100,
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.symmetric(
-                            vertical: 10,
+                            vertical: 0,
                             horizontal: 20,
                           ),
                           border: OutlineInputBorder(
                             borderSide: BorderSide.none,
                           ),
-                          hintText: 'Enter link here',
+                          hintText: 'Type something',
                           hintStyle: GoogleFonts.poppins(
                               fontWeight: FontWeight.normal),
                         ),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 20.0, right: 25.0),
+                      padding: EdgeInsets.only(left: 10.0, right: 25.0),
                       child: Obx(
                         () => GestureDetector(
                           onTap: () {
@@ -255,7 +193,7 @@ class NewLink extends StatelessWidget {
                                   'Fetch title from link',
                                   style: GoogleFonts.poppins(
                                     color: accent.withOpacity(0.75),
-                                    fontSize: 20,
+                                    fontSize: 17,
                                   ),
                                   minFontSize: 1,
                                   maxLines: 2,
@@ -280,14 +218,94 @@ class NewLink extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: Obx(
-                        () => ColorPicker(
-                          onColorSelected: (index) {
-                            controller.selectedColorIndex.value = index;
-                          },
-                          selectedIndex: controller.selectedColorIndex.value,
-                        ),
+                      padding: EdgeInsets.only(
+                          top: 10, bottom: 20, left: 15, right: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Obx(
+                            () => ColorPicker(
+                              onColorSelected: (index) {
+                                controller.selectedColorIndex.value = index;
+                              },
+                              selectedIndex:
+                                  controller.selectedColorIndex.value,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          Obx(
+                            () => IgnorePointer(
+                              ignoring: controller.isSaving.value,
+                              child: FloatingActionButton(
+                                backgroundColor: accent,
+                                child: controller.isSaving.value
+                                    ? SpinKitChasingDots(
+                                        color: Colors.white,
+                                        size: 20,
+                                      )
+                                    : Icon(
+                                        Icons.check_rounded,
+                                      ),
+                                onPressed: () async {
+                                  if (linkController.text.trim().isEmpty) {
+                                    showSnackBar(context, "Please enter a note",
+                                        error: true);
+                                    return;
+                                  }
+                                  controller.isSaving(true);
+                                  String title = titleController.text.trim();
+                                  if (link != null) {
+                                    if (link!.url ==
+                                            linkController.text.trim() &&
+                                        link!.title == title &&
+                                        link!.colorIndex ==
+                                            controller
+                                                .selectedColorIndex.value &&
+                                        link!.autotitle ==
+                                            controller.autoTitle.value &&
+                                        listEquals(link!.labels,
+                                            controller.selectedLabelIndex)) {
+                                      await hideKeyboard(context);
+                                      Get.back();
+                                      return;
+                                    }
+                                  }
+                                  bool result = await saveLink(
+                                    context,
+                                    linkController.text.trim(),
+                                    controller.autoTitle.value ? '' : title,
+                                    controller.selectedColorIndex.value,
+                                    controller.selectedLabelIndex,
+                                    controller.autoTitle.value,
+                                    uid: link?.uid,
+                                  );
+                                  if (result) {
+                                    controller.isSaving(false);
+                                    if (sharedText?.isEmpty ?? true) {
+                                      Get.back();
+                                    } else {
+                                      if (isAndroid) {
+                                        if (Navigator.canPop(context))
+                                          Get.back();
+                                        else
+                                          SystemNavigator.pop();
+                                      } else {
+                                        if (Navigator.canPop(context))
+                                          Get.back();
+                                        else
+                                          Get.off(() => Home());
+                                      }
+                                    }
+                                  } else {
+                                    controller.isSaving(false);
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

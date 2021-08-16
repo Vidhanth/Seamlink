@@ -26,7 +26,7 @@ class LabelPicker extends StatelessWidget {
     List<dynamic> labelsList = sidebarController.labels;
     return Obx(
       () => SingleChildScrollView(
-        padding: EdgeInsets.only(top: 20.0, left: 20),
+        padding: EdgeInsets.only(top: 10.0, left: 20, right: 20),
         physics: BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,
         child: Row(
