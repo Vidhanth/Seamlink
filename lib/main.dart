@@ -110,11 +110,7 @@ class _MainActivityState extends State<MainActivity> {
         builder: (context) {
           return Row(
             children: [
-              isDesktop
-                  ? Obx(() {
-                      return Sidebar();
-                    })
-                  : SizedBox(),
+              isDesktop ? Sidebar() : SizedBox(),
               Expanded(
                 child: Column(
                   children: [
