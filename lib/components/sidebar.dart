@@ -18,7 +18,7 @@ class Sidebar extends StatelessWidget {
 
   Size size = Size(0, 0);
 
-  final SidebarController controller = Get.put(SidebarController());
+  final SidebarController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {

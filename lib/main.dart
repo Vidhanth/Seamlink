@@ -8,6 +8,7 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:seamlink/components/custom_titlebar.dart';
 import 'package:seamlink/components/sidebar.dart';
 import 'package:seamlink/controllers/HomeController.dart';
+import 'package:seamlink/controllers/SidebarController.dart';
 import 'package:seamlink/controllers/UserController.dart';
 import 'package:seamlink/services/navigation.dart';
 import 'package:seamlink/services/utils.dart';
@@ -49,6 +50,7 @@ void main() async {
 
 Future<void> initializePrefs() async {
   UserController _userController = Get.put(UserController());
+  SidebarController _sidebarController = Get.put(SidebarController());
   HomeController _homeController = Get.put(HomeController());
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String username = prefs.getString('username') ?? '';
