@@ -22,6 +22,7 @@ class SingleFutureBuilder extends StatelessWidget {
     return FutureBuilder(
       future: future,
       builder: (context, snapshot) {
+        if (snapshot.hasError) return childBuilder.call(context, fallbackData);
         return childBuilder.call(context, snapshot.data);
       },
     );
