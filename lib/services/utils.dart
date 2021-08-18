@@ -26,6 +26,8 @@ Future<void> logout() async {
   await SharedPreferences.getInstance()
     ..remove('username');
   Get.find<UserController>().username('');
+  Get.find<SidebarController>().labels.clear();
+  Get.find<SidebarController>().labelIndex(-2);
   Get.find<HomeController>().linksList.clear();
   Get.find<HomeController>().showSidebar(false);
 }
