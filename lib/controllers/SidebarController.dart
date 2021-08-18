@@ -20,7 +20,6 @@ class SidebarController extends GetxController {
 
   @override
   void onInit() async {
-    await refreshLabels();
     super.onInit();
   }
 }
