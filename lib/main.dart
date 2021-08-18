@@ -110,7 +110,13 @@ class _MainActivityState extends State<MainActivity> {
         builder: (context) {
           return Row(
             children: [
-              isDesktop ? Sidebar() : SizedBox(),
+              isDesktop
+                  ? Obx(() {
+                      return Get.find<UserController>().username.isNotEmpty
+                          ? Sidebar()
+                          : SizedBox();
+                    })
+                  : SizedBox(),
               Expanded(
                 child: Column(
                   children: [
