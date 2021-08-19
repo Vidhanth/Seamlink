@@ -50,7 +50,7 @@ void main() async {
 
 Future<void> initializePrefs() async {
   UserController _userController = Get.put(UserController());
-  SidebarController _sidebarController = Get.put(SidebarController());
+  Get.put(SidebarController());
   HomeController _homeController = Get.put(HomeController());
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String username = prefs.getString('username') ?? '';
