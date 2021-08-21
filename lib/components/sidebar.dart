@@ -85,7 +85,7 @@ class Sidebar extends StatelessWidget {
                         onTap: () {
                           controller.selectedType(NoteType.ALL);
                           if (isMobile) {
-                            Get.find<HomeController>().showSidebar.toggle();
+                            Navigator.pop(context);
                           }
                         },
                         icon: Icons.notes_sharp,
@@ -97,7 +97,7 @@ class Sidebar extends StatelessWidget {
                         onTap: () {
                           controller.selectedType(NoteType.NOTE);
                           if (isMobile) {
-                            Get.find<HomeController>().showSidebar.toggle();
+                            Navigator.pop(context);
                           }
                         },
                         icon: LineIcons.stickyNote,
@@ -109,7 +109,7 @@ class Sidebar extends StatelessWidget {
                         onTap: () {
                           controller.selectedType(NoteType.LINK);
                           if (isMobile) {
-                            Get.find<HomeController>().showSidebar.toggle();
+                            Navigator.pop(context);
                           }
                         },
                         icon: LineIcons.link,
@@ -171,9 +171,7 @@ class Sidebar extends StatelessWidget {
                                 onTap: () {
                                   controller.labelIndex(-2);
                                   if (isMobile) {
-                                    Get.find<HomeController>()
-                                        .showSidebar
-                                        .toggle();
+                                    Navigator.pop(context);
                                   }
                                 },
                               ));
@@ -187,9 +185,7 @@ class Sidebar extends StatelessWidget {
                                 onTap: () {
                                   controller.labelIndex(-1);
                                   if (isMobile) {
-                                    Get.find<HomeController>()
-                                        .showSidebar
-                                        .toggle();
+                                    Navigator.pop(context);
                                   }
                                 },
                               ));
@@ -233,9 +229,7 @@ class Sidebar extends StatelessWidget {
                                 } else {
                                   controller.labelIndex(index);
                                   if (isMobile) {
-                                    Get.find<HomeController>()
-                                        .showSidebar
-                                        .toggle();
+                                    Navigator.pop(context);
                                   }
                                 }
                               },
