@@ -98,6 +98,7 @@ class _AuthViewState extends State<AuthView> {
                             ),
                             controller: userController,
                             hint: 'Username',
+                            style: GoogleFonts.poppins(),
                             padding: EdgeInsets.symmetric(
                               horizontal: 20,
                               vertical: 20,
