@@ -42,6 +42,14 @@ class LinkTile extends StatelessWidget {
     this.getLink = getLinkData(link);
   }
 
+  Future<bool> _confirmDismiss(direction) async {
+    hideKeyboard(Get.context, delay: 0.milliseconds);
+    return await confirmDialog(Get.context, "Delete ${noteOrLink(link.url)}?",
+        "Are you sure you want to delete this ${noteOrLink(
+            link.url)}? This cannot be undone.") ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dismissible(
@@ -60,10 +68,7 @@ class LinkTile extends StatelessWidget {
         ),
       ),
       confirmDismiss: (direction) async {
-        hideKeyboard(context, delay: 0.milliseconds);
-        return await confirmDialog(context, "Delete ${noteOrLink(link.url)}?",
-                "Are you sure you want to delete this ${noteOrLink(link.url)}? This cannot be undone.") ??
-            false;
+        return await _confirmDismiss(direction);
       },
       onDismissed: (direction) {
         onDismissed.call(direction);
@@ -109,73 +114,73 @@ class LinkTile extends StatelessWidget {
                         duration: 400.milliseconds,
                         child: data != null
                             ? Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  if (link.title.isNotEmpty) ...[
-                                    SubstringHighlight(
-                                      text: link.title,
-                                      textAlign: TextAlign.center,
-                                      term: searchText,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      textStyle: GoogleFonts.poppins(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      textStyleHighlight: GoogleFonts.poppins(
-                                        color: accent,
-                                        backgroundColor: Colors.white,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                  ],
-                                  SubstringHighlight(
-                                    text: link.subtitle?.isEmpty ?? true
-                                        ? link.url
-                                        : link.subtitle!,
-                                    term: searchText,
-                                    textAlign: TextAlign.center,
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                    textStyle: GoogleFonts.poppins(
-                                      color: Colors.white,
-                                      fontStyle: FontStyle.italic,
-                                      fontSize: 15,
-                                    ),
-                                    textStyleHighlight: GoogleFonts.poppins(
-                                      color: accent,
-                                      backgroundColor: Colors.white,
-                                    ),
-                                  ),
-                                  if (link.message != null) ...[
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    SubstringHighlight(
-                                      textAlign: TextAlign.center,
-                                      text: link.message!,
-                                      term: searchText,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textStyle: GoogleFonts.poppins(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                      ),
-                                      textStyleHighlight: GoogleFonts.poppins(
-                                        color: accent,
-                                        backgroundColor: Colors.white,
-                                      ),
-                                    ),
-                                  ]
-                                ],
-                              )
-                            : SpinKitChasingDots(
-                                size: 30,
-                                color: Colors.white,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (link.title.isNotEmpty) ...[
+                              SubstringHighlight(
+                                text: link.title,
+                                textAlign: TextAlign.center,
+                                term: searchText,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                textStyle: GoogleFonts.poppins(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textStyleHighlight: GoogleFonts.poppins(
+                                  color: accent,
+                                  backgroundColor: Colors.white,
+                                ),
                               ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                            ],
+                            SubstringHighlight(
+                              text: link.subtitle?.isEmpty ?? true
+                                  ? link.url
+                                  : link.subtitle!,
+                              term: searchText,
+                              textAlign: TextAlign.center,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              textStyle: GoogleFonts.poppins(
+                                color: Colors.white,
+                                fontStyle: FontStyle.italic,
+                                fontSize: 15,
+                              ),
+                              textStyleHighlight: GoogleFonts.poppins(
+                                color: accent,
+                                backgroundColor: Colors.white,
+                              ),
+                            ),
+                            if (link.message != null) ...[
+                              SizedBox(
+                                height: 10,
+                              ),
+                              SubstringHighlight(
+                                textAlign: TextAlign.center,
+                                text: link.message!,
+                                term: searchText,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                textStyle: GoogleFonts.poppins(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                ),
+                                textStyleHighlight: GoogleFonts.poppins(
+                                  color: accent,
+                                  backgroundColor: Colors.white,
+                                ),
+                              ),
+                            ]
+                          ],
+                        )
+                            : SpinKitChasingDots(
+                          size: 30,
+                          color: Colors.white,
+                        ),
                       );
                     }),
               ),
