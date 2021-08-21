@@ -32,8 +32,8 @@ class HomeController extends GetxController {
 
   void refreshLinks({String? sortBy, bool? ascending}) async {
     isLoading(true);
-    final list = await Client.fetchLinks(sortBy: sortBy, ascending: ascending);
     Get.find<SidebarController>().refreshLabels();
+    final list = await Client.fetchLinks(sortBy: sortBy, ascending: ascending);
     if (list is List<dynamic>) {
       var newList = linkFromJson(list);
       linksList.value = newList;
