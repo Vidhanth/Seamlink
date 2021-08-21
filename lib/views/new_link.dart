@@ -21,18 +21,20 @@ class NewLink extends StatelessWidget {
   final String? sharedText;
 
   final NewLinkController controller = NewLinkController();
-  late TextEditingController titleController;
-  late TextEditingController linkController;
+  TextEditingController? titleController;
+  TextEditingController? linkController;
 
   NewLink({Key? key, this.link, this.sharedText}) : super(key: key) {
-    titleController = TextEditingController(text: link?.title);
-    linkController = TextEditingController(text: link?.url ?? sharedText);
-    controller.selectedColorIndex.value = link?.colorIndex ?? 0;
-    controller.selectedLabelIndex.value += link?.labels ?? [];
-    if (link != null) {
-      controller.autoTitle(link!.autotitle);
-    } else if (sharedText?.isValidLink ?? false) {
-      controller.autoTitle(true);
+    if (linkController == null) {
+      titleController ??= TextEditingController(text: link?.title);
+      linkController ??= TextEditingController(text: link?.url ?? sharedText);
+      controller.selectedColorIndex.value = link?.colorIndex ?? 0;
+      controller.selectedLabelIndex.value += link?.labels ?? [];
+      if (link != null) {
+        controller.autoTitle(link!.autotitle);
+      } else if (sharedText?.isValidLink ?? false) {
+        controller.autoTitle(true);
+      }
     }
   }
 
@@ -110,7 +112,7 @@ class NewLink extends StatelessWidget {
                       controller: titleController,
                       onChanged: (title) {
                         controller.autoTitle(title.trim().isEmpty &&
-                            linkController.text.trim().isValidLink);
+                            linkController!.text.trim().isValidLink);
                       },
                       style: GoogleFonts.poppins(
                         fontWeight: FontWeight.bold,
@@ -158,52 +160,65 @@ class NewLink extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 10.0, right: 25.0),
-                      child: Obx(
-                        () => GestureDetector(
-                          onTap: () {
-                            controller.autoTitle.toggle();
-                          },
-                          child: Row(
-                            children: [
-                              Checkbox(
-                                materialTapTargetSize:
-                                    MaterialTapTargetSize.shrinkWrap,
-                                value: controller.autoTitle.value,
-                                onChanged: (val) {
-                                  if (val!) {
-                                    if (linkController.text.trim().isValidLink)
-                                      controller.autoTitle(true);
-                                    else {
-                                      showSnackBar(
-                                          context, "Please enter a valid link",
-                                          error: true);
+                        padding: EdgeInsets.only(left: 10.0, right: 25.0),
+                        child: StatefulBuilder(builder: (context, setState) {
+                          return GestureDetector(
+                            onTap: () {
+                              if (!controller.autoTitle.value) {
+                                if (linkController!.text.trim().isValidLink)
+                                  controller.autoTitle(true);
+                                else {
+                                  showSnackBar(
+                                      context, "Please enter a valid link",
+                                      error: true);
+                                }
+                              } else {
+                                controller.autoTitle(false);
+                              }
+                              setState(() {});
+                            },
+                            child: Row(
+                              children: [
+                                Checkbox(
+                                  materialTapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                  value: controller.autoTitle.value,
+                                  onChanged: (val) {
+                                    if (val!) {
+                                      if (linkController!.text
+                                          .trim()
+                                          .isValidLink)
+                                        controller.autoTitle(true);
+                                      else {
+                                        showSnackBar(context,
+                                            "Please enter a valid link",
+                                            error: true);
+                                      }
+                                    } else {
+                                      controller.autoTitle(false);
                                     }
-                                  } else {
-                                    controller.autoTitle(false);
-                                  }
-                                },
-                                activeColor: accent,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                              ),
-                              Flexible(
-                                child: AutoSizeText(
-                                  'Fetch title from link',
-                                  style: GoogleFonts.poppins(
-                                    color: accent.withOpacity(0.75),
-                                    fontSize: 17,
+                                    setState(() {});
+                                  },
+                                  activeColor: accent,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
                                   ),
-                                  minFontSize: 1,
-                                  maxLines: 2,
                                 ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+                                Flexible(
+                                  child: AutoSizeText(
+                                    'Fetch title from link',
+                                    style: GoogleFonts.poppins(
+                                      color: accent.withOpacity(0.75),
+                                      fontSize: 17,
+                                    ),
+                                    minFontSize: 1,
+                                    maxLines: 2,
+                                  ),
+                                )
+                              ],
+                            ),
+                          );
+                        })),
                     Obx(
                       () => LabelPicker(
                         onLabelSelected: (index) {
@@ -249,16 +264,16 @@ class NewLink extends StatelessWidget {
                                         Icons.check_rounded,
                                       ),
                                 onPressed: () async {
-                                  if (linkController.text.trim().isEmpty) {
+                                  if (linkController!.text.trim().isEmpty) {
                                     showSnackBar(context, "Please enter a note",
                                         error: true);
                                     return;
                                   }
                                   controller.isSaving(true);
-                                  String title = titleController.text.trim();
+                                  String title = titleController!.text.trim();
                                   if (link != null) {
                                     if (link!.url ==
-                                            linkController.text.trim() &&
+                                            linkController!.text.trim() &&
                                         link!.title == title &&
                                         link!.colorIndex ==
                                             controller
@@ -274,7 +289,7 @@ class NewLink extends StatelessWidget {
                                   }
                                   bool result = await saveLink(
                                     context,
-                                    linkController.text.trim(),
+                                    linkController!.text.trim(),
                                     controller.autoTitle.value ? '' : title,
                                     controller.selectedColorIndex.value,
                                     controller.selectedLabelIndex,
@@ -282,7 +297,7 @@ class NewLink extends StatelessWidget {
                                     uid: link?.uid,
                                   );
                                   if (result) {
-                                    controller.isSaving(false);
+                                    // controller.isSaving(false);
                                     if (sharedText?.isEmpty ?? true) {
                                       Get.back();
                                     } else {
