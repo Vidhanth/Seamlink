@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:seamlink/components/input_field.dart';
 import 'package:seamlink/controllers/HomeController.dart';
@@ -23,7 +24,7 @@ class _SearchBarState extends State<SearchBar> {
     return InputField(
       focusNode: widget.focusNode,
       hint: "Search",
-      margin: EdgeInsets.only(right: 0),
+      style: GoogleFonts.poppins(),
       onChanged: (query) {
         homeController.searchText.value = query.toLowerCase().trim();
       },
