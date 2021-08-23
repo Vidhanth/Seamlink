@@ -19,6 +19,7 @@ import 'package:seamlink/views/home.dart';
 class NewLink extends StatelessWidget {
   final Link? link;
   final String? sharedText;
+  Function? refreshAutotitle;
 
   final NewLinkController controller = NewLinkController();
   TextEditingController? titleController;
@@ -113,6 +114,7 @@ class NewLink extends StatelessWidget {
                       onChanged: (title) {
                         controller.autoTitle(title.trim().isEmpty &&
                             linkController!.text.trim().isValidLink);
+                        refreshAutotitle?.call(() {});
                       },
                       style: GoogleFonts.poppins(
                         fontWeight: FontWeight.bold,
@@ -135,6 +137,7 @@ class NewLink extends StatelessWidget {
                         controller: linkController,
                         onChanged: (newLink) {
                           controller.autoTitle(newLink.isValidLink);
+                          refreshAutotitle?.call(() {});
                         },
                         cursorColor: accent,
                         autofocus: ((link?.url.isEmpty ?? true) &&
@@ -162,6 +165,7 @@ class NewLink extends StatelessWidget {
                     Padding(
                         padding: EdgeInsets.only(left: 10.0, right: 25.0),
                         child: StatefulBuilder(builder: (context, setState) {
+                          refreshAutotitle = setState;
                           return GestureDetector(
                             onTap: () {
                               if (!controller.autoTitle.value) {
