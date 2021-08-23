@@ -120,7 +120,7 @@ class LinkTile extends StatelessWidget {
                                     text: link.title,
                                     textAlign: TextAlign.center,
                                     term: searchText,
-                                    maxLines: 2,
+                                    maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
                                     textStyle: GoogleFonts.poppins(
                                       color: Colors.white,
@@ -142,7 +142,7 @@ class LinkTile extends StatelessWidget {
                                       : link.subtitle!,
                                   term: searchText,
                                   textAlign: TextAlign.center,
-                                  maxLines: 3,
+                                  maxLines: 10,
                                   overflow: TextOverflow.ellipsis,
                                   textStyle: GoogleFonts.poppins(
                                     color: Colors.white,
