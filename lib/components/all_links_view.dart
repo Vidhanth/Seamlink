@@ -103,64 +103,56 @@ class AllLinksView extends StatelessWidget {
 
     if (!isScreenWide(context)) {
       return AnimationLimiter(
-        child: NotificationListener(
-          onNotification: (notification) {
-            if (notification is ScrollNotification) {
-              hideKeyboard(context, delay: 0.milliseconds);
-            }
-            return true;
-          },
-          child: ListView.builder(
-            padding: EdgeInsets.only(bottom: 40, top: 10),
-            physics:
-                BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-            itemBuilder: (context, index) {
-              return AnimationConfiguration.staggeredList(
-                position: index,
-                child: SlideAnimation(
+        child: ListView.builder(
+          padding: EdgeInsets.only(bottom: 40, top: 10),
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          itemBuilder: (context, index) {
+            return AnimationConfiguration.staggeredList(
+              position: index,
+              child: SlideAnimation(
+                duration: 400.milliseconds,
+                child: FadeInAnimation(
                   duration: 400.milliseconds,
-                  child: FadeInAnimation(
-                    duration: 400.milliseconds,
-                    child: LinkTile(
-                      onDismissed: (direction) async {
-                        hideKeyboard(context);
-                        await Get.find<HomeController>()
-                            .deleteLink(context, linksList[index].uid);
-                      },
-                      searchText: searchText,
-                      link: linksList[index],
-                      onTap: () async {
-                        hideKeyboard(context);
-                        if (linksList[index].url.isValidLink) {
-                          launch(linksList[index].url);
-                        } else {
-                          Navigate.to(
-                            page: NewLink(link: linksList[index]),
-                          );
-                        }
-                      },
-                      onLongPress: () {
-                        hideKeyboard(context);
-                        showLinkOptions(context, linksList[index]);
-                      },
-                      onSecondaryTap: () {
-                        showLinkOptions(context, linksList[index]);
-                      },
-                      onTertiaryTap: () async {
-                        if (linksList[index].url.isValidLink)
-                          await openAndDelete(context, linksList[index]);
-                        else
-                          Navigate.to(
-                            page: NewLink(link: linksList[index]),
-                          );
-                      },
-                    ),
+                  child: LinkTile(
+                    onDismissed: (direction) async {
+                      hideKeyboard(context);
+                      await Get.find<HomeController>()
+                          .deleteLink(context, linksList[index].uid);
+                    },
+                    searchText: searchText,
+                    link: linksList[index],
+                    onTap: () async {
+                      hideKeyboard(context);
+                      if (linksList[index].url.isValidLink) {
+                        launch(linksList[index].url);
+                      } else {
+                        Navigate.to(
+                          page: NewLink(link: linksList[index]),
+                        );
+                      }
+                    },
+                    onLongPress: () {
+                      hideKeyboard(context);
+                      showLinkOptions(context, linksList[index]);
+                    },
+                    onSecondaryTap: () {
+                      showLinkOptions(context, linksList[index]);
+                    },
+                    onTertiaryTap: () async {
+                      if (linksList[index].url.isValidLink)
+                        await openAndDelete(context, linksList[index]);
+                      else
+                        Navigate.to(
+                          page: NewLink(link: linksList[index]),
+                        );
+                    },
                   ),
                 ),
-              );
-            },
-            itemCount: linksList.length,
-          ),
+              ),
+            );
+          },
+          itemCount: linksList.length,
         ),
       );
     } else {
