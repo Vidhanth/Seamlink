@@ -24,7 +24,7 @@ class _SearchBarState extends State<SearchBar> {
     return InputField(
       focusNode: widget.focusNode,
       hint: "Search",
-      style: GoogleFonts.poppins(),
+      style: GoogleFonts.poppins(fontSize: 18),
       onChanged: (query) {
         homeController.searchText.value = query.toLowerCase().trim();
       },
