@@ -150,6 +150,7 @@ class Home extends StatelessWidget {
                                                   child: RefreshIndicator(
                                                     color: accent,
                                                     onRefresh: () async {
+                                                      searchFocus.unfocus();
                                                       Get.showSnackbar(GetBar(
                                                         // title: "You're up to date!",
                                                         message:
