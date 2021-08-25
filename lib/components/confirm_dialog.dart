@@ -136,6 +136,9 @@ class BottomDialog extends StatelessWidget {
                   onCancel.call();
                 },
                 color: accent.withOpacity(0.15),
+                splashColor: Colors.black12,
+                hoverColor: Colors.black12,
+                focusColor: Colors.black12,
                 textColor: accent.withOpacity(0.7),
                 text: cancelText ?? "NO",
                 padding: EdgeInsets.symmetric(
@@ -154,6 +157,9 @@ class BottomDialog extends StatelessWidget {
                     onOptional!.call();
                   },
                   color: accent.withOpacity(0.15),
+                  splashColor: Colors.black12,
+                  hoverColor: Colors.black12,
+                  focusColor: Colors.black12,
                   textColor: accent.withOpacity(0.7),
                   text: optionalText!,
                   padding: EdgeInsets.symmetric(

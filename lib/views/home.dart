@@ -199,6 +199,8 @@ class Home extends StatelessWidget {
                                   ContainerTransitionType.fadeThrough,
                               closedBuilder: (_, openContainer) {
                                 return InkWell(
+                                  hoverColor: Colors.white24,
+                                  focusColor: Colors.white24,
                                   onTap: () {
                                     hideKeyboard(context,
                                         delay: 0.milliseconds);

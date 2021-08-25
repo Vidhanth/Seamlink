@@ -130,18 +130,21 @@ class Sidebar extends StatelessWidget {
                           fontWeight: FontWeight.w500, color: Colors.black87),
                       textAlign: TextAlign.start,
                     ),
-                    InkWell(
-                      onTap: () async {
-                        controller.editMode.toggle();
-                      },
-                      borderRadius: BorderRadius.circular(3),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 3),
-                        child: Obx(
-                          () => Text(
-                            controller.editMode.value ? "DONE" : "EDIT",
-                            style: GoogleFonts.poppins(color: Colors.black54),
-                            textAlign: TextAlign.start,
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        onTap: () async {
+                          controller.editMode.toggle();
+                        },
+                        borderRadius: BorderRadius.circular(3),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 3),
+                          child: Obx(
+                            () => Text(
+                              controller.editMode.value ? "DONE" : "EDIT",
+                              style: GoogleFonts.poppins(color: Colors.black54),
+                              textAlign: TextAlign.start,
+                            ),
                           ),
                         ),
                       ),
@@ -272,16 +275,19 @@ class Sidebar extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        InkWell(
-                          onTap: () async {
-                            await logout();
-                          },
-                          borderRadius: BorderRadius.circular(3),
-                          child: Text(
-                            ' Logout ',
-                            style: GoogleFonts.poppins(
-                              // fontSize: 20,
-                              fontStyle: FontStyle.italic,
+                        Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () async {
+                              await logout();
+                            },
+                            borderRadius: BorderRadius.circular(3),
+                            child: Text(
+                              ' Logout ',
+                              style: GoogleFonts.poppins(
+                                // fontSize: 20,
+                                fontStyle: FontStyle.italic,
+                              ),
                             ),
                           ),
                         )

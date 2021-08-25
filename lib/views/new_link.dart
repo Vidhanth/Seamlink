@@ -238,7 +238,7 @@ class NewLink extends StatelessWidget {
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                          top: 10, bottom: 20, left: 15, right: 20),
+                          top: 5, bottom: 20, left: 15, right: 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -259,6 +259,8 @@ class NewLink extends StatelessWidget {
                               ignoring: controller.isSaving.value,
                               child: FloatingActionButton(
                                 backgroundColor: accent,
+                                focusColor: Colors.white24,
+                                hoverColor: Colors.white24,
                                 child: controller.isSaving.value
                                     ? SpinKitChasingDots(
                                         color: Colors.white,

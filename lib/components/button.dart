@@ -7,6 +7,8 @@ class Button extends StatelessWidget {
   final double? radius;
   final Color? textColor;
   final Color? splashColor;
+  final Color? hoverColor;
+  final Color? focusColor;
   final Color? borderColor;
   final double? borderWidth;
   final String text;
@@ -25,32 +27,40 @@ class Button extends StatelessWidget {
     this.textSize,
     this.padding,
     this.splashColor,
+    this.hoverColor,
+    this.focusColor,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      splashColor: splashColor ?? Colors.white10,
-      onTap: () {
-        onTap.call();
-      },
+    return Container(decoration: BoxDecoration(
+      color: color,
       borderRadius: BorderRadius.circular(radius ?? 20),
-      child: Container(
-        decoration: BoxDecoration(
-          color: color,
+      border: Border.all(
+        color: borderColor ?? Colors.transparent,
+        width: borderWidth ?? 0,
+      ),
+    ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          splashColor: splashColor ?? Colors.white10,
+          hoverColor: hoverColor ?? Colors.white24,
+          focusColor: focusColor ?? Colors.white24,
+          onTap: () {
+            onTap.call();
+          },
           borderRadius: BorderRadius.circular(radius ?? 20),
-          border: Border.all(
-            color: borderColor ?? Colors.transparent,
-            width: borderWidth ?? 0,
-          ),
-        ),
-        padding: padding ?? EdgeInsets.zero,
-        child: Center(
-          child: Text(
-            text,
-            style: GoogleFonts.poppins(
-              color: textColor ?? Colors.white,
-              fontSize: textSize ?? 16,
+          child: Container(
+            padding: padding ?? EdgeInsets.zero,
+            child: Center(
+              child: Text(
+                text,
+                style: GoogleFonts.poppins(
+                  color: textColor ?? Colors.white,
+                  fontSize: textSize ?? 16,
+                ),
+              ),
             ),
           ),
         ),
