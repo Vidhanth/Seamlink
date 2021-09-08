@@ -30,6 +30,7 @@ dependencies:
   bitsdojo_window:
   shared_preferences:
   flutter_staggered_animations: ^1.0.0
+  flutter_launcher_icons:
   window_size:
     git:
       url: git://github.com/google/flutter-desktop-embedding.git
@@ -39,6 +40,13 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: "ic_launcher"
+  ios: false
+  image_path: "assets/images/ic_launcher.png"
+  adaptive_icon_foreground: "assets/images/ic_launcher_fg.png"
+  adaptive_icon_background: "#ffffff"
 
 flutter:
   
