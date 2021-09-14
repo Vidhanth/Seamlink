@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:seamlink/models/link.dart';
-import 'package:seamlink/services/url_parser.dart';
+import 'package:seamlink/services/parsers/url_parser.dart';
 
 class RedditData {
   static Future<Link> getDetails(Link link) async {
@@ -16,9 +16,9 @@ class RedditData {
     String title = data["data"]["children"][0]["data"]['title'];
     String subreddit = 'r/' + data["data"]["children"][0]["data"]['subreddit'];
     String author = 'u/' + data["data"]["children"][0]["data"]['author'];
-    link.title = title;
-    link.subtitle = author;
-    link.message = subreddit;
+    link.title = title.trim();
+    link.subtitle = author.trim();
+    link.message = subreddit.trim();
     return link;
   }
 

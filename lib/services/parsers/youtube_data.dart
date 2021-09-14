@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:seamlink/models/link.dart';
-import 'package:seamlink/services/url_parser.dart';
-import 'extensions.dart';
+import 'package:seamlink/services/parsers/url_parser.dart';
+import '../extensions.dart';
 
 class YoutubeData {
   static Future<Link> getDetails(Link link) async {
@@ -33,9 +33,9 @@ class YoutubeData {
       return link;
     }
 
-    link.title = title;
-    link.subtitle = channelTitle;
-    link.message = duration;
+    link.title = title.trim();
+    link.subtitle = channelTitle.trim();
+    link.message = duration.trim();
 
     return link;
   }

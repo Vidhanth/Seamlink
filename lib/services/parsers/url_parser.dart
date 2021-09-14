@@ -20,6 +20,6 @@ class UrlParser {
         }
       });
     } catch (e) {}
-    return title ?? '';
+    return title?.trim() ?? '';
   }
 }

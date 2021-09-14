@@ -11,10 +11,10 @@ import 'package:seamlink/controllers/UserController.dart';
 import 'package:seamlink/models/link.dart';
 import 'package:seamlink/models/result.dart';
 import 'package:seamlink/services/client.dart';
-import 'package:seamlink/services/reddit_data.dart';
-import 'package:seamlink/services/url_parser.dart';
+import 'package:seamlink/services/parsers/reddit_data.dart';
+import 'package:seamlink/services/parsers/url_parser.dart';
 import 'package:seamlink/services/extensions.dart';
-import 'package:seamlink/services/youtube_data.dart';
+import 'package:seamlink/services/parsers/youtube_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
