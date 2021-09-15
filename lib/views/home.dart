@@ -187,41 +187,60 @@ class Home extends StatelessWidget {
                           Positioned(
                             bottom: 20,
                             right: 20,
-                            child: OpenContainer(
-                              closedColor: accent,
-                              closedElevation: 15,
-                              closedShape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(100.0)),
-                              ),
-                              transitionDuration: 400.milliseconds,
-                              transitionType:
-                                  ContainerTransitionType.fadeThrough,
-                              closedBuilder: (_, openContainer) {
-                                return InkWell(
-                                  hoverColor: Colors.white24,
-                                  focusColor: Colors.white24,
-                                  onTap: () {
-                                    hideKeyboard(context,
-                                        delay: 0.milliseconds);
-                                    openContainer.call();
-                                  },
-                                  child: Container(
-                                    height: 60,
-                                    width: 60,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Icon(
-                                      Icons.add,
-                                      color: Colors.white,
-                                    ),
+                            child: Row(
+                              children: [
+                                AnimatedOpacity(
+                                  duration: 300.milliseconds,
+                                  opacity: (isDesktop ||
+                                          homeController.linksList.isNotEmpty)
+                                      ? 1
+                                      : 0,
+                                  child: FloatingActionButton(
+                                    heroTag: 'refresh',
+                                    onPressed: () {
+                                      homeController.refreshLinks();
+                                    },
+                                    hoverColor: Colors.white24,
+                                    focusColor: Colors.white24,
+                                    backgroundColor: accent,
+                                    child: Icon(Icons.refresh),
                                   ),
-                                );
-                              },
-                              openBuilder: (_, __) {
-                                return NewLink();
-                              },
+                                ),
+                                SizedBox(
+                                  width: (isDesktop ||
+                                          homeController.linksList.isNotEmpty)
+                                      ? 5
+                                      : 0,
+                                ),
+                                OpenContainer(
+                                  closedColor: accent,
+                                  closedElevation: 15,
+                                  closedShape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(100.0)),
+                                  ),
+                                  transitionDuration: 400.milliseconds,
+                                  transitionType:
+                                      ContainerTransitionType.fadeThrough,
+                                  closedBuilder: (_, openContainer) {
+                                    return FloatingActionButton(
+                                      heroTag: 'new_link',
+                                      onPressed: () {
+                                        hideKeyboard(context,
+                                            delay: 0.milliseconds);
+                                        openContainer.call();
+                                      },
+                                      hoverColor: Colors.white24,
+                                      focusColor: Colors.white24,
+                                      backgroundColor: accent,
+                                      child: Icon(Icons.add),
+                                    );
+                                  },
+                                  openBuilder: (_, __) {
+                                    return NewLink();
+                                  },
+                                ),
+                              ],
                             ),
                           ),
                         ],
