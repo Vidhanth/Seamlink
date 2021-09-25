@@ -5,10 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:menubar/menubar.dart';
 import 'package:seamlink/components/color_picker.dart';
 import 'package:seamlink/components/custom_titlebar.dart';
 import 'package:seamlink/components/label_picker.dart';
 import 'package:seamlink/constants/colors.dart';
+import 'package:seamlink/controllers/HomeController.dart';
 import 'package:seamlink/controllers/NewLinkController.dart';
 import 'package:seamlink/models/link.dart';
 import 'package:seamlink/services/utils.dart';
@@ -41,6 +43,7 @@ class NewLink extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    updateMenubar();
     return WillPopScope(
       onWillPop: () async {
         return !controller.isSaving.value;
@@ -71,23 +74,7 @@ class NewLink extends StatelessWidget {
                             padding: EdgeInsets.only(right: 20),
                             child: InkWell(
                               onTap: () async {
-                                if (controller.isSaving.value) return;
-                                if (sharedText?.isEmpty ?? true) {
-                                  await hideKeyboard(context);
-                                  Get.back();
-                                } else {
-                                  if (isAndroid) {
-                                    if (Navigator.canPop(context))
-                                      Get.back();
-                                    else
-                                      SystemNavigator.pop();
-                                  } else {
-                                    if (Navigator.canPop(context))
-                                      Get.back();
-                                    else
-                                      Get.off(() => Home());
-                                  }
-                                }
+                                await cancel();
                               },
                               borderRadius: BorderRadius.circular(200),
                               child: Icon(
@@ -270,58 +257,7 @@ class NewLink extends StatelessWidget {
                                         Icons.check_rounded,
                                       ),
                                 onPressed: () async {
-                                  if (linkController!.text.trim().isEmpty) {
-                                    showSnackBar(context, "Please enter a note",
-                                        error: true);
-                                    return;
-                                  }
-                                  controller.isSaving(true);
-                                  String title = titleController!.text.trim();
-                                  if (link != null) {
-                                    if (link!.url ==
-                                            linkController!.text.trim() &&
-                                        link!.title == title &&
-                                        link!.colorIndex ==
-                                            controller
-                                                .selectedColorIndex.value &&
-                                        link!.autotitle ==
-                                            controller.autoTitle.value &&
-                                        listEquals(link!.labels,
-                                            controller.selectedLabelIndex)) {
-                                      await hideKeyboard(context);
-                                      Get.back();
-                                      return;
-                                    }
-                                  }
-                                  bool result = await saveLink(
-                                    context,
-                                    linkController!.text.trim(),
-                                    controller.autoTitle.value ? '' : title,
-                                    controller.selectedColorIndex.value,
-                                    controller.selectedLabelIndex,
-                                    controller.autoTitle.value,
-                                    uid: link?.uid,
-                                  );
-                                  if (result) {
-                                    // controller.isSaving(false);
-                                    if (sharedText?.isEmpty ?? true) {
-                                      Get.back();
-                                    } else {
-                                      if (isAndroid) {
-                                        if (Navigator.canPop(context))
-                                          Get.back();
-                                        else
-                                          SystemNavigator.pop();
-                                      } else {
-                                        if (Navigator.canPop(context))
-                                          Get.back();
-                                        else
-                                          Get.off(() => Home());
-                                      }
-                                    }
-                                  } else {
-                                    controller.isSaving(false);
-                                  }
+                                  await save();
                                 },
                               ),
                             ),
@@ -337,5 +273,114 @@ class NewLink extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void updateMenubar() {
+    setApplicationMenu([
+      Submenu(
+        label: "Actions",
+        children: [
+          MenuItem(
+            label: 'Save',
+            enabled: true,
+            onClicked: () async {
+              await save();
+            },
+            shortcut: LogicalKeySet.fromSet({
+              LogicalKeyboardKey.keyS,
+              LogicalKeyboardKey.meta,
+            }),
+          ),
+          MenuItem(
+            label: 'Cancel',
+            enabled: true,
+            onClicked: () async {
+              await cancel();
+            },
+            shortcut: LogicalKeySet.fromSet({
+              LogicalKeyboardKey.keyW,
+              LogicalKeyboardKey.meta,
+            }),
+          ),
+        ],
+      ),
+    ]);
+  }
+
+  Future<void> cancel() async {
+    if (controller.isSaving.value) return;
+    Future.delayed(1.seconds, () {
+      Get.find<HomeController>().updateMenubar();
+    });
+    if (sharedText?.isEmpty ?? true) {
+      await hideKeyboard(Get.context);
+      Get.back();
+    } else {
+      if (isAndroid) {
+        if (Navigator.canPop(Get.context!))
+          Get.back();
+        else
+          SystemNavigator.pop();
+      } else {
+        if (Navigator.canPop(Get.context!))
+          Get.back();
+        else
+          Get.off(() => Home());
+      }
+    }
+  }
+
+  Future<void> save() async {
+    if (linkController!.text.trim().isEmpty) {
+      showSnackBar(Get.context!, "Please enter a note", error: true);
+      return;
+    }
+    controller.isSaving(true);
+    String title = titleController!.text.trim();
+    if (link != null) {
+      if (link!.url == linkController!.text.trim() &&
+          link!.title == title &&
+          link!.colorIndex == controller.selectedColorIndex.value &&
+          link!.autotitle == controller.autoTitle.value &&
+          listEquals(link!.labels, controller.selectedLabelIndex)) {
+        await hideKeyboard(Get.context!);
+        Future.delayed(1.seconds, () {
+          Get.find<HomeController>().updateMenubar();
+        });
+        Get.back();
+        return;
+      }
+    }
+    bool result = await saveLink(
+      Get.context!,
+      linkController!.text.trim(),
+      controller.autoTitle.value ? '' : title,
+      controller.selectedColorIndex.value,
+      controller.selectedLabelIndex,
+      controller.autoTitle.value,
+      uid: link?.uid,
+    );
+    if (result) {
+      Future.delayed(1.seconds, () {
+        Get.find<HomeController>().updateMenubar();
+      });
+      if (sharedText?.isEmpty ?? true) {
+        Get.back();
+      } else {
+        if (isAndroid) {
+          if (Navigator.canPop(Get.context!))
+            Get.back();
+          else
+            SystemNavigator.pop();
+        } else {
+          if (Navigator.canPop(Get.context!))
+            Get.back();
+          else
+            Get.off(() => Home());
+        }
+      }
+    } else {
+      controller.isSaving(false);
+    }
   }
 }

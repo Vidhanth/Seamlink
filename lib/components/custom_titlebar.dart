@@ -51,9 +51,7 @@ class CustomTitleBar extends StatelessWidget {
                           child: Padding(
                             padding: EdgeInsets.only(
                                 top: 15, bottom: 10, left: 25, right: 25),
-                            child: SearchBar(
-                              focusNode: FocusNode(),
-                            ),
+                            child: SearchBar(),
                           ),
                         ),
                 ],

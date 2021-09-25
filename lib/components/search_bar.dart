@@ -6,9 +6,9 @@ import 'package:seamlink/components/input_field.dart';
 import 'package:seamlink/controllers/HomeController.dart';
 
 class SearchBar extends StatefulWidget {
-  final FocusNode focusNode;
-
-  SearchBar({Key? key, required this.focusNode}) : super(key: key);
+  SearchBar({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _SearchBarState createState() => _SearchBarState();
@@ -22,7 +22,7 @@ class _SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) {
     return InputField(
-      focusNode: widget.focusNode,
+      focusNode: homeController.searchFocus,
       hint: "Search",
       style: GoogleFonts.poppins(fontSize: 18),
       onChanged: (query) {

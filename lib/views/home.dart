@@ -94,7 +94,7 @@ class Home extends StatelessWidget {
                                 Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 10),
-                                  child: SearchBar(focusNode: searchFocus),
+                                  child: SearchBar(),
                                 ),
                               ],
                               Obx(
@@ -223,6 +223,7 @@ class Home extends StatelessWidget {
                                   transitionType:
                                       ContainerTransitionType.fadeThrough,
                                   closedBuilder: (_, openContainer) {
+                                    homeController.openNewLink = openContainer;
                                     return FloatingActionButton(
                                       heroTag: 'new_link',
                                       onPressed: () {

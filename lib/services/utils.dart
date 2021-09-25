@@ -3,6 +3,7 @@ import 'dart:io' hide Link;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:menubar/menubar.dart';
 import 'package:seamlink/components/confirm_dialog.dart';
 import 'package:seamlink/components/link_options.dart';
 import 'package:seamlink/controllers/HomeController.dart';
@@ -23,6 +24,7 @@ String noteOrLink(String url) {
 }
 
 Future<void> logout() async {
+  setApplicationMenu([]);
   await SharedPreferences.getInstance()
     ..remove('username');
   Get.find<UserController>().username('');
