@@ -55,6 +55,7 @@ class HomeController extends GetxController {
   }
 
   void updateMenubar() {
+    if (isMobile) return;
     setApplicationMenu([
       Submenu(
         label: "Actions",

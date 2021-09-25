@@ -24,7 +24,7 @@ String noteOrLink(String url) {
 }
 
 Future<void> logout() async {
-  setApplicationMenu([]);
+  if (isDesktop) setApplicationMenu([]);
   await SharedPreferences.getInstance()
     ..remove('username');
   Get.find<UserController>().username('');
