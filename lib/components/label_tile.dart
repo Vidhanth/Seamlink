@@ -34,6 +34,7 @@ class LabelTile extends StatelessWidget {
         onLongPress: () {
           onLongPress?.call();
         },
+        focusColor: Colors.black.withOpacity(0.05),
         child: GestureDetector(
           onSecondaryTap: () {
             onLongPress?.call();
