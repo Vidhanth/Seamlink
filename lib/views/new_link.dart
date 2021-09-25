@@ -276,7 +276,7 @@ class NewLink extends StatelessWidget {
   }
 
   void updateMenubar() {
-    if (isMobile) return;
+    if (isMobile || isWindows) return;
     setApplicationMenu([
       Submenu(
         label: "Actions",
