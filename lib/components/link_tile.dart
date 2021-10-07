@@ -59,7 +59,9 @@ class LinkTile extends StatelessWidget {
         width: double.infinity,
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-            color: Colors.redAccent, borderRadius: BorderRadius.circular(20)),
+          color: Colors.redAccent,
+          borderRadius: BorderRadius.circular(20),
+        ),
         child: Icon(
           LineIcons.trash,
           color: Colors.white,
@@ -87,18 +89,24 @@ class LinkTile extends StatelessWidget {
           margin: margin,
           width: double.infinity,
           decoration: BoxDecoration(
-            color: colorsList[link.colorIndex],
-            boxShadow: [BoxShadow(blurRadius: 7, color: Colors.black12)],
+            color: primaryBg,
+            boxShadow: [
+              BoxShadow(blurRadius: 5, color: Colors.black26),
+            ],
             borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: colorsList[link.colorIndex],
+              width: 3,
+            ),
           ),
           duration: 500.milliseconds,
           child: Material(
             color: Colors.transparent,
             child: InkWell(
-              borderRadius: BorderRadius.circular(20),
-              splashColor: Colors.white30,
+              borderRadius: BorderRadius.circular(15),
+              splashColor: colorsList[link.colorIndex].withOpacity(0.15),
               highlightColor: Colors.transparent,
-              hoverColor: Colors.black12,
+              hoverColor: colorsList[link.colorIndex].withOpacity(0.15),
               onTap: () {
                 onTap.call();
               },
@@ -123,13 +131,13 @@ class LinkTile extends StatelessWidget {
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
                                     textStyle: GoogleFonts.poppins(
-                                      color: Colors.white,
+                                      color: Colors.black.withOpacity(0.7),
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
                                     ),
                                     textStyleHighlight: GoogleFonts.poppins(
-                                      color: accent,
-                                      backgroundColor: Colors.white,
+                                      color: Colors.white,
+                                      backgroundColor: Colors.black,
                                     ),
                                   ),
                                   SizedBox(
@@ -145,7 +153,7 @@ class LinkTile extends StatelessWidget {
                                   maxLines: 10,
                                   overflow: TextOverflow.ellipsis,
                                   textStyle: GoogleFonts.poppins(
-                                    color: Colors.white,
+                                    color: Colors.black.withOpacity(0.7),
                                     fontStyle: FontStyle.italic,
                                     fontSize: 15,
                                   ),
@@ -165,7 +173,7 @@ class LinkTile extends StatelessWidget {
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     textStyle: GoogleFonts.poppins(
-                                      color: Colors.white,
+                                      color: Colors.black.withOpacity(0.7),
                                       fontSize: 15,
                                     ),
                                     textStyleHighlight: GoogleFonts.poppins(
@@ -178,7 +186,7 @@ class LinkTile extends StatelessWidget {
                             )
                           : SpinKitChasingDots(
                               size: 30,
-                              color: Colors.white,
+                              color: colorsList[link.colorIndex],
                             ),
                     );
                   },
