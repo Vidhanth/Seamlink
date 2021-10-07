@@ -1,7 +1,9 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:seamlink/controllers/ThemeController.dart';
 
 class LabelTile extends StatelessWidget {
   final String label;
@@ -12,7 +14,9 @@ class LabelTile extends StatelessWidget {
   final Function? onLongPress;
   final bool? editing;
 
-  const LabelTile({
+  final ThemeController themeController = Get.find();
+
+  LabelTile({
     Key? key,
     required this.label,
     required this.isSelected,
@@ -34,7 +38,9 @@ class LabelTile extends StatelessWidget {
         onLongPress: () {
           onLongPress?.call();
         },
-        focusColor: Colors.black.withOpacity(0.05),
+        focusColor: themeController.currentTheme.focusColor,
+        splashColor: themeController.currentTheme.splashColor,
+        hoverColor: themeController.currentTheme.hoverColor,
         child: GestureDetector(
           onSecondaryTap: () {
             onLongPress?.call();
@@ -43,7 +49,9 @@ class LabelTile extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             margin: EdgeInsets.only(top: 0),
             decoration: BoxDecoration(
-              color: isSelected ? Colors.black12 : Colors.transparent,
+              color: isSelected
+                  ? themeController.currentTheme.splashColor
+                  : Colors.transparent,
             ),
             alignment: Alignment.centerLeft,
             child: Row(
@@ -51,11 +59,15 @@ class LabelTile extends StatelessWidget {
                 Stack(
                   alignment: Alignment.bottomRight,
                   children: [
-                    Icon(icon ?? LineIcons.tag),
+                    Icon(
+                      icon ?? LineIcons.tag,
+                      color: themeController.currentTheme.foreground,
+                    ),
                     if (iconSecondary != null)
                       Icon(
                         iconSecondary!,
                         size: 10,
+                        color: themeController.currentTheme.foreground,
                       ),
                   ],
                 ),
@@ -64,10 +76,17 @@ class LabelTile extends StatelessWidget {
                 ),
                 Text(
                   label,
-                  style: GoogleFonts.poppins(),
+                  style: GoogleFonts.poppins(
+                    color: themeController.currentTheme.foreground,
+                  ),
                 ),
                 Spacer(),
-                if (editing ?? false) FadeIn(child: Icon(LineIcons.pen)),
+                if (editing ?? false)
+                  FadeIn(
+                      child: Icon(
+                    LineIcons.pen,
+                    color: themeController.currentTheme.foreground,
+                  )),
               ],
             ),
           ),

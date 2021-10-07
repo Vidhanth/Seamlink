@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:seamlink/components/button.dart';
 import 'package:seamlink/components/input_field.dart';
-import 'package:seamlink/constants/colors.dart';
+import 'package:seamlink/controllers/ThemeController.dart';
 import 'package:seamlink/services/utils.dart';
 
 // ignore: must_be_immutable
@@ -46,10 +46,13 @@ class BottomDialog extends StatelessWidget {
 
   late TextEditingController? _textController;
 
+  final ThemeController themeController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     if (isScreenWide(context) || (Get.isDialogOpen ?? false)) {
       return AlertDialog(
+        backgroundColor: themeController.currentTheme.backgroundColor,
         contentPadding: EdgeInsets.all(18),
         content: Container(
           width: (MediaQuery.of(context).size.width * 0.4).clamp(300, 500),
@@ -94,6 +97,7 @@ class BottomDialog extends StatelessWidget {
           style: GoogleFonts.poppins(
             fontWeight: FontWeight.bold,
             fontSize: 25,
+            color: themeController.currentTheme.foreground,
           ),
         ),
         SizedBox(
@@ -103,7 +107,7 @@ class BottomDialog extends StatelessWidget {
           Text(
             message!,
             style: GoogleFonts.poppins(
-              color: Colors.grey[700],
+              color: themeController.currentTheme.subtext,
               fontWeight: FontWeight.normal,
               fontSize: 20,
             ),
@@ -116,11 +120,18 @@ class BottomDialog extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: InputField(
+              cursorColor: themeController.currentTheme.subtext,
+              bgColor: themeController.currentTheme.mutedBg,
               controller: _textController,
               onSubmitted: onSubmitted!,
               autofocus: true,
               hint: hint ?? 'Label',
-              style: GoogleFonts.poppins(),
+              hintStyle: GoogleFonts.poppins(
+                color: themeController.currentTheme.subtext,
+              ),
+              style: GoogleFonts.poppins(
+                color: themeController.currentTheme.foreground,
+              ),
               radius: 20,
             ),
           ),
@@ -135,11 +146,11 @@ class BottomDialog extends StatelessWidget {
                 onTap: () {
                   onCancel.call();
                 },
-                color: accent.withOpacity(0.15),
-                splashColor: Colors.black12,
-                hoverColor: Colors.black12,
-                focusColor: Colors.black12,
-                textColor: accent.withOpacity(0.7),
+                color: themeController.currentTheme.accent.withOpacity(0.15),
+                splashColor: themeController.currentTheme.splashColor,
+                hoverColor: themeController.currentTheme.hoverColor,
+                focusColor: themeController.currentTheme.focusColor,
+                textColor: themeController.currentTheme.accent.withOpacity(0.7),
                 text: cancelText ?? "NO",
                 padding: EdgeInsets.symmetric(
                   vertical: 15,
@@ -156,11 +167,12 @@ class BottomDialog extends StatelessWidget {
                   onTap: () {
                     onOptional!.call();
                   },
-                  color: accent.withOpacity(0.15),
-                  splashColor: Colors.black12,
-                  hoverColor: Colors.black12,
-                  focusColor: Colors.black12,
-                  textColor: accent.withOpacity(0.7),
+                  color: themeController.currentTheme.accent.withOpacity(0.15),
+                  splashColor: themeController.currentTheme.splashColor,
+                  hoverColor: themeController.currentTheme.hoverColor,
+                  focusColor: themeController.currentTheme.focusColor,
+                  textColor:
+                      themeController.currentTheme.accent.withOpacity(0.7),
                   text: optionalText!,
                   padding: EdgeInsets.symmetric(
                     vertical: 15,
@@ -174,6 +186,10 @@ class BottomDialog extends StatelessWidget {
             ],
             Flexible(
               child: Button(
+                splashColor:
+                    themeController.currentTheme.contrastText.withOpacity(0.24),
+                hoverColor:
+                    themeController.currentTheme.contrastText.withOpacity(0.24),
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
                 onTap: () {
                   if (showTextField!)
@@ -181,8 +197,9 @@ class BottomDialog extends StatelessWidget {
                   else
                     onConfirm!.call();
                 },
-                color: accent,
+                color: themeController.currentTheme.accent,
                 text: confirmText ?? 'YES',
+                textColor: themeController.currentTheme.contrastText,
               ),
             ),
           ],

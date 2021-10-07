@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:seamlink/components/button.dart';
 import 'package:seamlink/components/input_field.dart';
-import 'package:seamlink/constants/colors.dart';
 import 'package:seamlink/controllers/HomeController.dart';
+import 'package:seamlink/controllers/ThemeController.dart';
 import 'package:seamlink/controllers/UserController.dart';
 import 'package:seamlink/models/result.dart';
 import 'package:seamlink/services/client.dart';
@@ -26,6 +26,7 @@ class AuthView extends StatefulWidget {
 
 class _AuthViewState extends State<AuthView> {
   TextEditingController userController = TextEditingController();
+  final ThemeController themeController = Get.find();
 
   FocusNode userFocus = FocusNode();
   bool loading = false;
@@ -40,7 +41,7 @@ class _AuthViewState extends State<AuthView> {
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: primaryBg,
+      backgroundColor: themeController.currentTheme.backgroundColor,
       body: Builder(
         builder: (context) => Center(
           child: AnimatedSwitcher(
@@ -53,14 +54,16 @@ class _AuthViewState extends State<AuthView> {
                     children: [
                       SpinKitChasingDots(
                         size: 50,
-                        color: accent,
+                        color: themeController.currentTheme.accent,
                       ),
                       SizedBox(
                         height: 15,
                       ),
                       Text(
                         "Hang on",
-                        style: GoogleFonts.poppins(),
+                        style: GoogleFonts.poppins(
+                          color: themeController.currentTheme.foreground,
+                        ),
                       ),
                       SizedBox(
                         height: 15,
@@ -75,8 +78,10 @@ class _AuthViewState extends State<AuthView> {
                         Text(
                           "Hey there!",
                           style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.bold,
-                              fontSize: (width * 0.1).clamp(10.0, 50.0)),
+                            fontWeight: FontWeight.bold,
+                            fontSize: (width * 0.1).clamp(10.0, 50.0),
+                            color: themeController.currentTheme.foreground,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                         SizedBox(
@@ -84,21 +89,29 @@ class _AuthViewState extends State<AuthView> {
                         ),
                         Text(
                           "Please enter your username\nto access your links.",
-                          style: GoogleFonts.poppins(fontSize: 20),
+                          style: GoogleFonts.poppins(
+                            fontSize: 20,
+                            color: themeController.currentTheme.foreground,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                         Container(
                           width: MediaQuery.of(context).size.width *
                               (isMobile ? 0.8 : 0.45),
                           child: InputField(
+                            bgColor: themeController.currentTheme.mutedBg,
                             radius: 25,
+                            cursorColor: themeController.currentTheme.subtext,
                             margin: EdgeInsets.symmetric(
                               vertical: 20,
                               horizontal: 0,
                             ),
                             controller: userController,
                             hint: 'Username',
-                            style: GoogleFonts.poppins(),
+                            hintStyle: GoogleFonts.poppins(
+                                color: themeController.currentTheme.subtext),
+                            style: GoogleFonts.poppins(
+                                color: themeController.currentTheme.foreground),
                             padding: EdgeInsets.symmetric(
                               horizontal: 20,
                               vertical: 20,
@@ -116,10 +129,18 @@ class _AuthViewState extends State<AuthView> {
                             padding: EdgeInsets.symmetric(vertical: 17.5),
                             radius: 25,
                             text: "Take me in!",
+                            splashColor: themeController
+                                .currentTheme.contrastText
+                                .withOpacity(0.12),
+                            hoverColor: themeController
+                                .currentTheme.contrastText
+                                .withOpacity(0.12),
+                            textColor:
+                                themeController.currentTheme.contrastText,
                             onTap: () async {
                               await submitUsername();
                             },
-                            color: accent,
+                            color: themeController.currentTheme.accent,
                           ),
                         )
                       ],

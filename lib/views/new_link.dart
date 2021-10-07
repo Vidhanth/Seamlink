@@ -9,9 +9,9 @@ import 'package:menubar/menubar.dart';
 import 'package:seamlink/components/color_picker.dart';
 import 'package:seamlink/components/custom_titlebar.dart';
 import 'package:seamlink/components/label_picker.dart';
-import 'package:seamlink/constants/colors.dart';
 import 'package:seamlink/controllers/HomeController.dart';
 import 'package:seamlink/controllers/NewLinkController.dart';
+import 'package:seamlink/controllers/ThemeController.dart';
 import 'package:seamlink/models/link.dart';
 import 'package:seamlink/services/utils.dart';
 import 'package:seamlink/services/extensions.dart';
@@ -24,6 +24,7 @@ class NewLink extends StatelessWidget {
   Function? refreshAutotitle;
 
   final NewLinkController controller = NewLinkController();
+  final ThemeController themeController = Get.find();
   TextEditingController? titleController;
   TextEditingController? linkController;
 
@@ -74,12 +75,14 @@ class NewLink extends StatelessWidget {
                             padding: EdgeInsets.only(right: 20),
                             child: InkWell(
                               onTap: () async {
+                                await hideKeyboard(context);
                                 await cancel();
                               },
                               borderRadius: BorderRadius.circular(200),
                               child: Icon(
                                 Icons.chevron_left_rounded,
                                 size: 60,
+                                color: themeController.currentTheme.foreground,
                               ),
                             ),
                           ),
@@ -90,6 +93,7 @@ class NewLink extends StatelessWidget {
                             style: GoogleFonts.poppins(
                               fontSize: 50,
                               fontWeight: FontWeight.bold,
+                              color: themeController.currentTheme.foreground,
                             ),
                           ),
                         ],
@@ -106,16 +110,19 @@ class NewLink extends StatelessWidget {
                       style: GoogleFonts.poppins(
                         fontWeight: FontWeight.bold,
                         fontSize: 25,
+                        color: themeController.currentTheme.foreground,
                       ),
                       maxLines: 1,
-                      cursorColor: accent,
+                      cursorColor: themeController.currentTheme.subtext,
                       decoration: InputDecoration(
                         contentPadding:
                             EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                         border: OutlineInputBorder(borderSide: BorderSide.none),
                         hintText: 'Title',
-                        hintStyle:
-                            GoogleFonts.poppins(fontWeight: FontWeight.bold),
+                        hintStyle: GoogleFonts.poppins(
+                          fontWeight: FontWeight.bold,
+                          color: themeController.currentTheme.subtext,
+                        ),
                       ),
                     ),
                     Expanded(
@@ -126,13 +133,14 @@ class NewLink extends StatelessWidget {
                           controller.autoTitle(newLink.isValidLink);
                           refreshAutotitle?.call(() {});
                         },
-                        cursorColor: accent,
+                        cursorColor: themeController.currentTheme.subtext,
                         autofocus: ((link?.url.isEmpty ?? true) &&
                                 (sharedText?.isEmpty ?? true)) ||
                             isDesktop,
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.normal,
                           fontSize: 20,
+                          color: themeController.currentTheme.foreground,
                         ),
                         maxLines: 100,
                         decoration: InputDecoration(
@@ -145,7 +153,9 @@ class NewLink extends StatelessWidget {
                           ),
                           hintText: 'Type something',
                           hintStyle: GoogleFonts.poppins(
-                              fontWeight: FontWeight.normal),
+                            fontWeight: FontWeight.normal,
+                            color: themeController.currentTheme.subtext,
+                          ),
                         ),
                       ),
                     ),
@@ -190,7 +200,19 @@ class NewLink extends StatelessWidget {
                                     }
                                     setState(() {});
                                   },
-                                  activeColor: accent,
+                                  side: BorderSide(
+                                    color:
+                                        themeController.currentTheme.foreground,
+                                    width: 2,
+                                  ),
+                                  focusColor:
+                                      themeController.currentTheme.focusColor,
+                                  hoverColor:
+                                      themeController.currentTheme.hoverColor,
+                                  checkColor:
+                                      themeController.currentTheme.contrastText,
+                                  activeColor:
+                                      themeController.currentTheme.accent,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(30),
                                   ),
@@ -199,7 +221,8 @@ class NewLink extends StatelessWidget {
                                   child: AutoSizeText(
                                     'Fetch title from link',
                                     style: GoogleFonts.poppins(
-                                      color: accent.withOpacity(0.75),
+                                      color: themeController.currentTheme.accent
+                                          .withOpacity(0.75),
                                       fontSize: 17,
                                     ),
                                     minFontSize: 1,
@@ -245,16 +268,27 @@ class NewLink extends StatelessWidget {
                             () => IgnorePointer(
                               ignoring: controller.isSaving.value,
                               child: FloatingActionButton(
-                                backgroundColor: accent,
-                                focusColor: Colors.white24,
-                                hoverColor: Colors.white24,
+                                backgroundColor:
+                                    themeController.currentTheme.accent,
+                                focusColor: themeController
+                                    .currentTheme.contrastText
+                                    .withOpacity(0.24),
+                                splashColor: themeController
+                                    .currentTheme.contrastText
+                                    .withOpacity(0.24),
+                                hoverColor: themeController
+                                    .currentTheme.contrastText
+                                    .withOpacity(0.24),
                                 child: controller.isSaving.value
                                     ? SpinKitChasingDots(
-                                        color: Colors.white,
+                                        color: themeController
+                                            .currentTheme.contrastText,
                                         size: 20,
                                       )
                                     : Icon(
                                         Icons.check_rounded,
+                                        color: themeController
+                                            .currentTheme.contrastText,
                                       ),
                                 onPressed: () async {
                                   await save();
@@ -314,7 +348,6 @@ class NewLink extends StatelessWidget {
       Get.find<HomeController>().updateMenubar();
     });
     if (sharedText?.isEmpty ?? true) {
-      await hideKeyboard(Get.context);
       Get.back();
     } else {
       if (isAndroid) {

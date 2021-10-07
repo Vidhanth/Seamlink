@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:seamlink/constants/colors.dart';
+import 'package:seamlink/controllers/ThemeController.dart';
 
 class ColorPicker extends StatelessWidget {
   final Function onColorSelected;
   final int selectedIndex;
 
-  const ColorPicker(
+  final ThemeController themeController = Get.find();
+
+  ColorPicker(
       {Key? key, required this.onColorSelected, required this.selectedIndex})
       : super(key: key);
 
@@ -28,9 +32,9 @@ class ColorPicker extends StatelessWidget {
                 child: Material(
                   color: Colors.transparent,
                   child: InkWell(
-                    splashColor: Colors.black12,
-                    hoverColor: Colors.black12,
-                    focusColor: Colors.black12,
+                    splashColor: themeController.currentTheme.splashColor,
+                    hoverColor: themeController.currentTheme.hoverColor,
+                    focusColor: themeController.currentTheme.focusColor,
                     highlightColor: Colors.transparent,
                     onTap: () {
                       onColorSelected.call(index);
@@ -44,7 +48,7 @@ class ColorPicker extends StatelessWidget {
                               height: 30,
                               width: 30,
                               decoration: BoxDecoration(
-                                color: Colors.black12,
+                                color: themeController.currentTheme.hoverColor,
                                 shape: BoxShape.circle,
                               ),
                               child: Icon(

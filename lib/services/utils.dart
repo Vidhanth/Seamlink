@@ -8,6 +8,7 @@ import 'package:seamlink/components/confirm_dialog.dart';
 import 'package:seamlink/components/link_options.dart';
 import 'package:seamlink/controllers/HomeController.dart';
 import 'package:seamlink/controllers/SidebarController.dart';
+import 'package:seamlink/controllers/ThemeController.dart';
 import 'package:seamlink/controllers/UserController.dart';
 import 'package:seamlink/models/link.dart';
 import 'package:seamlink/models/result.dart';
@@ -407,10 +408,14 @@ showSnackBar(context, text, {error = false}) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       backgroundColor:
-          error ? Colors.red : Theme.of(context).snackBarTheme.backgroundColor,
+          error ? Colors.red : Get.find<ThemeController>().currentTheme.mutedBg,
       content: Text(
         text,
-        style: GoogleFonts.poppins(),
+        style: GoogleFonts.poppins(
+          color: error
+              ? Colors.white
+              : Get.find<ThemeController>().currentTheme.foreground,
+        ),
       ),
     ),
   );

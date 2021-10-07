@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart' hide Dismissible, DismissDirection;
 import 'package:flutter/material.dart' hide Dismissible, DismissDirection;
 import 'package:line_icons/line_icons.dart';
+import 'package:seamlink/controllers/ThemeController.dart';
 import 'dismissible.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
@@ -23,6 +24,8 @@ class LinkTile extends StatelessWidget {
   final EdgeInsets margin;
   final EdgeInsets padding;
   final Function onDismissed;
+
+  final ThemeController themeController = Get.find();
 
   LinkTile({
     Key? key,
@@ -89,9 +92,10 @@ class LinkTile extends StatelessWidget {
           margin: margin,
           width: double.infinity,
           decoration: BoxDecoration(
-            color: primaryBg,
+            color: themeController.currentTheme.backgroundColor,
             boxShadow: [
-              BoxShadow(blurRadius: 5, color: Colors.black26),
+              BoxShadow(
+                  blurRadius: 5, color: themeController.currentTheme.shadow),
             ],
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
@@ -131,13 +135,16 @@ class LinkTile extends StatelessWidget {
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
                                     textStyle: GoogleFonts.poppins(
-                                      color: Colors.black.withOpacity(0.7),
+                                      color: themeController
+                                          .currentTheme.foreground,
                                       fontSize: 15,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w500,
                                     ),
                                     textStyleHighlight: GoogleFonts.poppins(
-                                      color: Colors.white,
-                                      backgroundColor: Colors.black,
+                                      color: themeController
+                                          .currentTheme.contrastText,
+                                      backgroundColor: themeController
+                                          .currentTheme.foreground,
                                     ),
                                   ),
                                   SizedBox(
@@ -153,13 +160,16 @@ class LinkTile extends StatelessWidget {
                                   maxLines: 10,
                                   overflow: TextOverflow.ellipsis,
                                   textStyle: GoogleFonts.poppins(
-                                    color: Colors.black.withOpacity(0.7),
+                                    color:
+                                        themeController.currentTheme.foreground,
                                     fontStyle: FontStyle.italic,
                                     fontSize: 15,
                                   ),
                                   textStyleHighlight: GoogleFonts.poppins(
-                                    color: accent,
-                                    backgroundColor: Colors.white,
+                                    color: themeController
+                                        .currentTheme.contrastText,
+                                    backgroundColor:
+                                        themeController.currentTheme.foreground,
                                   ),
                                 ),
                                 if (link.message != null) ...[
@@ -173,12 +183,15 @@ class LinkTile extends StatelessWidget {
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     textStyle: GoogleFonts.poppins(
-                                      color: Colors.black.withOpacity(0.7),
+                                      color: themeController
+                                          .currentTheme.foreground,
                                       fontSize: 15,
                                     ),
                                     textStyleHighlight: GoogleFonts.poppins(
-                                      color: accent,
-                                      backgroundColor: Colors.white,
+                                      color: themeController
+                                          .currentTheme.contrastText,
+                                      backgroundColor: themeController
+                                          .currentTheme.foreground,
                                     ),
                                   ),
                                 ]

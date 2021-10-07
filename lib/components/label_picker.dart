@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:seamlink/constants/colors.dart';
 import 'package:seamlink/controllers/SidebarController.dart';
+import 'package:seamlink/controllers/ThemeController.dart';
 import 'package:seamlink/services/utils.dart';
 
 class LabelPicker extends StatelessWidget {
@@ -10,6 +10,7 @@ class LabelPicker extends StatelessWidget {
   final List<int> selectedIndices;
 
   late final SidebarController sidebarController;
+  final ThemeController themeController = Get.find();
 
   LabelPicker(
       {Key? key, required this.onLabelSelected, required this.selectedIndices})
@@ -51,14 +52,17 @@ class LabelPicker extends StatelessWidget {
                           EdgeInsets.symmetric(vertical: 4, horizontal: 10),
                       decoration: BoxDecoration(
                         color: Colors.transparent,
-                        border: Border.all(color: accent.withOpacity(0.6)),
+                        border: Border.all(
+                            color: themeController.currentTheme.accent
+                                .withOpacity(0.6)),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Center(
                         child: Text(
                           '+ Create new',
                           style: GoogleFonts.poppins(
-                            color: accent.withOpacity(0.6),
+                            color: themeController.currentTheme.accent
+                                .withOpacity(0.6),
                           ),
                         ),
                       ),
@@ -77,9 +81,11 @@ class LabelPicker extends StatelessWidget {
                     padding: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
                     decoration: BoxDecoration(
                       color: selectedIndices.contains(index)
-                          ? accent
+                          ? themeController.currentTheme.accent
                           : Colors.transparent,
-                      border: Border.all(color: accent.withOpacity(0.6)),
+                      border: Border.all(
+                          color: themeController.currentTheme.accent
+                              .withOpacity(0.6)),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Center(
@@ -87,8 +93,9 @@ class LabelPicker extends StatelessWidget {
                         labelsList[index],
                         style: GoogleFonts.poppins(
                           color: selectedIndices.contains(index)
-                              ? Colors.white.withOpacity(0.9)
-                              : accent.withOpacity(0.6),
+                              ? themeController.currentTheme.contrastText
+                              : themeController.currentTheme.accent
+                                  .withOpacity(0.6),
                         ),
                       ),
                     ),

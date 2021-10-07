@@ -8,10 +8,10 @@ import 'package:seamlink/components/all_links_view.dart';
 import 'package:seamlink/components/filter_row.dart';
 import 'package:seamlink/components/search_bar.dart';
 import 'package:seamlink/components/sidebar.dart';
-import 'package:seamlink/constants/colors.dart';
 import 'package:seamlink/constants/enum.dart';
 import 'package:seamlink/controllers/HomeController.dart';
 import 'package:seamlink/controllers/SidebarController.dart';
+import 'package:seamlink/controllers/ThemeController.dart';
 import 'package:seamlink/controllers/UserController.dart';
 import 'package:seamlink/services/utils.dart';
 import 'package:seamlink/views/auth_view.dart';
@@ -21,6 +21,7 @@ class Home extends StatelessWidget {
   Home({Key? key}) : super(key: key);
 
   final HomeController homeController = Get.find<HomeController>();
+  final ThemeController themeController = Get.find();
   final FocusNode searchFocus = FocusNode();
 
   @override
@@ -36,7 +37,7 @@ class Home extends StatelessWidget {
       child: Obx(() {
         if (Get.find<UserController>().username.isEmpty) return AuthView();
         return Scaffold(
-          backgroundColor: primaryBg,
+          backgroundColor: themeController.currentTheme.backgroundColor,
           body: Stack(
             children: [
               SafeArea(
@@ -63,7 +64,7 @@ class Home extends StatelessWidget {
                                         hoverColor: Colors.transparent,
                                         highlightColor: Colors.transparent,
                                         onTap: () async {
-                                          searchFocus.unfocus();
+                                          hideKeyboard(context);
                                           homeController.showSidebar.toggle();
                                           Get.find<SidebarController>()
                                               .editMode(false);
@@ -85,6 +86,8 @@ class Home extends StatelessWidget {
                                             style: GoogleFonts.poppins(
                                               fontSize: 50,
                                               fontWeight: FontWeight.bold,
+                                              color: themeController
+                                                  .currentTheme.foreground,
                                             ),
                                           ),
                                   ],
@@ -109,7 +112,9 @@ class Home extends StatelessWidget {
                                               padding:
                                                   EdgeInsets.only(bottom: 30.0),
                                               child: SpinKitChasingDots(
-                                                  size: 30, color: accent),
+                                                  size: 30,
+                                                  color: themeController
+                                                      .currentTheme.accent),
                                             )
                                           : Column(
                                               crossAxisAlignment:
@@ -148,11 +153,11 @@ class Home extends StatelessWidget {
                                                 ),
                                                 Expanded(
                                                   child: RefreshIndicator(
-                                                    color: accent,
+                                                    color: themeController
+                                                        .currentTheme.accent,
                                                     onRefresh: () async {
                                                       searchFocus.unfocus();
                                                       Get.showSnackbar(GetBar(
-                                                        // title: "You're up to date!",
                                                         message:
                                                             "Links were updated.",
                                                         duration: 2.seconds,
@@ -200,10 +205,22 @@ class Home extends StatelessWidget {
                                     onPressed: () {
                                       homeController.refreshLinks();
                                     },
-                                    hoverColor: Colors.white24,
-                                    focusColor: Colors.white24,
-                                    backgroundColor: accent,
-                                    child: Icon(Icons.refresh),
+                                    hoverColor: themeController
+                                        .currentTheme.contrastText
+                                        .withOpacity(0.24),
+                                    focusColor: themeController
+                                        .currentTheme.contrastText
+                                        .withOpacity(0.24),
+                                    splashColor: themeController
+                                        .currentTheme.contrastText
+                                        .withOpacity(0.24),
+                                    backgroundColor:
+                                        themeController.currentTheme.accent,
+                                    child: Icon(
+                                      Icons.refresh,
+                                      color: themeController
+                                          .currentTheme.contrastText,
+                                    ),
                                   ),
                                 ),
                                 SizedBox(
@@ -213,7 +230,12 @@ class Home extends StatelessWidget {
                                       : 0,
                                 ),
                                 OpenContainer(
-                                  closedColor: accent,
+                                  closedColor: themeController
+                                      .currentTheme.backgroundColor,
+                                  middleColor: themeController
+                                      .currentTheme.backgroundColor,
+                                  openColor: themeController
+                                      .currentTheme.backgroundColor,
                                   closedElevation: 15,
                                   closedShape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.all(
@@ -231,10 +253,22 @@ class Home extends StatelessWidget {
                                             delay: 0.milliseconds);
                                         openContainer.call();
                                       },
-                                      hoverColor: Colors.white24,
-                                      focusColor: Colors.white24,
-                                      backgroundColor: accent,
-                                      child: Icon(Icons.add),
+                                      hoverColor: themeController
+                                          .currentTheme.contrastText
+                                          .withOpacity(0.24),
+                                      focusColor: themeController
+                                          .currentTheme.contrastText
+                                          .withOpacity(0.24),
+                                      splashColor: themeController
+                                          .currentTheme.contrastText
+                                          .withOpacity(0.24),
+                                      backgroundColor:
+                                          themeController.currentTheme.accent,
+                                      child: Icon(
+                                        Icons.add,
+                                        color: themeController
+                                            .currentTheme.contrastText,
+                                      ),
                                     );
                                   },
                                   openBuilder: (_, __) {

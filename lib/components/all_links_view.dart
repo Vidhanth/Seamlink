@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:seamlink/components/link_tile.dart';
 import 'package:seamlink/constants/enum.dart';
 import 'package:seamlink/controllers/HomeController.dart';
+import 'package:seamlink/controllers/ThemeController.dart';
 import 'package:seamlink/models/link.dart';
 import 'package:seamlink/services/navigation.dart';
 import 'package:seamlink/services/utils.dart';
@@ -20,7 +21,9 @@ class AllLinksView extends StatelessWidget {
   final NoteType selectedType;
   final int labelIndex;
 
-  const AllLinksView({
+  final ThemeController themeController = Get.find();
+
+  AllLinksView({
     Key? key,
     required this.allLinks,
     required this.searchText,
@@ -69,13 +72,16 @@ class AllLinksView extends StatelessWidget {
                       ? Icons.search_off_rounded
                       : Icons.shopping_cart_outlined,
                   size: 80,
+                  color: themeController.currentTheme.foreground,
                 ),
                 SizedBox(
                   height: 10,
                 ),
                 Text(
                   searchText.isNotEmpty ? 'No results' : 'Nothing here',
-                  style: GoogleFonts.poppins(),
+                  style: GoogleFonts.poppins(
+                    color: themeController.currentTheme.foreground,
+                  ),
                 ),
                 SizedBox(
                   height: 3,
@@ -90,7 +96,10 @@ class AllLinksView extends StatelessWidget {
                         horizontal: 8.0, vertical: 4.0),
                     child: Text(
                       'Refresh',
-                      style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.bold,
+                        color: themeController.currentTheme.foreground,
+                      ),
                     ),
                   ),
                 ),

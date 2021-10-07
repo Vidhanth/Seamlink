@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:seamlink/controllers/HomeController.dart';
+import 'package:seamlink/controllers/ThemeController.dart';
 import 'package:seamlink/models/link.dart';
 import 'package:seamlink/services/extensions.dart';
 import 'package:seamlink/services/navigation.dart';
@@ -11,12 +12,15 @@ import 'package:seamlink/views/new_link.dart';
 
 class LinkOptions extends StatelessWidget {
   final Link link;
-  const LinkOptions({Key? key, required this.link}) : super(key: key);
+  LinkOptions({Key? key, required this.link}) : super(key: key);
+
+  final ThemeController themeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     if (isScreenWide(context) || (Get.isDialogOpen ?? false)) {
       return AlertDialog(
+        backgroundColor: themeController.currentTheme.backgroundColor,
         contentPadding: EdgeInsets.all(10),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         content: _buildOptionsColumn(context),
@@ -24,6 +28,7 @@ class LinkOptions extends StatelessWidget {
     }
 
     return BottomSheet(
+      backgroundColor: themeController.currentTheme.backgroundColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
@@ -99,11 +104,16 @@ class LinkOptions extends StatelessWidget {
             Icon(
               icon,
               size: 30,
+              color: themeController.currentTheme.foreground,
             ),
             SizedBox(
               width: 10,
             ),
-            Text(title, style: GoogleFonts.poppins(fontSize: 18)),
+            Text(title,
+                style: GoogleFonts.poppins(
+                  fontSize: 18,
+                  color: themeController.currentTheme.foreground,
+                )),
           ],
         ),
       ),

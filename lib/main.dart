@@ -7,8 +7,10 @@ import 'package:get/get.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:seamlink/components/custom_titlebar.dart';
 import 'package:seamlink/components/sidebar.dart';
+import 'package:seamlink/components/wipe.dart';
 import 'package:seamlink/controllers/HomeController.dart';
 import 'package:seamlink/controllers/SidebarController.dart';
+import 'package:seamlink/controllers/ThemeController.dart';
 import 'package:seamlink/controllers/UserController.dart';
 import 'package:seamlink/services/navigation.dart';
 import 'package:seamlink/services/utils.dart';
@@ -16,7 +18,6 @@ import 'package:seamlink/views/home.dart';
 import 'package:seamlink/views/new_link.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_size/window_size.dart' as window_size;
-import 'constants/colors.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,6 +55,7 @@ Future<void> initializePrefs() async {
   HomeController _homeController = Get.put(HomeController());
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String username = prefs.getString('username') ?? '';
+  ThemeController.isDark = prefs.getBool('dark_mode') ?? false;
   if (username.isNotEmpty) {
     _userController.username(username);
     _homeController.refreshLinks();
@@ -100,50 +102,69 @@ class _MainActivityState extends State<MainActivity> {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      theme: ThemeData(
-        canvasColor: primaryBg,
-        backgroundColor: primaryBg,
-      ),
-      color: primaryBg,
-      home: Builder(
-        builder: (context) {
-          return Row(
-            children: [
-              isDesktop
-                  ? Obx(() {
-                      return Get.find<UserController>().username.isNotEmpty
-                          ? Sidebar()
-                          : SizedBox();
-                    })
-                  : SizedBox(),
-              Expanded(
-                child: Column(
+    return Wipe(
+      function: (enter, exit) {
+        ThemeController.enterWipe = enter;
+        ThemeController.exitWipe = exit;
+      },
+      child: GetBuilder<ThemeController>(
+        init: ThemeController(),
+        initState: (_) {},
+        builder: (_) {
+          ThemeController themeController = Get.find();
+          return GetMaterialApp(
+            theme: ThemeData(
+              canvasColor: themeController.currentTheme.backgroundColor,
+              backgroundColor: themeController.currentTheme.backgroundColor,
+              brightness:
+                  ThemeController.isDark ? Brightness.dark : Brightness.light,
+            ),
+            color: themeController.currentTheme.backgroundColor,
+            home: Builder(
+              builder: (context) {
+                return Row(
                   children: [
-                    if (isMacOS) ...[
-                      Obx(() => CustomTitleBar(
-                            macStyle:
-                                Get.find<UserController>().username.isNotEmpty,
-                            title: Get.find<UserController>().username.value,
-                          ))
-                    ],
+                    isDesktop
+                        ? Obx(() {
+                            return Get.find<UserController>()
+                                    .username
+                                    .isNotEmpty
+                                ? Sidebar()
+                                : SizedBox();
+                          })
+                        : SizedBox(),
                     Expanded(
-                      child: FutureBuilder(
-                        future: getInitialSharedText(),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) return SizedBox();
-                          return snapshot.data.toString().isEmpty
-                              ? Home()
-                              : NewLink(
-                                  sharedText: snapshot.data.toString(),
-                                );
-                        },
+                      child: Column(
+                        children: [
+                          if (isMacOS) ...[
+                            Obx(() => CustomTitleBar(
+                                  macStyle: Get.find<UserController>()
+                                      .username
+                                      .isNotEmpty,
+                                  title:
+                                      Get.find<UserController>().username.value,
+                                ))
+                          ],
+                          Expanded(
+                            child: FutureBuilder(
+                              future: getInitialSharedText(),
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData) return SizedBox();
+                                return snapshot.data.toString().isEmpty
+                                    ? Home()
+                                    : NewLink(
+                                        sharedText: snapshot.data.toString(),
+                                      );
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
-                ),
-              ),
-            ],
+                );
+              },
+            ),
           );
         },
       ),

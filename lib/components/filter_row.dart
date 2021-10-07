@@ -4,12 +4,14 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:seamlink/constants/enum.dart';
 import 'package:seamlink/controllers/SidebarController.dart';
+import 'package:seamlink/controllers/ThemeController.dart';
 
 // ignore: must_be_immutable
 class FilterRow extends StatelessWidget {
   FilterRow({Key? key}) : super(key: key);
 
   SidebarController sidebarController = Get.find();
+  ThemeController themeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,7 @@ class FilterRow extends StatelessWidget {
             ),
             child: FadeIn(
               child: FilterChip(
+                backgroundColor: themeController.currentTheme.subtext,
                 onSelected: (val) {
                   sidebarController.selectedType(NoteType.ALL);
                 },
@@ -35,11 +38,11 @@ class FilterRow extends StatelessWidget {
                   right: 4,
                   left: 2,
                 ),
-                avatar: Icon(
-                  Icons.remove_circle,
-                  size: 20,
+                avatar: Icon(Icons.remove_circle,
+                    size: 20, color: themeController.currentTheme.contrastText),
+                labelStyle: GoogleFonts.poppins(
+                  color: themeController.currentTheme.contrastText,
                 ),
-                labelStyle: GoogleFonts.poppins(),
                 label: Text(
                     sidebarController.selectedType.value == NoteType.LINK
                         ? "Links"
@@ -51,6 +54,7 @@ class FilterRow extends StatelessWidget {
           sidebarController.labelIndex.value == -1
               ? FadeIn(
                   child: FilterChip(
+                    backgroundColor: themeController.currentTheme.subtext,
                     onSelected: (val) {
                       sidebarController.labelIndex(-2);
                     },
@@ -65,8 +69,11 @@ class FilterRow extends StatelessWidget {
                     avatar: Icon(
                       Icons.remove_circle,
                       size: 20,
+                      color: themeController.currentTheme.contrastText,
                     ),
-                    labelStyle: GoogleFonts.poppins(),
+                    labelStyle: GoogleFonts.poppins(
+                      color: themeController.currentTheme.contrastText,
+                    ),
                     label: Text(
                       'Untagged',
                     ),
@@ -74,6 +81,7 @@ class FilterRow extends StatelessWidget {
                 )
               : FadeIn(
                   child: FilterChip(
+                    backgroundColor: themeController.currentTheme.subtext,
                     onSelected: (val) {
                       sidebarController.labelIndex(-2);
                     },
@@ -88,8 +96,11 @@ class FilterRow extends StatelessWidget {
                     avatar: Icon(
                       Icons.remove_circle,
                       size: 20,
+                      color: themeController.currentTheme.contrastText,
                     ),
-                    labelStyle: GoogleFonts.poppins(),
+                    labelStyle: GoogleFonts.poppins(
+                      color: themeController.currentTheme.contrastText,
+                    ),
                     label: Text(
                       sidebarController
                           .labels[sidebarController.labelIndex.value],

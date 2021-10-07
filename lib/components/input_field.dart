@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:seamlink/constants/colors.dart';
+import 'package:get/get.dart';
+import 'package:seamlink/controllers/ThemeController.dart';
 
 class InputField extends StatelessWidget {
   final Color bgColor;
@@ -16,6 +17,7 @@ class InputField extends StatelessWidget {
   final List<TextInputFormatter> inputFormatters;
   final Function(String)? onChanged;
   final TextStyle style;
+  final TextStyle hintStyle;
   final TextInputType keyboardType;
   final bool obscureText;
   final bool error;
@@ -25,7 +27,7 @@ class InputField extends StatelessWidget {
   final Function? onSubmitted;
   final bool? autofocus;
 
-  const InputField({
+  InputField({
     this.bgColor = Colors.black12,
     this.radius = 20,
     this.hint = "Hint",
@@ -48,17 +50,22 @@ class InputField extends StatelessWidget {
     this.focusNode,
     this.onSubmitted,
     this.autofocus,
+    this.hintStyle = const TextStyle(),
   });
+
+  final ThemeController themeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: margin,
       child: Material(
+        color: Colors.transparent,
         child: Stack(
           children: [
             Theme(
-              data: Theme.of(context).copyWith(primaryColor: accent),
+              data: Theme.of(context)
+                  .copyWith(primaryColor: themeController.currentTheme.accent),
               child: TextField(
                 autofocus: autofocus ?? false,
                 focusNode: focusNode ?? FocusNode(),
@@ -82,7 +89,9 @@ class InputField extends StatelessWidget {
                   contentPadding: padding,
                   fillColor: bgColor,
                   hintText: hint,
-                  focusColor: accent,
+                  hintStyle: hintStyle,
+                  hoverColor: themeController.currentTheme.hoverColor,
+                  focusColor: themeController.currentTheme.focusColor,
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(radius),
                     borderSide: BorderSide(

@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:seamlink/components/search_bar.dart';
-import 'package:seamlink/constants/colors.dart';
+import 'package:seamlink/controllers/ThemeController.dart';
 import 'package:seamlink/services/utils.dart';
 
 // ignore: must_be_immutable
@@ -15,16 +16,18 @@ class CustomTitleBar extends StatelessWidget {
     title ??= "s e a m l i n k   d e s k t o p".toUpperCase();
   }
 
+  final ThemeController themeController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: primaryBg,
+      color: themeController.currentTheme.backgroundColor,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Container(
             height: (isWindows ? 35 : 30) * (macStyle! ? 3 : 1),
-            color: primaryBg,
+            color: themeController.currentTheme.backgroundColor,
             alignment: Alignment.center,
             width: MediaQuery.of(context).size.width -
                 (title!.isEmpty

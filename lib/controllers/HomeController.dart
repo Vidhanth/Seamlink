@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:menubar/menubar.dart';
 import 'package:seamlink/constants/enum.dart';
 import 'package:seamlink/controllers/SidebarController.dart';
+import 'package:seamlink/controllers/ThemeController.dart';
 import 'package:seamlink/models/link.dart';
 import 'package:seamlink/models/result.dart';
 import 'package:seamlink/services/client.dart';
@@ -141,6 +142,19 @@ class HomeController extends GetxController {
               LogicalKeyboardKey.meta,
               LogicalKeyboardKey.shift,
               LogicalKeyboardKey.escape,
+            }),
+          ),
+          MenuDivider(),
+          MenuItem(
+            label: ThemeController.isDark ? 'Light Mode' : 'Dark Mode',
+            enabled: true,
+            onClicked: () async {
+              await Get.find<ThemeController>().switchTheme();
+              updateMenubar();
+            },
+            shortcut: LogicalKeySet.fromSet({
+              LogicalKeyboardKey.meta,
+              LogicalKeyboardKey.keyT,
             }),
           ),
         ],

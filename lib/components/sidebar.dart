@@ -5,10 +5,10 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:seamlink/components/label_tile.dart';
-import 'package:seamlink/constants/colors.dart';
 import 'package:seamlink/constants/enum.dart';
 import 'package:seamlink/controllers/HomeController.dart';
 import 'package:seamlink/controllers/SidebarController.dart';
+import 'package:seamlink/controllers/ThemeController.dart';
 import 'package:seamlink/controllers/UserController.dart';
 import 'package:seamlink/services/utils.dart';
 
@@ -19,6 +19,7 @@ class Sidebar extends StatelessWidget {
   Size size = Size(0, 0);
 
   final SidebarController controller = Get.find();
+  final ThemeController themeController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +29,13 @@ class Sidebar extends StatelessWidget {
       color: Colors.transparent,
       child: Container(
         decoration: BoxDecoration(
-          color: isMobile ? primaryBg : primarySidebarBg,
-          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 200)],
+          color: isMobile
+              ? themeController.currentTheme.backgroundColor
+              : themeController.currentTheme.mutedBg,
+          boxShadow: [
+            BoxShadow(
+                color: themeController.currentTheme.shadow, blurRadius: 200)
+          ],
         ),
         width: isDesktop
             ? (size.width * 0.2).clamp(200, 400)
@@ -66,8 +72,9 @@ class Sidebar extends StatelessWidget {
                       'Seamlink',
                       style: GoogleFonts.poppins(
                         fontSize: isDesktop ? 20 : 25,
+                        color: themeController.currentTheme.foreground,
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -127,7 +134,8 @@ class Sidebar extends StatelessWidget {
                     Text(
                       "L A B E L S",
                       style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w500, color: Colors.black87),
+                          fontWeight: FontWeight.w500,
+                          color: themeController.currentTheme.foreground),
                       textAlign: TextAlign.start,
                     ),
                     Material(
@@ -136,13 +144,18 @@ class Sidebar extends StatelessWidget {
                         onTap: () async {
                           controller.editMode.toggle();
                         },
+                        hoverColor: themeController.currentTheme.hoverColor,
+                        splashColor: themeController.currentTheme.splashColor,
+                        focusColor: themeController.currentTheme.focusColor,
                         borderRadius: BorderRadius.circular(3),
                         child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 3),
                           child: Obx(
                             () => Text(
                               controller.editMode.value ? "DONE" : "EDIT",
-                              style: GoogleFonts.poppins(color: Colors.black54),
+                              style: GoogleFonts.poppins(
+                                color: themeController.currentTheme.subtext,
+                              ),
                               textAlign: TextAlign.start,
                             ),
                           ),
@@ -261,8 +274,9 @@ class Sidebar extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Icon(
-                      LineIcons.userCircle,
+                      LineIcons.user,
                       size: 40,
+                      color: themeController.currentTheme.foreground,
                     ),
                     SizedBox(width: 5),
                     Column(
@@ -273,6 +287,7 @@ class Sidebar extends StatelessWidget {
                           style: GoogleFonts.poppins(
                             // fontSize: 20,
                             fontWeight: FontWeight.bold,
+                            color: themeController.currentTheme.foreground,
                           ),
                         ),
                         Material(
@@ -281,17 +296,44 @@ class Sidebar extends StatelessWidget {
                             onTap: () async {
                               await logout();
                             },
+                            hoverColor: themeController.currentTheme.hoverColor,
+                            splashColor:
+                                themeController.currentTheme.splashColor,
+                            focusColor: themeController.currentTheme.focusColor,
                             borderRadius: BorderRadius.circular(3),
                             child: Text(
                               ' Logout ',
                               style: GoogleFonts.poppins(
                                 // fontSize: 20,
                                 fontStyle: FontStyle.italic,
+                                color: themeController.currentTheme.foreground,
                               ),
                             ),
                           ),
                         )
                       ],
+                    ),
+                    Spacer(),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(40),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: IconButton(
+                          focusColor: themeController.currentTheme.focusColor,
+                          hoverColor: themeController.currentTheme.hoverColor,
+                          splashColor: themeController.currentTheme.splashColor,
+                          splashRadius: 29,
+                          onPressed: () async {
+                            await themeController.switchTheme();
+                          },
+                          icon: Icon(
+                            ThemeController.isDark
+                                ? Icons.light_mode_outlined
+                                : Icons.dark_mode_outlined,
+                            color: themeController.currentTheme.foreground,
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
