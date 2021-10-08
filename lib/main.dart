@@ -56,6 +56,11 @@ Future<void> initializePrefs() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String username = prefs.getString('username') ?? '';
   ThemeController.isDark = prefs.getBool('dark_mode') ?? false;
+  ThemeController.mode = (prefs.getBool('auto_mode') ?? false)
+      ? Mode.SYSTEM
+      : ThemeController.isDark
+          ? Mode.DARK
+          : Mode.LIGHT;
   if (username.isNotEmpty) {
     _userController.username(username);
     _homeController.refreshLinks();
@@ -69,7 +74,8 @@ class MainActivity extends StatefulWidget {
   _MainActivityState createState() => _MainActivityState();
 }
 
-class _MainActivityState extends State<MainActivity> {
+class _MainActivityState extends State<MainActivity>
+    with WidgetsBindingObserver {
   StreamSubscription? _sharedTextSub;
 
   Future<String> getInitialSharedText() async {
@@ -78,7 +84,13 @@ class _MainActivityState extends State<MainActivity> {
   }
 
   @override
+  void didChangePlatformBrightness() {
+    setAutoTheme();
+  }
+
+  @override
   void initState() {
+    WidgetsBinding.instance?.addObserver(this);
     if (isMobile) {
       _sharedTextSub =
           ReceiveSharingIntent.getTextStream().listen((String value) {
@@ -97,6 +109,7 @@ class _MainActivityState extends State<MainActivity> {
   @override
   void dispose() {
     _sharedTextSub?.cancel();
+    WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
   }
 
@@ -110,8 +123,7 @@ class _MainActivityState extends State<MainActivity> {
       child: GetBuilder<ThemeController>(
         init: ThemeController(),
         initState: (_) {},
-        builder: (_) {
-          ThemeController themeController = Get.find();
+        builder: (themeController) {
           return GetMaterialApp(
             theme: ThemeData(
               canvasColor: themeController.currentTheme.backgroundColor,
@@ -169,5 +181,16 @@ class _MainActivityState extends State<MainActivity> {
         },
       ),
     );
+  }
+
+  void setAutoTheme() {
+    if (ThemeController.isAuto) {
+      if (WidgetsBinding.instance?.window.platformBrightness ==
+          Brightness.dark) {
+        if (!ThemeController.isDark) Get.find<ThemeController>().setDark();
+      } else {
+        if (ThemeController.isDark) Get.find<ThemeController>().setLight();
+      }
+    }
   }
 }

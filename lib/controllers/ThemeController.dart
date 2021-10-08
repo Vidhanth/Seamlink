@@ -3,9 +3,16 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:seamlink/models/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+enum Mode {
+  LIGHT,
+  DARK,
+  SYSTEM,
+}
+
 class ThemeController extends GetxController {
   static bool isDark = false;
-
+  static Mode mode = Mode.LIGHT;
+  static bool get isAuto => mode == Mode.SYSTEM;
   static Function enterWipe = () {};
   static Function exitWipe = () {};
 
@@ -37,14 +44,47 @@ class ThemeController extends GetxController {
       ThemeColors.fromThemeColors(isDark ? darkTheme : lightTheme);
 
   Future<void> switchTheme() async {
-    await enterWipe.call();
-    isDark = !isDark;
-    currentTheme = ThemeColors.fromThemeColors(
-      isDark ? darkTheme : lightTheme,
-    );
+    if (mode == Mode.LIGHT) {
+      mode = Mode.DARK;
+      setDark();
+    } else if (mode == Mode.DARK) {
+      mode = Mode.SYSTEM;
+      if (WidgetsBinding.instance?.window.platformBrightness ==
+          Brightness.dark) {
+        if (!isDark) setDark();
+      } else {
+        if (isDark) setLight();
+      }
+    } else {
+      mode = Mode.LIGHT;
+      setLight();
+    }
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('dark_mode', isDark);
+    prefs.setBool('auto_mode', isAuto);
     refresh();
-    await exitWipe.call();
+  }
+
+  Future<void> setLight() async {
+    if (isDark) {
+      await enterWipe.call();
+      isDark = false;
+      currentTheme = ThemeColors.fromThemeColors(lightTheme);
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('dark_mode', isDark);
+      refresh();
+      await exitWipe.call();
+    }
+  }
+
+  Future<void> setDark() async {
+    if (!isDark) {
+      await enterWipe.call();
+      isDark = true;
+      currentTheme = ThemeColors.fromThemeColors(darkTheme);
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('dark_mode', isDark);
+      refresh();
+      await exitWipe.call();
+    }
   }
 }
