@@ -75,6 +75,8 @@ class Home extends StatelessWidget {
                                           child: Icon(
                                             LineIcons.bars,
                                             size: 40,
+                                            color: themeController
+                                                .currentTheme.foreground,
                                           ),
                                         ),
                                       ),

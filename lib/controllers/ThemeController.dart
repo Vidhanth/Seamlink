@@ -40,8 +40,11 @@ class ThemeController extends GetxController {
     contrastText: Colors.black.withOpacity(0.9),
   );
 
-  ThemeColors currentTheme =
-      ThemeColors.fromThemeColors(isDark ? darkTheme : lightTheme);
+  ThemeColors currentTheme = ThemeColors.fromThemeColors(isAuto
+      ? _getAutoTheme()
+      : isDark
+          ? darkTheme
+          : lightTheme);
 
   Future<void> switchTheme() async {
     if (mode == Mode.LIGHT) {
@@ -86,5 +89,11 @@ class ThemeController extends GetxController {
       refresh();
       await exitWipe.call();
     }
+  }
+
+  static ThemeColors _getAutoTheme() {
+    if (WidgetsBinding.instance?.window.platformBrightness == Brightness.dark)
+      return darkTheme;
+    return lightTheme;
   }
 }
