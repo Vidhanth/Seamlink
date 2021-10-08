@@ -82,11 +82,15 @@ class LabelTile extends StatelessWidget {
                 ),
                 Spacer(),
                 if (editing ?? false)
-                  FadeIn(
-                      child: Icon(
-                    LineIcons.pen,
-                    color: themeController.currentTheme.foreground,
-                  )),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 4.0),
+                    child: FadeIn(
+                        child: Icon(
+                      LineIcons.pen,
+                      color: themeController.currentTheme.foreground,
+                      size: 20,
+                    )),
+                  ),
               ],
             ),
           ),
