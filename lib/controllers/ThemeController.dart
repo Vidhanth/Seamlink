@@ -48,19 +48,19 @@ class ThemeController extends GetxController {
 
   Future<void> switchTheme() async {
     if (mode == Mode.LIGHT) {
+      await setDark();
       mode = Mode.DARK;
-      setDark();
     } else if (mode == Mode.DARK) {
-      mode = Mode.SYSTEM;
       if (WidgetsBinding.instance?.window.platformBrightness ==
           Brightness.dark) {
-        if (!isDark) setDark();
+        if (!isDark) await setDark();
       } else {
-        if (isDark) setLight();
+        if (isDark) await setLight();
       }
+      mode = Mode.SYSTEM;
     } else {
+      await setLight();
       mode = Mode.LIGHT;
-      setLight();
     }
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool('auto_mode', isAuto);

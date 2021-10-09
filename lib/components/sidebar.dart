@@ -330,8 +330,8 @@ class Sidebar extends StatelessWidget {
                             ThemeController.isAuto
                                 ? Icons.brightness_auto_outlined
                                 : ThemeController.isDark
-                                    ? Icons.light_mode_outlined
-                                    : Icons.dark_mode_outlined,
+                                    ? Icons.dark_mode_outlined
+                                    : Icons.light_mode_outlined,
                             color: themeController.currentTheme.foreground,
                           ),
                         ),
