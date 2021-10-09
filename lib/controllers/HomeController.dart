@@ -146,7 +146,11 @@ class HomeController extends GetxController {
           ),
           MenuDivider(),
           MenuItem(
-            label: ThemeController.isDark ? 'Light Mode' : 'Dark Mode',
+            label: ThemeController.isAuto
+                ? 'Light Mode'
+                : ThemeController.isDark
+                    ? 'System Theme'
+                    : 'Dark Mode',
             enabled: true,
             onClicked: () async {
               await Get.find<ThemeController>().switchTheme();

@@ -325,6 +325,7 @@ class Sidebar extends StatelessWidget {
                           splashRadius: 29,
                           onPressed: () async {
                             await themeController.switchTheme();
+                            Get.find<HomeController>().updateMenubar();
                           },
                           icon: Icon(
                             ThemeController.isAuto
