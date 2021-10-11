@@ -291,6 +291,7 @@ class NewLink extends StatelessWidget {
                                             .currentTheme.contrastText,
                                       ),
                                 onPressed: () async {
+                                  await hideKeyboard(context);
                                   await save();
                                 },
                               ),
