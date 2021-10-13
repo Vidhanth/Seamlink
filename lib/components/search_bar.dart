@@ -43,8 +43,8 @@ class _SearchBarState extends State<SearchBar> {
       },
       prefixIcon: isDesktop
           ? null
-          : Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15),
+          : Material(
+              type: MaterialType.transparency,
               child: InkWell(
                 onTap: () {
                   if (isMobile) {
@@ -54,10 +54,13 @@ class _SearchBarState extends State<SearchBar> {
                   }
                 },
                 borderRadius: BorderRadius.circular(50),
-                child: Icon(
-                  LineIcons.bars,
-                  color: themeController.currentTheme.foreground,
-                  size: 25,
+                child: Padding(
+                  padding: EdgeInsets.all(15),
+                  child: Icon(
+                    LineIcons.bars,
+                    color: themeController.currentTheme.foreground,
+                    size: 25,
+                  ),
                 ),
               ),
             ),
