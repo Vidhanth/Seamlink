@@ -22,7 +22,7 @@ class InputField extends StatelessWidget {
   final bool obscureText;
   final bool error;
   final Widget? suffix;
-  final Icon? prefixIcon;
+  final Widget? prefixIcon;
   final FocusNode? focusNode;
   final Function? onSubmitted;
   final bool? autofocus;

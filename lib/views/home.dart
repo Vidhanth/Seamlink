@@ -49,53 +49,10 @@ class Home extends StatelessWidget {
                         children: [
                           Column(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 25.0, vertical: 0),
-                                child: Row(
-                                  mainAxisAlignment: isScreenWide(context)
-                                      ? MainAxisAlignment.start
-                                      : MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    if (isMobile) ...[
-                                      InkWell(
-                                        focusColor: Colors.transparent,
-                                        splashColor: Colors.transparent,
-                                        hoverColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
-                                        onTap: () async {
-                                          hideKeyboard(context);
-                                          homeController.showSidebar.toggle();
-                                          Get.find<SidebarController>()
-                                              .editMode(false);
-                                        },
-                                        child: Padding(
-                                          padding: EdgeInsets.only(
-                                              right: 20.0, left: 0),
-                                          child: Icon(
-                                            LineIcons.bars,
-                                            size: 40,
-                                            color: themeController
-                                                .currentTheme.foreground,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                    isDesktop
-                                        ? SizedBox()
-                                        : Text(
-                                            'Seamlink',
-                                            style: GoogleFonts.poppins(
-                                              fontSize: 50,
-                                              fontWeight: FontWeight.bold,
-                                              color: themeController
-                                                  .currentTheme.foreground,
-                                            ),
-                                          ),
-                                  ],
-                                ),
-                              ),
                               if (!isMacOS) ...[
+                                SizedBox(
+                                  height: 10,
+                                ),
                                 Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 10),

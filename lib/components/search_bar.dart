@@ -4,7 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:seamlink/components/input_field.dart';
 import 'package:seamlink/controllers/HomeController.dart';
+import 'package:seamlink/controllers/SidebarController.dart';
 import 'package:seamlink/controllers/ThemeController.dart';
+import 'package:seamlink/services/utils.dart';
 
 class SearchBar extends StatefulWidget {
   SearchBar({
@@ -39,6 +41,26 @@ class _SearchBarState extends State<SearchBar> {
       onChanged: (query) {
         homeController.searchText.value = query.toLowerCase().trim();
       },
+      prefixIcon: isDesktop
+          ? null
+          : Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15),
+              child: InkWell(
+                onTap: () {
+                  if (isMobile) {
+                    hideKeyboard(context);
+                    homeController.showSidebar.toggle();
+                    Get.find<SidebarController>().editMode(false);
+                  }
+                },
+                borderRadius: BorderRadius.circular(50),
+                child: Icon(
+                  LineIcons.bars,
+                  color: themeController.currentTheme.foreground,
+                  size: 25,
+                ),
+              ),
+            ),
       controller: controller,
       suffix: Obx(
         () => homeController.searchText.value.trim().isEmpty
