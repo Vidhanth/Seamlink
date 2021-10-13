@@ -2,8 +2,6 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:line_icons/line_icons.dart';
 import 'package:seamlink/components/all_links_view.dart';
 import 'package:seamlink/components/filter_row.dart';
 import 'package:seamlink/components/search_bar.dart';
