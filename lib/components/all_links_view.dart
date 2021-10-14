@@ -86,22 +86,19 @@ class AllLinksView extends StatelessWidget {
                 SizedBox(
                   height: 3,
                 ),
-                InkWell(
-                  borderRadius: BorderRadius.circular(5),
-                  onTap: () {
+                TextButton(
+                  onPressed: () {
                     Get.find<HomeController>().refreshLinks();
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0, vertical: 4.0),
-                    child: Text(
-                      'Refresh',
-                      style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.bold,
-                        color: themeController.currentTheme.foreground,
-                      ),
+                  style: TextButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    primary: themeController.currentTheme.foreground,
+                    textStyle: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
+                  child: Text('Refresh'),
                 ),
               ],
             ),

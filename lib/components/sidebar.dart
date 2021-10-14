@@ -147,9 +147,9 @@ class Sidebar extends StatelessWidget {
                         hoverColor: themeController.currentTheme.hoverColor,
                         splashColor: themeController.currentTheme.splashColor,
                         focusColor: themeController.currentTheme.focusColor,
-                        borderRadius: BorderRadius.circular(3),
+                        borderRadius: BorderRadius.circular(8),
                         child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 3),
+                          padding: EdgeInsets.symmetric(horizontal: 5),
                           child: Obx(
                             () => Text(
                               controller.editMode.value ? "DONE" : "EDIT",
@@ -278,39 +278,35 @@ class Sidebar extends StatelessWidget {
                       size: 40,
                       color: themeController.currentTheme.foreground,
                     ),
-                    SizedBox(width: 5),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          ' ${Get.find<UserController>().username} ',
-                          style: GoogleFonts.poppins(
-                            // fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: themeController.currentTheme.foreground,
-                          ),
-                        ),
-                        Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () async {
-                              await logout();
-                            },
-                            hoverColor: themeController.currentTheme.hoverColor,
-                            splashColor:
-                                themeController.currentTheme.splashColor,
-                            focusColor: themeController.currentTheme.focusColor,
-                            borderRadius: BorderRadius.circular(3),
-                            child: Text(
-                              ' Logout ',
-                              style: GoogleFonts.poppins(
-                                // fontSize: 20,
-                                fontStyle: FontStyle.italic,
-                                color: themeController.currentTheme.foreground,
-                              ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5.0),
+                          child: Text(
+                            '${Get.find<UserController>().username}',
+                            style: GoogleFonts.poppins(
+                              // fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: themeController.currentTheme.foreground,
                             ),
                           ),
-                        )
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            await logout();
+                          },
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.symmetric(horizontal: 7.0),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            primary: themeController.currentTheme.foreground,
+                            textStyle: GoogleFonts.poppins(
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                          child: Text('Logout'),
+                        ),
                       ],
                     ),
                     Spacer(),
