@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:seamlink/constants/colors.dart';
 import 'package:seamlink/constants/enum.dart';
 import 'package:seamlink/controllers/SidebarController.dart';
 import 'package:seamlink/controllers/ThemeController.dart';
@@ -113,6 +114,26 @@ class FilterRow extends StatelessWidget {
                     ),
                   ),
                 ),
+        if (sidebarController.selectedType.value != NoteType.ALL ||
+            sidebarController.labelIndex.value != -2) ...[
+          Spacer(),
+          TextButton(
+            onPressed: () {
+              sidebarController.selectedType(NoteType.ALL);
+              sidebarController.labelIndex(-2);
+            },
+            style: TextButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              primary: colorsList[2],
+              textStyle: GoogleFonts.poppins(),
+            ),
+            child: Text('Clear'),
+          ),
+          SizedBox(
+            width: 20,
+          ),
+        ]
       ],
     );
   }
