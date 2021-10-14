@@ -292,20 +292,32 @@ class Sidebar extends StatelessWidget {
                             ),
                           ),
                         ),
-                        TextButton(
-                          onPressed: () async {
-                            await logout();
-                          },
-                          style: TextButton.styleFrom(
-                            padding: EdgeInsets.symmetric(horizontal: 7.0),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            primary: themeController.currentTheme.foreground,
-                            textStyle: GoogleFonts.poppins(
-                              fontStyle: FontStyle.italic,
+                        Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () async {
+                              await logout();
+                            },
+                            hoverColor: themeController.currentTheme.hoverColor,
+                            splashColor:
+                                themeController.currentTheme.splashColor,
+                            focusColor: themeController.currentTheme.focusColor,
+                            borderRadius: BorderRadius.circular(8),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 5,
+                                vertical: 2,
+                              ),
+                              child: Text(
+                                'Logout',
+                                style: GoogleFonts.poppins(
+                                  color: themeController.currentTheme.subtext,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                                textAlign: TextAlign.start,
+                              ),
                             ),
                           ),
-                          child: Text('Logout'),
                         ),
                       ],
                     ),
