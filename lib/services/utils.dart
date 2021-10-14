@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_protected_member
+
 import 'dart:io' hide Link;
 
 import 'package:flutter/material.dart';
