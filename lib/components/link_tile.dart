@@ -1,9 +1,9 @@
+import 'package:fade_shimmer/fade_shimmer.dart';
 import 'package:flutter/cupertino.dart' hide Dismissible, DismissDirection;
 import 'package:flutter/material.dart' hide Dismissible, DismissDirection;
 import 'package:line_icons/line_icons.dart';
 import 'package:seamlink/controllers/ThemeController.dart';
 import 'dismissible.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:seamlink/components/single_future_builder.dart';
@@ -197,9 +197,28 @@ class LinkTile extends StatelessWidget {
                                 ]
                               ],
                             )
-                          : SpinKitChasingDots(
-                              size: 30,
-                              color: colorsList[link.colorIndex],
+                          : Column(
+                              children: [
+                                _buildShimmer(),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 30.0,
+                                  ),
+                                  child: _buildShimmer(),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0,
+                                  ),
+                                  child: _buildShimmer(),
+                                ),
+                              ],
                             ),
                     );
                   },
@@ -209,6 +228,16 @@ class LinkTile extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildShimmer() {
+    return FadeShimmer(
+      width: double.infinity,
+      height: 14,
+      radius: 2,
+      baseColor: themeController.currentTheme.subtext.withOpacity(0.1),
+      highlightColor: themeController.currentTheme.subtext.withOpacity(0.25),
     );
   }
 }
