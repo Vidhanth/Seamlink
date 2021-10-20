@@ -2,6 +2,7 @@ import 'package:fade_shimmer/fade_shimmer.dart';
 import 'package:flutter/cupertino.dart' hide Dismissible, DismissDirection;
 import 'package:flutter/material.dart' hide Dismissible, DismissDirection;
 import 'package:line_icons/line_icons.dart';
+import 'package:octo_image/octo_image.dart';
 import 'package:seamlink/controllers/ThemeController.dart';
 import 'package:seamlink/services/extensions.dart';
 import 'dismissible.dart';
@@ -133,7 +134,6 @@ class LinkTile extends StatelessWidget {
   }
 
   Widget _buildYoutubeCard() {
-    bool imageLoading = true;
     return SingleFutureBuilder(
       fallbackData: link,
       childBuilder: (context, data) {
@@ -176,22 +176,10 @@ class LinkTile extends StatelessWidget {
                         StatefulBuilder(builder: (context, setState) {
                           return Stack(
                             children: [
-                              if (imageLoading) _buildShimmer(height: 145),
-                              Image.network(
-                                link.thumbnail!,
-                                loadingBuilder: (context, image, event) {
-                                  if (event == null) {
-                                    if (imageLoading) {
-                                      Future.delayed(5.seconds, () {
-                                        setState(() {
-                                          imageLoading = false;
-                                        });
-                                      });
-                                    }
-                                    return image;
-                                  }
-                                  return SizedBox();
-                                },
+                              OctoImage(
+                                image: NetworkImage(link.thumbnail!),
+                                placeholderBuilder: (context) =>
+                                    _buildShimmer(height: 145.0),
                               ),
                               Positioned(
                                 bottom: 10,

@@ -32,6 +32,7 @@ dependencies:
   flutter_staggered_animations: ^1.0.0
   flutter_launcher_icons:
   fade_shimmer: ^2.0.1
+  octo_image: ^1.0.0+1
   window_size:
     git:
       url: git://github.com/google/flutter-desktop-embedding.git
