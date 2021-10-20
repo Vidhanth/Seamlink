@@ -217,7 +217,10 @@ class LinkTile extends StatelessWidget {
                                   padding: EdgeInsets.all(5),
                                   child: SubstringHighlight(
                                     textAlign: TextAlign.center,
-                                    text: link.message!,
+                                    text: link.message! +
+                                        (link.url.contains('playlist')
+                                            ? ' videos'
+                                            : ''),
                                     term: searchText,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -234,7 +237,7 @@ class LinkTile extends StatelessWidget {
                                     ),
                                   ),
                                   decoration: BoxDecoration(
-                                    color: Colors.black54,
+                                    color: Colors.black.withOpacity(0.75),
                                     borderRadius: BorderRadius.circular(5),
                                   ),
                                 ),

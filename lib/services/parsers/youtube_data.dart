@@ -7,23 +7,27 @@ import '../extensions.dart';
 
 class YoutubeData {
   static Future<Link> getDetails(Link link) async {
+    bool playlist = link.url.contains('playlist');
+
     String id = _getVideoID(link.url);
+
     if (id.isEmpty) {
       link.title = await UrlParser.getUrlTitle(link.url);
       return link;
     }
-    String rawDetails = await _getDataFromApi(id);
+    String rawDetails = await _getDataFromApi(id, playlist: playlist);
     Map<String, dynamic> details = json.decode(rawDetails);
 
-    String title, channelTitle, duration;
+    String title, channelTitle, extra;
     String? thumbnail;
 
     try {
-      duration =
-          _parseDuration(details['items'][0]['contentDetails']['duration'])
+      extra = playlist
+          ? details['items'][0]['contentDetails']['itemCount'].toString()
+          : _parseDuration(details['items'][0]['contentDetails']['duration'])
               .toDurationString();
     } catch (e) {
-      duration = "Live";
+      extra = playlist ? "0" : "Live";
     }
 
     try {
@@ -42,17 +46,24 @@ class YoutubeData {
 
     link.title = title.trim();
     link.subtitle = channelTitle.trim();
-    link.message = duration.trim();
+    link.message = extra.trim();
     link.thumbnail = thumbnail;
 
     return link;
   }
 
-  static Future<String> _getDataFromApi(String id) async {
+  static Future<String> _getDataFromApi(
+    String id, {
+    bool playlist = false,
+  }) async {
+    String url = playlist
+        ? 'https://www.googleapis.com/youtube/v3/playlists?id=$id&key=AIzaSyDOAca4V6Nll2OcJKVDl7n74VN5n_SzbrI&part=snippet&part=contentDetails&fields=items(snippet(title,channelTitle,thumbnails(maxres/url,high/url)),contentDetails/itemCount)'
+        : 'https://www.googleapis.com/youtube/v3/videos?id=$id&key=AIzaSyDOAca4V6Nll2OcJKVDl7n74VN5n_SzbrI&part=snippet&part=contentDetails&fields=items(snippet(title,channelTitle,thumbnails(maxres/url,high/url)),contentDetails/duration)';
+
     var request = http.Request(
         'GET',
         Uri.parse(
-          'https://www.googleapis.com/youtube/v3/videos?id=$id&key=AIzaSyDOAca4V6Nll2OcJKVDl7n74VN5n_SzbrI&part=snippet&part=contentDetails&fields=items(snippet(title,channelTitle,thumbnails(maxres/url,high/url)),contentDetails/duration)',
+          url,
         ));
 
     http.StreamedResponse response = await request.send();
@@ -65,6 +76,10 @@ class YoutubeData {
   }
 
   static String _getVideoID(String url) {
+    if (url.contains('playlist')) {
+      return url.split('list=').last;
+    }
+
     String pattern =
         r"http(?:s)?:\/\/(?:m.)?(?:w{3}\.)?youtu(?:\.be\/|be\.com\/(?:(?:shorts\/)|(?:watch\?(?:feature=youtu.be\&)?v=|v\/|embed\/|user\/(?:[\w#]+\/)+)))([^&#?\n]+)";
     RegExp exp = RegExp(pattern);

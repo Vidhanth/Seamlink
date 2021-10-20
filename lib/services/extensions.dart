@@ -39,9 +39,8 @@ extension s on String {
   }
 
   bool get isYoutubeLink {
-    return (this.toLowerCase().contains('youtube.com/') ||
-            this.toLowerCase().contains('youtu.be/')) &&
-        !this.toLowerCase().contains('playlist');
+    return this.toLowerCase().contains('youtube.com/') ||
+        this.toLowerCase().contains('youtu.be/');
   }
 
   bool get isRedditLink {
