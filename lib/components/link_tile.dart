@@ -206,7 +206,9 @@ class LinkTile extends StatelessWidget {
                                     ),
                                   ),
                                   decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.75),
+                                    color: themeController
+                                        .currentTheme.backgroundColor
+                                        .withOpacity(0.85),
                                     borderRadius: BorderRadius.circular(5),
                                   ),
                                 ),
