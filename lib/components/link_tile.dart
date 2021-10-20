@@ -141,7 +141,6 @@ class LinkTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(17),
           child: data == null
               ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _buildShimmer(height: 145),
                     Padding(
@@ -155,13 +154,13 @@ class LinkTile extends StatelessWidget {
                     ),
                     Padding(
                       padding:
-                          EdgeInsets.only(left: 20, right: 100, bottom: 8.0),
+                          EdgeInsets.only(left: 40, right: 40, bottom: 8.0),
                       child: _buildShimmer(),
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                        left: 20,
-                        right: 130,
+                        left: 60,
+                        right: 60,
                         bottom: 20.0,
                       ),
                       child: _buildShimmer(),
@@ -171,7 +170,6 @@ class LinkTile extends StatelessWidget {
               : link.thumbnail == null
                   ? _buildNote(data)
                   : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         StatefulBuilder(builder: (context, setState) {
                           return Stack(
@@ -222,7 +220,7 @@ class LinkTile extends StatelessWidget {
                           child: SubstringHighlight(
                             text: link.title,
                             term: searchText,
-                            textAlign: TextAlign.start,
+                            textAlign: TextAlign.center,
                             maxLines: 10,
                             overflow: TextOverflow.ellipsis,
                             textStyle: GoogleFonts.poppins(
@@ -243,7 +241,7 @@ class LinkTile extends StatelessWidget {
                           child: SubstringHighlight(
                             text: link.subtitle!,
                             term: searchText,
-                            textAlign: TextAlign.start,
+                            textAlign: TextAlign.center,
                             maxLines: 10,
                             overflow: TextOverflow.ellipsis,
                             textStyle: GoogleFonts.poppins(
