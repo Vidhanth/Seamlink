@@ -143,14 +143,7 @@ class LinkTile extends StatelessWidget {
               ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    FadeShimmer(
-                      width: double.infinity,
-                      height: 145,
-                      baseColor:
-                          themeController.currentTheme.subtext.withOpacity(0.1),
-                      highlightColor: themeController.currentTheme.subtext
-                          .withOpacity(0.25),
-                    ),
+                    _buildShimmer(height: 145),
                     Padding(
                       padding: EdgeInsets.only(
                         left: 20,
@@ -183,17 +176,7 @@ class LinkTile extends StatelessWidget {
                         StatefulBuilder(builder: (context, setState) {
                           return Stack(
                             children: [
-                              if (imageLoading)
-                                FadeShimmer(
-                                  width: double.infinity,
-                                  height: 145,
-                                  baseColor: themeController
-                                      .currentTheme.subtext
-                                      .withOpacity(0.1),
-                                  highlightColor: themeController
-                                      .currentTheme.subtext
-                                      .withOpacity(0.25),
-                                ),
+                              if (imageLoading) _buildShimmer(height: 145),
                               Image.network(
                                 link.thumbnail!,
                                 loadingBuilder: (context, image, event) {
@@ -296,10 +279,13 @@ class LinkTile extends StatelessWidget {
     );
   }
 
-  Widget _buildShimmer() {
+  Widget _buildShimmer({
+    double height: 16,
+    double width: double.infinity,
+  }) {
     return FadeShimmer(
-      width: double.infinity,
-      height: 16,
+      width: width,
+      height: height,
       radius: 2,
       baseColor: themeController.currentTheme.subtext.withOpacity(0.1),
       highlightColor: themeController.currentTheme.subtext.withOpacity(0.25),
