@@ -22,6 +22,7 @@ class Link {
     required this.autotitle,
     this.subtitle,
     this.message,
+    this.thumbnail,
     this.type,
   });
 
@@ -35,6 +36,7 @@ class Link {
   bool autotitle;
   String? subtitle;
   String? message;
+  String? thumbnail;
   NoteType? type;
 
   factory Link.fromJson(Map<String, dynamic> json) {

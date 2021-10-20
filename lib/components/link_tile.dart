@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart' hide Dismissible, DismissDirection;
 import 'package:flutter/material.dart' hide Dismissible, DismissDirection;
 import 'package:line_icons/line_icons.dart';
 import 'package:seamlink/controllers/ThemeController.dart';
+import 'package:seamlink/services/extensions.dart';
 import 'dismissible.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -114,69 +115,107 @@ class LinkTile extends StatelessWidget {
               onTap: () {
                 onTap.call();
               },
-              child: Padding(
-                padding: padding,
-                child: SingleFutureBuilder(
-                  future: getLink,
-                  condition: !(link.autotitle && link.title.isEmpty),
-                  fallbackData: link,
-                  childBuilder: (context, data) {
-                    return AnimatedSwitcher(
-                      duration: 400.milliseconds,
-                      child: data != null
-                          ? Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                if (link.title.isNotEmpty) ...[
-                                  SubstringHighlight(
-                                    text: link.title,
-                                    textAlign: TextAlign.center,
-                                    term: searchText,
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                    textStyle: GoogleFonts.poppins(
-                                      color: themeController
-                                          .currentTheme.foreground,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    textStyleHighlight: GoogleFonts.poppins(
-                                      color: themeController
-                                          .currentTheme.contrastText,
-                                      backgroundColor: themeController
-                                          .currentTheme.foreground,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                ],
-                                SubstringHighlight(
-                                  text: link.subtitle?.isEmpty ?? true
-                                      ? link.url
-                                      : link.subtitle!,
-                                  term: searchText,
-                                  textAlign: TextAlign.center,
-                                  maxLines: 10,
-                                  overflow: TextOverflow.ellipsis,
-                                  textStyle: GoogleFonts.poppins(
-                                    color:
-                                        themeController.currentTheme.foreground,
-                                    fontStyle: FontStyle.italic,
-                                    fontSize: 15,
-                                  ),
-                                  textStyleHighlight: GoogleFonts.poppins(
-                                    color: themeController
-                                        .currentTheme.contrastText,
-                                    backgroundColor:
-                                        themeController.currentTheme.foreground,
-                                  ),
+              child: link.url.isYoutubeLink
+                  ? _buildYoutubeCard()
+                  : SingleFutureBuilder(
+                      future: getLink,
+                      condition: !(link.autotitle && link.title.isEmpty),
+                      fallbackData: link,
+                      childBuilder: (context, data) {
+                        return _buildNote(data);
+                      },
+                    ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildYoutubeCard() {
+    bool imageLoading = true;
+    return SingleFutureBuilder(
+      fallbackData: link,
+      childBuilder: (context, data) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(17),
+          child: data == null
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    FadeShimmer(
+                      width: double.infinity,
+                      height: 145,
+                      baseColor:
+                          themeController.currentTheme.subtext.withOpacity(0.1),
+                      highlightColor: themeController.currentTheme.subtext
+                          .withOpacity(0.25),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        bottom: 3.0,
+                        top: 20.0,
+                      ),
+                      child: _buildShimmer(),
+                    ),
+                    Padding(
+                      padding:
+                          EdgeInsets.only(left: 20, right: 100, bottom: 8.0),
+                      child: _buildShimmer(),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: 20,
+                        right: 130,
+                        bottom: 20.0,
+                      ),
+                      child: _buildShimmer(),
+                    ),
+                  ],
+                )
+              : link.thumbnail == null
+                  ? _buildNote(data)
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        StatefulBuilder(builder: (context, setState) {
+                          return Stack(
+                            children: [
+                              if (imageLoading)
+                                FadeShimmer(
+                                  width: double.infinity,
+                                  height: 145,
+                                  baseColor: themeController
+                                      .currentTheme.subtext
+                                      .withOpacity(0.1),
+                                  highlightColor: themeController
+                                      .currentTheme.subtext
+                                      .withOpacity(0.25),
                                 ),
-                                if (link.message != null) ...[
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  SubstringHighlight(
+                              Image.network(
+                                link.thumbnail!,
+                                loadingBuilder: (context, image, event) {
+                                  if (event == null) {
+                                    if (imageLoading) {
+                                      Future.delayed(5.seconds, () {
+                                        setState(() {
+                                          imageLoading = false;
+                                        });
+                                      });
+                                    }
+                                    return image;
+                                  }
+                                  return SizedBox();
+                                },
+                              ),
+                              Positioned(
+                                bottom: 10,
+                                right: 10,
+                                child: Container(
+                                  padding: EdgeInsets.all(5),
+                                  child: SubstringHighlight(
                                     textAlign: TextAlign.center,
                                     text: link.message!,
                                     term: searchText,
@@ -185,7 +224,7 @@ class LinkTile extends StatelessWidget {
                                     textStyle: GoogleFonts.poppins(
                                       color: themeController
                                           .currentTheme.foreground,
-                                      fontSize: 15,
+                                      fontSize: 12.5,
                                     ),
                                     textStyleHighlight: GoogleFonts.poppins(
                                       color: themeController
@@ -194,50 +233,175 @@ class LinkTile extends StatelessWidget {
                                           .currentTheme.foreground,
                                     ),
                                   ),
-                                ]
-                              ],
-                            )
-                          : Column(
-                              children: [
-                                _buildShimmer(),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 30.0,
+                                  decoration: BoxDecoration(
+                                    color: Colors.black54,
+                                    borderRadius: BorderRadius.circular(5),
                                   ),
-                                  child: _buildShimmer(),
                                 ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 20.0,
-                                  ),
-                                  child: _buildShimmer(),
-                                ),
-                              ],
+                              )
+                            ],
+                          );
+                        }),
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 0.0),
+                          child: SubstringHighlight(
+                            text: link.title,
+                            term: searchText,
+                            textAlign: TextAlign.start,
+                            maxLines: 10,
+                            overflow: TextOverflow.ellipsis,
+                            textStyle: GoogleFonts.poppins(
+                              color: themeController.currentTheme.foreground,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
                             ),
-                    );
-                  },
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
+                            textStyleHighlight: GoogleFonts.poppins(
+                              color: themeController.currentTheme.contrastText,
+                              backgroundColor:
+                                  themeController.currentTheme.foreground,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 20.0),
+                          child: SubstringHighlight(
+                            text: link.subtitle!,
+                            term: searchText,
+                            textAlign: TextAlign.start,
+                            maxLines: 10,
+                            overflow: TextOverflow.ellipsis,
+                            textStyle: GoogleFonts.poppins(
+                              color: themeController.currentTheme.foreground,
+                              fontStyle: FontStyle.italic,
+                              fontSize: 15,
+                            ),
+                            textStyleHighlight: GoogleFonts.poppins(
+                              color: themeController.currentTheme.contrastText,
+                              backgroundColor:
+                                  themeController.currentTheme.foreground,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+        );
+      },
+      condition: !(link.autotitle && link.title.isEmpty),
+      future: getLink,
     );
   }
 
   Widget _buildShimmer() {
     return FadeShimmer(
       width: double.infinity,
-      height: 14,
+      height: 16,
       radius: 2,
       baseColor: themeController.currentTheme.subtext.withOpacity(0.1),
       highlightColor: themeController.currentTheme.subtext.withOpacity(0.25),
+    );
+  }
+
+  Widget _buildNote(data) {
+    return AnimatedSwitcher(
+      duration: 400.milliseconds,
+      child: data != null
+          ? Padding(
+              padding: padding,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (link.title.isNotEmpty) ...[
+                    SubstringHighlight(
+                      text: link.title,
+                      textAlign: TextAlign.center,
+                      term: searchText,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      textStyle: GoogleFonts.poppins(
+                        color: themeController.currentTheme.foreground,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textStyleHighlight: GoogleFonts.poppins(
+                        color: themeController.currentTheme.contrastText,
+                        backgroundColor:
+                            themeController.currentTheme.foreground,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                  SubstringHighlight(
+                    text: link.subtitle?.isEmpty ?? true
+                        ? link.url
+                        : link.subtitle!,
+                    term: searchText,
+                    textAlign: TextAlign.center,
+                    maxLines: 10,
+                    overflow: TextOverflow.ellipsis,
+                    textStyle: GoogleFonts.poppins(
+                      color: themeController.currentTheme.foreground,
+                      fontStyle: FontStyle.italic,
+                      fontSize: 15,
+                    ),
+                    textStyleHighlight: GoogleFonts.poppins(
+                      color: themeController.currentTheme.contrastText,
+                      backgroundColor: themeController.currentTheme.foreground,
+                    ),
+                  ),
+                  if (link.message != null) ...[
+                    SizedBox(
+                      height: 10,
+                    ),
+                    SubstringHighlight(
+                      textAlign: TextAlign.center,
+                      text: link.message!,
+                      term: searchText,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textStyle: GoogleFonts.poppins(
+                        color: themeController.currentTheme.foreground,
+                        fontSize: 15,
+                      ),
+                      textStyleHighlight: GoogleFonts.poppins(
+                        color: themeController.currentTheme.contrastText,
+                        backgroundColor:
+                            themeController.currentTheme.foreground,
+                      ),
+                    ),
+                  ]
+                ],
+              ),
+            )
+          : Padding(
+              padding: padding,
+              child: Column(
+                children: [
+                  _buildShimmer(),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 30.0,
+                    ),
+                    child: _buildShimmer(),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0,
+                    ),
+                    child: _buildShimmer(),
+                  ),
+                ],
+              ),
+            ),
     );
   }
 }

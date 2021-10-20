@@ -16,6 +16,7 @@ class YoutubeData {
     Map<String, dynamic> details = json.decode(rawDetails);
 
     String title, channelTitle, duration;
+    String? thumbnail;
 
     try {
       duration =
@@ -28,6 +29,12 @@ class YoutubeData {
     try {
       title = details['items'][0]['snippet']['title'];
       channelTitle = details['items'][0]['snippet']['channelTitle'];
+      try {
+        thumbnail =
+            details['items'][0]['snippet']['thumbnails']['maxres']['url'];
+      } catch (e) {
+        thumbnail = details['items'][0]['snippet']['thumbnails']['high']['url'];
+      }
     } catch (e) {
       link.title = await UrlParser.getUrlTitle(link.url);
       return link;
@@ -36,6 +43,7 @@ class YoutubeData {
     link.title = title.trim();
     link.subtitle = channelTitle.trim();
     link.message = duration.trim();
+    link.thumbnail = thumbnail;
 
     return link;
   }
