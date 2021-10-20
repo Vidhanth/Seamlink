@@ -52,7 +52,7 @@ class YoutubeData {
     var request = http.Request(
         'GET',
         Uri.parse(
-          'https://www.googleapis.com/youtube/v3/videos?id=$id&key=AIzaSyDOAca4V6Nll2OcJKVDl7n74VN5n_SzbrI&part=contentDetails&part=snippet',
+          'https://www.googleapis.com/youtube/v3/videos?id=$id&key=AIzaSyDOAca4V6Nll2OcJKVDl7n74VN5n_SzbrI&part=snippet&part=contentDetails&fields=items(snippet(title,channelTitle,thumbnails(maxres/url,high/url)),contentDetails/duration)',
         ));
 
     http.StreamedResponse response = await request.send();
