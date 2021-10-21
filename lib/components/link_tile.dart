@@ -142,29 +142,46 @@ class LinkTile extends StatelessWidget {
           child: data == null
               ? Column(
                   children: [
-                    _buildShimmer(height: 145),
+                    _buildShimmer(height: 148),
                     Padding(
-                      padding: EdgeInsets.only(
-                        left: 20,
-                        right: 20,
-                        bottom: 3.0,
-                        top: 20.0,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 20.0,
+                        horizontal: 15.0,
                       ),
-                      child: _buildShimmer(),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.only(left: 40, right: 40, bottom: 8.0),
-                      child: _buildShimmer(),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: 60,
-                        right: 60,
-                        bottom: 20.0,
+                      child: Row(
+                        children: [
+                          _buildShimmer(
+                            height: 40,
+                            rounded: true,
+                          ),
+                          SizedBox(
+                            width: 15.0,
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                _buildShimmer(),
+                                SizedBox(
+                                  height: 3.0,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 50.0),
+                                  child: _buildShimmer(),
+                                ),
+                                SizedBox(
+                                  height: 10.0,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 80.0),
+                                  child: _buildShimmer(),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      child: _buildShimmer(),
-                    ),
+                    )
                   ],
                 )
               : link.thumbnail == null
@@ -175,9 +192,10 @@ class LinkTile extends StatelessWidget {
                           return Stack(
                             children: [
                               OctoImage(
-                                image: NetworkImage(link.thumbnail!),
+                                image: NetworkImage(
+                                    link.thumbnail!.split('||').first),
                                 placeholderBuilder: (context) =>
-                                    _buildShimmer(height: 145.0),
+                                    _buildShimmer(height: 148.0),
                               ),
                               Positioned(
                                 bottom: 10,
@@ -217,47 +235,82 @@ class LinkTile extends StatelessWidget {
                           );
                         }),
                         Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 0.0),
-                          child: SubstringHighlight(
-                            text: link.title,
-                            term: searchText,
-                            textAlign: TextAlign.center,
-                            maxLines: 10,
-                            overflow: TextOverflow.ellipsis,
-                            textStyle: GoogleFonts.poppins(
-                              color: themeController.currentTheme.foreground,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 15,
-                            ),
-                            textStyleHighlight: GoogleFonts.poppins(
-                              color: themeController.currentTheme.contrastText,
-                              backgroundColor:
-                                  themeController.currentTheme.foreground,
-                            ),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 20.0,
+                            horizontal: 15.0,
                           ),
-                        ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(20.0, 8.0, 20.0, 20.0),
-                          child: SubstringHighlight(
-                            text: link.subtitle!,
-                            term: searchText,
-                            textAlign: TextAlign.center,
-                            maxLines: 10,
-                            overflow: TextOverflow.ellipsis,
-                            textStyle: GoogleFonts.poppins(
-                              color: themeController.currentTheme.foreground,
-                              fontStyle: FontStyle.italic,
-                              fontSize: 15,
-                            ),
-                            textStyleHighlight: GoogleFonts.poppins(
-                              color: themeController.currentTheme.contrastText,
-                              backgroundColor:
-                                  themeController.currentTheme.foreground,
-                            ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: OctoImage(
+                                  image: NetworkImage(
+                                    link.thumbnail!.split('||').last,
+                                  ),
+                                  placeholderBuilder: (context) {
+                                    return _buildShimmer(
+                                      height: 40,
+                                      rounded: true,
+                                    );
+                                  },
+                                  height: 40,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 15.0,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SubstringHighlight(
+                                      text: link.title,
+                                      term: searchText,
+                                      textAlign: TextAlign.start,
+                                      maxLines: 10,
+                                      overflow: TextOverflow.ellipsis,
+                                      textStyle: GoogleFonts.poppins(
+                                        color: themeController
+                                            .currentTheme.foreground,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 15,
+                                      ),
+                                      textStyleHighlight: GoogleFonts.poppins(
+                                        color: themeController
+                                            .currentTheme.contrastText,
+                                        backgroundColor: themeController
+                                            .currentTheme.foreground,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5.0,
+                                    ),
+                                    SubstringHighlight(
+                                      text: link.subtitle!,
+                                      term: searchText,
+                                      textAlign: TextAlign.start,
+                                      maxLines: 10,
+                                      overflow: TextOverflow.ellipsis,
+                                      textStyle: GoogleFonts.poppins(
+                                        color: themeController
+                                            .currentTheme.foreground,
+                                        fontStyle: FontStyle.italic,
+                                        fontSize: 15,
+                                      ),
+                                      textStyleHighlight: GoogleFonts.poppins(
+                                        color: themeController
+                                            .currentTheme.contrastText,
+                                        backgroundColor: themeController
+                                            .currentTheme.foreground,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
                           ),
-                        ),
+                        )
                       ],
                     ),
         );
@@ -270,7 +323,15 @@ class LinkTile extends StatelessWidget {
   Widget _buildShimmer({
     double height: 16,
     double width: double.infinity,
+    bool rounded: false,
   }) {
+    if (rounded)
+      return FadeShimmer.round(
+        size: height,
+        baseColor: themeController.currentTheme.subtext.withOpacity(0.1),
+        highlightColor: themeController.currentTheme.subtext.withOpacity(0.25),
+      );
+
     return FadeShimmer(
       width: width,
       height: height,

@@ -18,6 +18,10 @@ class YoutubeData {
     String rawDetails = await _getDataFromApi(id, playlist: playlist);
     Map<String, dynamic> details = json.decode(rawDetails);
 
+    String channelData =
+        await _getChannelDetails(details['items'][0]['snippet']['channelId']);
+    Map<String, dynamic> channelDetails = json.decode(channelData);
+
     String title, channelTitle, extra;
     String? thumbnail;
 
@@ -39,6 +43,9 @@ class YoutubeData {
       } catch (e) {
         thumbnail = details['items'][0]['snippet']['thumbnails']['high']['url'];
       }
+      thumbnail = (thumbnail ?? '') +
+          '||' +
+          channelDetails['items'][0]['snippet']['thumbnails']['default']['url'];
     } catch (e) {
       link.title = await UrlParser.getUrlTitle(link.url);
       return link;
@@ -57,8 +64,8 @@ class YoutubeData {
     bool playlist = false,
   }) async {
     String url = playlist
-        ? 'https://www.googleapis.com/youtube/v3/playlists?id=$id&key=AIzaSyDOAca4V6Nll2OcJKVDl7n74VN5n_SzbrI&part=snippet&part=contentDetails&fields=items(snippet(title,channelTitle,thumbnails(maxres/url,high/url)),contentDetails/itemCount)'
-        : 'https://www.googleapis.com/youtube/v3/videos?id=$id&key=AIzaSyDOAca4V6Nll2OcJKVDl7n74VN5n_SzbrI&part=snippet&part=contentDetails&fields=items(snippet(title,channelTitle,thumbnails(maxres/url,high/url)),contentDetails/duration)';
+        ? 'https://www.googleapis.com/youtube/v3/playlists?id=$id&key=AIzaSyDOAca4V6Nll2OcJKVDl7n74VN5n_SzbrI&part=snippet&part=contentDetails&fields=items(snippet(title,channelTitle,channelId,thumbnails(maxres/url,high/url)),contentDetails/itemCount)'
+        : 'https://www.googleapis.com/youtube/v3/videos?id=$id&key=AIzaSyDOAca4V6Nll2OcJKVDl7n74VN5n_SzbrI&part=snippet&part=contentDetails&fields=items(snippet(title,channelTitle,channelId,thumbnails(maxres/url,high/url)),contentDetails/duration)';
 
     var request = http.Request(
         'GET',
@@ -100,5 +107,23 @@ class YoutubeData {
     }
     return Duration(
         hours: duration[0], minutes: duration[1], seconds: duration[2]);
+  }
+
+  static Future<String> _getChannelDetails(String id) async {
+    String url =
+        'https://www.googleapis.com/youtube/v3/channels?id=$id&key=AIzaSyDOAca4V6Nll2OcJKVDl7n74VN5n_SzbrI&part=snippet&fields=items(snippet(thumbnails(default/url)))';
+    var request = http.Request(
+        'GET',
+        Uri.parse(
+          url,
+        ));
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      return await response.stream.bytesToString();
+    } else {
+      throw Exception();
+    }
   }
 }
