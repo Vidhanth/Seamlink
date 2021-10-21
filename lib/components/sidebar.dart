@@ -34,7 +34,10 @@ class Sidebar extends StatelessWidget {
               : themeController.currentTheme.mutedBg,
           boxShadow: [
             BoxShadow(
-                color: themeController.currentTheme.shadow, blurRadius: 200)
+              color: themeController.currentTheme.shadow,
+              blurRadius:
+                  Get.find<HomeController>().showSidebar.isTrue ? 200 : 0,
+            )
           ],
         ),
         width: isDesktop
