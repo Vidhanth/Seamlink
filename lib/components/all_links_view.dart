@@ -109,117 +109,122 @@ class AllLinksView extends StatelessWidget {
 
     if (!isScreenWide(context)) {
       return AnimationLimiter(
-        child: ListView.builder(
+        child: ListView(
           padding: EdgeInsets.only(bottom: 40, top: 10),
           physics:
               BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          itemBuilder: (context, index) {
-            return AnimationConfiguration.staggeredList(
-              position: index,
-              child: SlideAnimation(
-                duration: 400.milliseconds,
-                child: FadeInAnimation(
+          children: List.generate(
+            linksList.length,
+            (index) {
+              return AnimationConfiguration.staggeredList(
+                position: index,
+                child: SlideAnimation(
                   duration: 400.milliseconds,
-                  child: LinkTile(
-                    onDismissed: (direction) async {
-                      hideKeyboard(context);
-                      await Get.find<HomeController>()
-                          .deleteLink(context, linksList[index].uid);
-                    },
-                    searchText: searchText,
-                    link: linksList[index],
-                    onTap: () async {
-                      hideKeyboard(context);
-                      if (linksList[index].url.isValidLink) {
-                        launch(linksList[index].url);
-                      } else {
-                        Navigate.to(
-                          page: NewLink(link: linksList[index]),
-                        );
-                      }
-                    },
-                    onLongPress: () {
-                      hideKeyboard(context);
-                      showLinkOptions(context, linksList[index]);
-                    },
-                    onSecondaryTap: () {
-                      showLinkOptions(context, linksList[index]);
-                    },
-                    onTertiaryTap: () async {
-                      if (linksList[index].url.isValidLink)
-                        await openAndDelete(context, linksList[index]);
-                      else
-                        Navigate.to(
-                          page: NewLink(link: linksList[index]),
-                        );
-                    },
+                  child: FadeInAnimation(
+                    duration: 400.milliseconds,
+                    child: LinkTile(
+                      onDismissed: (direction) async {
+                        hideKeyboard(context);
+                        await Get.find<HomeController>()
+                            .deleteLink(context, linksList[index].uid);
+                      },
+                      searchText: searchText,
+                      link: linksList[index],
+                      onTap: () async {
+                        hideKeyboard(context);
+                        if (linksList[index].url.isValidLink) {
+                          launch(linksList[index].url);
+                        } else {
+                          Navigate.to(
+                            page: NewLink(link: linksList[index]),
+                          );
+                        }
+                      },
+                      onLongPress: () {
+                        hideKeyboard(context);
+                        showLinkOptions(context, linksList[index]);
+                      },
+                      onSecondaryTap: () {
+                        showLinkOptions(context, linksList[index]);
+                      },
+                      onTertiaryTap: () async {
+                        if (linksList[index].url.isValidLink)
+                          await openAndDelete(context, linksList[index]);
+                        else
+                          Navigate.to(
+                            page: NewLink(link: linksList[index]),
+                          );
+                      },
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
-          itemCount: linksList.length,
+              );
+            },
+          ),
         ),
       );
     } else {
       return AnimationLimiter(
-        child: StaggeredGridView.countBuilder(
+        child: StaggeredGridView.count(
+          staggeredTiles: List.generate(linksList.length, (index) {
+            return StaggeredTile.fit(1);
+          }),
           physics:
               BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           crossAxisCount:
               (MediaQuery.of(context).size.width / 300).floor().clamp(2, 5),
-          itemCount: linksList.length,
           mainAxisSpacing: 15,
           crossAxisSpacing: 15,
           padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-          itemBuilder: (context, index) {
-            return AnimationConfiguration.staggeredGrid(
-              position: index,
-              columnCount:
-                  (MediaQuery.of(context).size.width / 300).floor().clamp(2, 5),
-              child: FadeInAnimation(
-                duration: 400.milliseconds,
-                child: SlideAnimation(
+          children: List.generate(
+            linksList.length,
+            (index) {
+              return AnimationConfiguration.staggeredGrid(
+                position: index,
+                columnCount: (MediaQuery.of(context).size.width / 300)
+                    .floor()
+                    .clamp(2, 5),
+                child: FadeInAnimation(
                   duration: 400.milliseconds,
-                  child: LinkTile(
-                    onDismissed: (direction) async {
-                      await Get.find<HomeController>()
-                          .deleteLink(context, linksList[index].uid);
-                    },
-                    margin: EdgeInsets.zero,
-                    searchText: searchText,
-                    link: linksList[index],
-                    onTap: () async {
-                      if (linksList[index].url.isValidLink) {
-                        launch(linksList[index].url);
-                      } else {
-                        Navigate.to(
-                          page: NewLink(link: linksList[index]),
-                        );
-                      }
-                    },
-                    onLongPress: () {
-                      showLinkOptions(context, linksList[index]);
-                    },
-                    onSecondaryTap: () {
-                      showLinkOptions(context, linksList[index]);
-                    },
-                    onTertiaryTap: () async {
-                      if (linksList[index].url.isValidLink)
-                        await openAndDelete(context, linksList[index]);
-                      else
-                        Navigate.to(
-                          page: NewLink(link: linksList[index]),
-                        );
-                    },
+                  child: SlideAnimation(
+                    duration: 400.milliseconds,
+                    child: LinkTile(
+                      onDismissed: (direction) async {
+                        await Get.find<HomeController>()
+                            .deleteLink(context, linksList[index].uid);
+                      },
+                      margin: EdgeInsets.zero,
+                      searchText: searchText,
+                      link: linksList[index],
+                      onTap: () async {
+                        if (linksList[index].url.isValidLink) {
+                          launch(linksList[index].url);
+                        } else {
+                          Navigate.to(
+                            page: NewLink(link: linksList[index]),
+                          );
+                        }
+                      },
+                      onLongPress: () {
+                        showLinkOptions(context, linksList[index]);
+                      },
+                      onSecondaryTap: () {
+                        showLinkOptions(context, linksList[index]);
+                      },
+                      onTertiaryTap: () async {
+                        if (linksList[index].url.isValidLink)
+                          await openAndDelete(context, linksList[index]);
+                        else
+                          Navigate.to(
+                            page: NewLink(link: linksList[index]),
+                          );
+                      },
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
-          staggeredTileBuilder: (index) {
-            return StaggeredTile.fit(1);
-          },
+              );
+            },
+          ),
         ),
       );
     }
