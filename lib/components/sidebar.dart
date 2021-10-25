@@ -1,11 +1,13 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:seamlink/components/label_tile.dart';
 import 'package:seamlink/constants/enum.dart';
+import 'package:seamlink/constants/strings.dart';
 import 'package:seamlink/controllers/HomeController.dart';
 import 'package:seamlink/controllers/SidebarController.dart';
 import 'package:seamlink/controllers/ThemeController.dart';
@@ -276,16 +278,23 @@ class Sidebar extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Icon(
-                      LineIcons.user,
-                      size: 40,
-                      color: themeController.currentTheme.foreground,
+                    Container(
+                      height: 40,
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: themeController.currentTheme.splashColor,
+                      ),
+                      child: SvgPicture.network(
+                        '$avatarApi/${Get.find<UserController>().username}.svg',
+                        height: 30,
+                      ),
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 5.0),
+                          padding: const EdgeInsets.only(left: 10.0),
                           child: Text(
                             '${Get.find<UserController>().username}',
                             style: GoogleFonts.poppins(
@@ -297,27 +306,32 @@ class Sidebar extends StatelessWidget {
                         ),
                         Material(
                           color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () async {
-                              await logout();
-                            },
-                            hoverColor: themeController.currentTheme.hoverColor,
-                            splashColor:
-                                themeController.currentTheme.splashColor,
-                            focusColor: themeController.currentTheme.focusColor,
-                            borderRadius: BorderRadius.circular(8),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 5,
-                                vertical: 2,
-                              ),
-                              child: Text(
-                                'Logout',
-                                style: GoogleFonts.poppins(
-                                  color: themeController.currentTheme.subtext,
-                                  fontStyle: FontStyle.italic,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 5.0),
+                            child: InkWell(
+                              onTap: () async {
+                                await logout();
+                              },
+                              hoverColor:
+                                  themeController.currentTheme.hoverColor,
+                              splashColor:
+                                  themeController.currentTheme.splashColor,
+                              focusColor:
+                                  themeController.currentTheme.focusColor,
+                              borderRadius: BorderRadius.circular(8),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 5,
+                                  vertical: 2,
                                 ),
-                                textAlign: TextAlign.start,
+                                child: Text(
+                                  'Logout',
+                                  style: GoogleFonts.poppins(
+                                    color: themeController.currentTheme.subtext,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                  textAlign: TextAlign.start,
+                                ),
                               ),
                             ),
                           ),
