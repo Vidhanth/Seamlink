@@ -1,5 +1,4 @@
 import 'package:fade_shimmer/fade_shimmer.dart';
-import 'package:flutter/cupertino.dart' hide Dismissible, DismissDirection;
 import 'package:flutter/material.dart' hide Dismissible, DismissDirection;
 import 'package:line_icons/line_icons.dart';
 import 'package:octo_image/octo_image.dart';
