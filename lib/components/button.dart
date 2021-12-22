@@ -33,14 +33,15 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(decoration: BoxDecoration(
-      color: color,
-      borderRadius: BorderRadius.circular(radius ?? 20),
-      border: Border.all(
-        color: borderColor ?? Colors.transparent,
-        width: borderWidth ?? 0,
+    return Container(
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(radius ?? 20),
+        border: Border.all(
+          color: borderColor ?? Colors.transparent,
+          width: borderWidth ?? 0,
+        ),
       ),
-    ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
