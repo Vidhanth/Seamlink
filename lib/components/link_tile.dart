@@ -64,7 +64,7 @@ class LinkTile extends StatelessWidget {
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: Colors.redAccent,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(15),
         ),
         child: Icon(
           LineIcons.trash,
@@ -98,10 +98,10 @@ class LinkTile extends StatelessWidget {
               BoxShadow(
                   blurRadius: 5, color: themeController.currentTheme.shadow),
             ],
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(15),
             border: Border.all(
               color: colorsList[link.colorIndex],
-              width: 3,
+              width: 2,
             ),
           ),
           duration: 500.milliseconds,
@@ -137,7 +137,7 @@ class LinkTile extends StatelessWidget {
       fallbackData: link,
       childBuilder: (context, data) {
         return ClipRRect(
-          borderRadius: BorderRadius.circular(17),
+          borderRadius: BorderRadius.circular(13),
           child: data == null
               ? Column(
                   children: [
