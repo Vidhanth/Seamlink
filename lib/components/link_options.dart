@@ -9,6 +9,7 @@ import 'package:seamlink/services/extensions.dart';
 import 'package:seamlink/services/navigation.dart';
 import 'package:seamlink/services/utils.dart';
 import 'package:seamlink/views/new_link.dart';
+import 'package:share_plus/share_plus.dart';
 
 class LinkOptions extends StatelessWidget {
   final Link link;
@@ -74,6 +75,15 @@ class LinkOptions extends StatelessWidget {
           Get.back();
           showSnackBar(context, "Copied to clipboard!");
         }),
+        if (isMobile) ...[
+          _buildOption("Share ${noteOrLink(link.url)}", LineIcons.share,
+              () async {
+            Get.back();
+            String textToShare =
+                (!link.autotitle ? link.title + "\n" : '') + link.url;
+            Share.share(textToShare);
+          }),
+        ],
         _buildOption(link.url.isValidLink ? "Delete link" : "Delete note",
             LineIcons.trash, () async {
           Get.back();
