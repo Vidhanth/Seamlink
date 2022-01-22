@@ -80,7 +80,13 @@ class _MainActivityState extends State<MainActivity>
 
   Future<String> getInitialSharedText() async {
     if (isDesktop) return '';
-    return (await ReceiveSharingIntent.getInitialText()) ?? "";
+    String sharedText = (await ReceiveSharingIntent.getInitialText()) ?? '';
+    if (Get.find<UserController>().username.value.isEmpty) {
+      Get.find<HomeController>().pendingSharedLink = sharedText;
+      GetSnackBar(message: 'Please log in first', backgroundColor: Colors.red);
+      return '';
+    }
+    return (sharedText);
   }
 
   @override
@@ -94,11 +100,15 @@ class _MainActivityState extends State<MainActivity>
     if (isMobile) {
       _sharedTextSub =
           ReceiveSharingIntent.getTextStream().listen((String value) {
-        Navigate.to(
-          page: NewLink(
-            sharedText: value,
-          ),
-        );
+        if (Get.find<UserController>().username.value.isEmpty) {
+          Get.find<HomeController>().pendingSharedLink = value;
+        } else {
+          Navigate.to(
+            page: NewLink(
+              sharedText: value,
+            ),
+          );
+        }
       }, onError: (err) {
         print("getLinkStream error: $err");
       });

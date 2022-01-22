@@ -13,6 +13,7 @@ import 'package:seamlink/controllers/HomeController.dart';
 import 'package:seamlink/controllers/SidebarController.dart';
 import 'package:seamlink/controllers/ThemeController.dart';
 import 'package:seamlink/controllers/UserController.dart';
+import 'package:seamlink/services/navigation.dart';
 import 'package:seamlink/services/utils.dart';
 import 'package:seamlink/views/auth_view.dart';
 import 'package:seamlink/views/new_link.dart';
@@ -36,6 +37,16 @@ class Home extends StatelessWidget {
       },
       child: Obx(() {
         if (Get.find<UserController>().username.isEmpty) return AuthView();
+        if (homeController.pendingSharedLink.isNotEmpty) {
+          Future.delayed(100.milliseconds, () {
+            Navigate.to(
+              page: NewLink(
+                sharedText: homeController.pendingSharedLink,
+              ),
+            );
+            homeController.pendingSharedLink = '';
+          });
+        }
         return Scaffold(
           backgroundColor: themeController.currentTheme.backgroundColor,
           body: Stack(

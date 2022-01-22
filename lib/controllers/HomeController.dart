@@ -15,6 +15,7 @@ class HomeController extends GetxController {
   var searchText = ''.obs;
   var isLoading = true.obs;
   var showSidebar = false.obs;
+  var pendingSharedLink = '';
   Function openNewLink = () {};
   FocusNode searchFocus = FocusNode();
 
