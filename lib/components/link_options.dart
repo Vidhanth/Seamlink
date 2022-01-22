@@ -73,7 +73,7 @@ class LinkOptions extends StatelessWidget {
             LineIcons.clipboardAlt, () {
           link.url.copyToClipboard();
           Get.back();
-          showSnackBar(context, "Copied to clipboard!");
+          showSnackBar("Copied to clipboard!");
         }),
         if (isMobile) ...[
           _buildOption("Share ${noteOrLink(link.url)}", LineIcons.share,

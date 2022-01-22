@@ -127,11 +127,9 @@ class Home extends StatelessWidget {
                                                         .currentTheme.accent,
                                                     onRefresh: () async {
                                                       searchFocus.unfocus();
-                                                      Get.showSnackbar(GetBar(
-                                                        message:
-                                                            "Links were updated.",
-                                                        duration: 2.seconds,
-                                                      ));
+                                                      showSnackBar(
+                                                        "Links were updated.",
+                                                      );
                                                       homeController
                                                           .refreshLinks();
                                                       return;

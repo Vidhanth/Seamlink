@@ -34,7 +34,7 @@ class HomeController extends GetxController {
     if (result.success) {
       linksList.removeWhere((link) => link.uid == result.message);
     } else
-      showSnackBar(context, 'There was an error.', error: true);
+      showSnackBar('There was an error.', error: true);
   }
 
   void refreshLinks({String? sortBy, bool? ascending}) async {
@@ -46,12 +46,11 @@ class HomeController extends GetxController {
       var newList = linkFromJson(list);
       linksList.value = newList;
     } else {
-      Get.showSnackbar(GetBar(
+      showSnackBar(
+        "Please make sure you have internet connectivity.",
         title: "Connection error",
-        message: "Please make sure you have internet connectivity.",
-        backgroundColor: Colors.red,
-        duration: 2.seconds,
-      ));
+        error: true,
+      );
     }
     isLoading(false);
   }

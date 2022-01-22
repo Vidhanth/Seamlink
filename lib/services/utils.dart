@@ -153,15 +153,13 @@ Future<bool?> deleteLabel(
         return true;
       } else {
         homeController.refreshLinks();
-        showSnackBar(
-            context, "An error occured. Please try deleting the label again.",
+        showSnackBar("An error occured. Please try deleting the label again.",
             error: true);
         return false;
       }
     } else {
       homeController.refreshLinks();
-      showSnackBar(
-          context, "An error occured. Please try deleting the label again.",
+      showSnackBar("An error occured. Please try deleting the label again.",
           error: true);
       return false;
     }
@@ -182,7 +180,7 @@ Future<bool?> newLabelDialog(
     labels += sbController.labels.value;
     if (labels.any((element) =>
         element.toString().toLowerCase() == newLabel.toLowerCase())) {
-      showSnackBar(context, 'Label already exists.', error: true);
+      showSnackBar('Label already exists.', error: true);
       return false;
     } else {
       isSaving = true;
@@ -193,8 +191,7 @@ Future<bool?> newLabelDialog(
         sbController.labels.add(newLabel);
         return true;
       } else {
-        showSnackBar(context, 'There was an error. Please try again.',
-            error: true);
+        showSnackBar('There was an error. Please try again.', error: true);
         isSaving = false;
         return false;
       }
@@ -254,11 +251,11 @@ Future<bool?> editLabelDialog(
     labels += sbController.labels.value;
 
     if (newLabel.isEmpty) {
-      showSnackBar(context, 'Please enter a valid name.', error: true);
+      showSnackBar('Please enter a valid name.', error: true);
       return false;
     } else if (labels.any((element) =>
         element.toString().toLowerCase() == newLabel.toLowerCase())) {
-      showSnackBar(context, 'Label already exists.', error: true);
+      showSnackBar('Label already exists.', error: true);
       return false;
     } else {
       isSaving = true;
@@ -269,8 +266,7 @@ Future<bool?> editLabelDialog(
         sbController.labels[index] = newLabel;
         return true;
       } else {
-        showSnackBar(context, 'There was an error. Please try again.',
-            error: true);
+        showSnackBar('There was an error. Please try again.', error: true);
         isSaving = false;
         return false;
       }
@@ -378,7 +374,6 @@ Future<bool> saveLink(context, String url, String title, int colorIndex,
     controller?.linkAdded(link, uid: uid);
   } else {
     showSnackBar(
-      context,
       result.message ?? "There was an error. Please try again.",
       error: true,
     );
@@ -405,22 +400,31 @@ bool isScreenWide(context) {
   return size.height <= size.width * 1.6;
 }
 
-showSnackBar(context, text, {error = false}) {
-  ScaffoldMessenger.of(context).removeCurrentSnackBar();
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      backgroundColor:
-          error ? Colors.red : Get.find<ThemeController>().currentTheme.mutedBg,
-      content: Text(
-        text,
-        style: GoogleFonts.poppins(
-          color: error
-              ? Colors.white
-              : Get.find<ThemeController>().currentTheme.foreground,
-        ),
+showSnackBar(message, {error = false, title}) {
+  GetSnackBar(
+    titleText: title != null
+        ? Text(
+            title,
+            style: GoogleFonts.poppins(
+              color: error
+                  ? Colors.white
+                  : Get.find<ThemeController>().currentTheme.foreground,
+              fontWeight: FontWeight.bold,
+            ),
+          )
+        : null,
+    backgroundColor:
+        error ? Colors.red : Get.find<ThemeController>().currentTheme.mutedBg,
+    messageText: Text(
+      message,
+      style: GoogleFonts.poppins(
+        color: error
+            ? Colors.white
+            : Get.find<ThemeController>().currentTheme.foreground,
       ),
     ),
-  );
+    duration: 2.seconds,
+  ).show();
 }
 
 Future<void> openAndDelete(context, Link link) async {
@@ -431,7 +435,7 @@ Future<void> openAndDelete(context, Link link) async {
       await Get.find<HomeController>().deleteLink(context, link.uid);
       Get.back();
     } else {
-      showSnackBar(context, "An error occured. Please try again.");
+      showSnackBar("An error occured. Please try again.");
     }
   }
 }

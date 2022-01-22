@@ -163,7 +163,6 @@ class _AuthViewState extends State<AuthView> {
         loading = false;
       });
       showSnackBar(
-        context,
         "Please check your internet connection.",
         error: true,
       );
@@ -178,7 +177,6 @@ class _AuthViewState extends State<AuthView> {
     String user = userController.text.toLowerCase().trim();
     if (user.isEmpty) {
       showSnackBar(
-        context,
         "Please enter a username.",
         error: true,
       );
@@ -196,7 +194,7 @@ class _AuthViewState extends State<AuthView> {
         Get.find<UserController>().username(user);
         Get.find<HomeController>().refreshLinks();
       } else {
-        showSnackBar(context, "This user doesn't exist.", error: true);
+        showSnackBar("This user doesn't exist.", error: true);
         setState(() {
           loading = false;
         });

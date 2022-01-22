@@ -171,8 +171,7 @@ class NewLink extends StatelessWidget {
                                 if (linkController!.text.trim().isValidLink)
                                   controller.autoTitle(true);
                                 else {
-                                  showSnackBar(
-                                      context, "Please enter a valid link",
+                                  showSnackBar("Please enter a valid link",
                                       error: true);
                                 }
                               } else {
@@ -193,9 +192,10 @@ class NewLink extends StatelessWidget {
                                           .isValidLink)
                                         controller.autoTitle(true);
                                       else {
-                                        showSnackBar(context,
-                                            "Please enter a valid link",
-                                            error: true);
+                                        showSnackBar(
+                                          "Please enter a valid link",
+                                          error: true,
+                                        );
                                       }
                                     } else {
                                       controller.autoTitle(false);
@@ -369,7 +369,7 @@ class NewLink extends StatelessWidget {
 
   Future<void> save() async {
     if (linkController!.text.trim().isEmpty) {
-      showSnackBar(Get.context!, "Please enter a note", error: true);
+      showSnackBar("Please enter a note", error: true);
       return;
     }
     controller.isSaving(true);
