@@ -102,6 +102,7 @@ class _MainActivityState extends State<MainActivity>
           ReceiveSharingIntent.getTextStream().listen((String value) {
         if (Get.find<UserController>().username.value.isEmpty) {
           Get.find<HomeController>().pendingSharedLink = value;
+          showSnackBar('Please log in first', error: true);
         } else {
           Navigate.to(
             page: NewLink(
