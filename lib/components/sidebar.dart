@@ -6,7 +6,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:seamlink/components/label_tile.dart';
 import 'package:seamlink/constants/enum.dart';
-import 'package:seamlink/constants/strings.dart';
 import 'package:seamlink/controllers/HomeController.dart';
 import 'package:seamlink/controllers/SidebarController.dart';
 import 'package:seamlink/controllers/ThemeController.dart';
@@ -285,9 +284,13 @@ class Sidebar extends StatelessWidget {
                         shape: BoxShape.circle,
                         color: themeController.currentTheme.splashColor,
                       ),
-                      child: SvgPicture.network(
-                        '$avatarApi/${Get.find<UserController>().username}.svg',
-                        height: 30,
+                      child: Obx(
+                        () => controller.userAvatar.value.length == 0
+                            ? Icon(LineIcons.user)
+                            : SvgPicture.memory(
+                                controller.userAvatar.value,
+                                height: 30,
+                              ),
                       ),
                     ),
                     Column(
