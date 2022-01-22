@@ -101,15 +101,12 @@ Future<bool?> deleteLabel(
       bool update = false;
       if (link.labels.contains(index)) {
         update = true;
-        print("Contains, before: ${link.labels}");
         int linkIndex = link.labels.indexOf(index);
         link.labels.remove(index);
         for (int i = linkIndex; i < link.labels.length; i++) {
           link.labels[i]--;
         }
-        print("Contains, after: ${link.labels}");
       } else {
-        print("before: ${link.labels}");
         int linkIndex = link.labels.length;
 
         for (int i = 0; i < link.labels.length; i++) {
@@ -123,7 +120,6 @@ Future<bool?> deleteLabel(
         for (int i = linkIndex; i < link.labels.length; i++) {
           link.labels[i]--;
         }
-        print("after: ${link.labels}");
       }
       link.labels.sort();
       if (update)
