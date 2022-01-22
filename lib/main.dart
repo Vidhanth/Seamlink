@@ -83,7 +83,7 @@ class _MainActivityState extends State<MainActivity>
     String sharedText = (await ReceiveSharingIntent.getInitialText()) ?? '';
     if (Get.find<UserController>().username.value.isEmpty) {
       Get.find<HomeController>().pendingSharedLink = sharedText;
-      GetSnackBar(message: 'Please log in first', backgroundColor: Colors.red);
+      showSnackBar('Please log in first', error: true);
       return '';
     }
     return (sharedText);
