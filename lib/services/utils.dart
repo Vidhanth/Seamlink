@@ -420,6 +420,9 @@ showSnackBar(message, {error = false, title}) {
       ),
     ),
     duration: 2.seconds,
+    animationDuration: 500.milliseconds,
+    forwardAnimationCurve: Curves.fastOutSlowIn,
+    reverseAnimationCurve: Curves.fastOutSlowIn,
   ).show();
 }
 
