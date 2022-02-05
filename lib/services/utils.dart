@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_use_of_protected_member
 
 import 'dart:io' hide Link;
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -31,6 +32,7 @@ Future<void> logout() async {
   await SharedPreferences.getInstance()
     ..remove('username');
   Get.find<UserController>().username('');
+  Get.find<SidebarController>().userAvatar(Uint8List(0));
   Get.find<SidebarController>().labels.clear();
   Get.find<SidebarController>().labelIndex(-2);
   Get.find<HomeController>().linksList.clear();
