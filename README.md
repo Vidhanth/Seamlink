@@ -1,6 +1,6 @@
-# seamlink
+# Seamlink
 
-A new Flutter project.
+Seamlessly sync notes and links across all your devices
 
 ## Getting Started
 
