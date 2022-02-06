@@ -30,11 +30,13 @@ class HomeController extends GetxController {
   }
 
   Future<void> deleteLink(context, uid) async {
-    Result result = await Client.deleteLink(uid);
-    if (result.success) {
-      linksList.removeWhere((link) => link.uid == result.message);
-    } else
+    int index = linksList.indexWhere((link) => link.uid == uid);
+    Link link = linksList.removeAt(index);
+    Result result = await Client.deleteLink(link.uid);
+    if (!result.success) {
       showSnackBar('There was an error.', error: true);
+      linksList.insert(index, link);
+    }
   }
 
   void refreshLinks({String? sortBy, bool? ascending}) async {
