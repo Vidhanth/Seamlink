@@ -34,6 +34,8 @@ void main() async {
         doWhenWindowReady(() {
           appWindow.title = 'Seamlink Desktop';
           final initialSize = Size(0.5 * width, 0.7 * height);
+          appWindow.size = initialSize;
+          appWindow.alignment = Alignment.center;
           appWindow.minSize = initialSize;
           appWindow.show();
         });
