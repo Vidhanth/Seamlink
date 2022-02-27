@@ -440,3 +440,14 @@ Future<void> openAndDelete(context, Link link) async {
     }
   }
 }
+
+bool searchLabels(String query, List<int> labels) {
+  bool labelExists = false;
+  List allLabels = Get.find<SidebarController>().labels;
+  allLabels
+      .where((label) => labels.contains(allLabels.indexOf(label)))
+      .forEach((label) {
+    labelExists = label.toString().toLowerCase().contains(query);
+  });
+  return labelExists;
+}
