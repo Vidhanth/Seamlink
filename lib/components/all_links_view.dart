@@ -50,8 +50,10 @@ class AllLinksView extends StatelessWidget {
         typeMatch = true;
       else
         typeMatch = link.type! == selectedType;
-      if (link.contains(searchText) ||
-          searchLabels(searchText, link.labels) && typeMatch && labelMatch) {
+      if ((link.contains(searchText) ||
+              searchLabels(searchText, link.labels)) &&
+          typeMatch &&
+          labelMatch) {
         linksList.add(link);
       }
     });
