@@ -297,7 +297,6 @@ class LinkTile extends StatelessWidget {
                                       textStyle: GoogleFonts.poppins(
                                         color: themeController
                                             .currentTheme.foreground,
-                                        fontStyle: FontStyle.italic,
                                         fontSize: 15,
                                       ),
                                       textStyleHighlight: GoogleFonts.poppins(
@@ -384,7 +383,6 @@ class LinkTile extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     textStyle: GoogleFonts.poppins(
                       color: themeController.currentTheme.foreground,
-                      fontStyle: FontStyle.italic,
                       fontSize: 15,
                     ),
                     textStyleHighlight: GoogleFonts.poppins(
