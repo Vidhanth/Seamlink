@@ -236,6 +236,13 @@ class LinkTile extends StatelessWidget {
                             )
                           ],
                         ),
+                        if (link.progress != null)
+                          LinearProgressIndicator(
+                            value: link.progress,
+                            color: Colors.red,
+                            backgroundColor:
+                                themeController.currentTheme.mutedBg,
+                          ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
                             vertical: 20.0,

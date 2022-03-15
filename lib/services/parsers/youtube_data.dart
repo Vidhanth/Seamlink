@@ -24,12 +24,17 @@ class YoutubeData {
 
     String title, channelTitle, extra;
     String? thumbnail;
+    double? progress;
 
     try {
-      extra = playlist
-          ? details['items'][0]['contentDetails']['itemCount'].toString()
-          : _parseDuration(details['items'][0]['contentDetails']['duration'])
-              .toDurationString();
+      if (playlist) {
+        extra = details['items'][0]['contentDetails']['itemCount'].toString();
+      } else {
+        Duration duration =
+            _parseDuration(details['items'][0]['contentDetails']['duration']);
+        extra = duration.toDurationString();
+        progress = _getProgess(link.url, duration);
+      }
     } catch (e) {
       extra = playlist ? "0" : "Live";
     }
@@ -55,6 +60,7 @@ class YoutubeData {
     link.subtitle = channelTitle.trim();
     link.message = extra.trim();
     link.thumbnail = thumbnail;
+    link.progress = progress;
 
     return link;
   }
@@ -107,6 +113,33 @@ class YoutubeData {
     }
     return Duration(
         hours: duration[0], minutes: duration[1], seconds: duration[2]);
+  }
+
+  static double? _getProgess(String url, Duration totalDuration) {
+    String? timestamp = Uri.parse(url).queryParameters['t'];
+    double? progress;
+    if (timestamp != null) {
+      String pattern = r"[m/s/h]?\d*[m/s/h]?";
+      RegExp exp = RegExp(pattern);
+      Iterable<RegExpMatch> matches = exp.allMatches(timestamp);
+      int seconds = 0;
+      for (var match in matches) {
+        String segment = match.group(0)!;
+        if (segment.contains('m')) {
+          seconds += int.parse(segment.replaceAll('m', '')) * 60;
+        } else if (segment.contains('h')) {
+          seconds += int.parse(segment.replaceAll('h', '')) * 60 * 60;
+        } else {
+          if (segment.isNotEmpty) {
+            seconds += int.parse(segment.replaceAll('s', ''));
+          }
+        }
+      }
+      if (totalDuration.inSeconds >= seconds) {
+        progress = seconds / totalDuration.inSeconds;
+      }
+    }
+    return progress;
   }
 
   static Future<String> _getChannelDetails(String id) async {

@@ -23,6 +23,7 @@ class Link {
     this.subtitle,
     this.message,
     this.thumbnail,
+    this.progress,
     this.type,
   });
 
@@ -37,6 +38,7 @@ class Link {
   String? subtitle;
   String? message;
   String? thumbnail;
+  double? progress;
   NoteType? type;
 
   factory Link.fromJson(Map<String, dynamic> json) {
