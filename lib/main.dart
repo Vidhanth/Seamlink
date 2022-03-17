@@ -4,6 +4,7 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:seamlink/components/custom_titlebar.dart';
 import 'package:seamlink/components/sidebar.dart';
@@ -138,9 +139,11 @@ class _MainActivityState extends State<MainActivity>
         initState: (_) {},
         builder: (themeController) {
           return GetMaterialApp(
+            debugShowCheckedModeBanner: false,
             theme: ThemeData(
               canvasColor: themeController.currentTheme.backgroundColor,
               backgroundColor: themeController.currentTheme.backgroundColor,
+              textTheme: GoogleFonts.poppinsTextTheme(),
               brightness:
                   ThemeController.isDark ? Brightness.dark : Brightness.light,
             ),
