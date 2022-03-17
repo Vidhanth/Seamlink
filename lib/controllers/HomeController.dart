@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:menubar/menubar.dart';
 import 'package:seamlink/constants/enum.dart';
+import 'package:seamlink/constants/strings.dart';
 import 'package:seamlink/controllers/SidebarController.dart';
 import 'package:seamlink/controllers/ThemeController.dart';
 import 'package:seamlink/models/link.dart';
@@ -16,6 +17,8 @@ class HomeController extends GetxController {
   var isLoading = true.obs;
   var showSidebar = false.obs;
   var pendingSharedLink = '';
+  int sortBy = 0;
+  bool ascending = false;
   Function openNewLink = () {};
   FocusNode searchFocus = FocusNode();
 
@@ -26,7 +29,7 @@ class HomeController extends GetxController {
       int index = linksList.indexWhere((ele) => ele.uid == link.uid);
       linksList[index] = link;
     }
-    linksList.sort((link1, link2) => compareLinksList(link1, link2));
+    sortList();
   }
 
   Future<void> deleteLink(context, uid) async {
@@ -39,11 +42,23 @@ class HomeController extends GetxController {
     }
   }
 
-  void refreshLinks({String? sortBy, bool? ascending}) async {
+  void updateSortingMethod(int sortingMethod, bool isAscending) {
+    sortBy = sortingMethod;
+    ascending = isAscending;
+    sortList();
+  }
+
+  void sortList() {
+    linksList.sort(
+        (link1, link2) => compareLinksList(link1, link2, sortBy, ascending));
+  }
+
+  void refreshLinks() async {
     updateMenubar();
     isLoading(true);
     Get.find<SidebarController>().refreshLabels();
-    final list = await Client.fetchLinks(sortBy: sortBy, ascending: ascending);
+    final list = await Client.fetchLinks(
+        sortBy: sortByColumns.keys.toList()[sortBy], ascending: ascending);
     if (list is List<dynamic>) {
       var newList = linkFromJson(list);
       linksList.value = newList;

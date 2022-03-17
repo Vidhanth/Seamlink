@@ -16,6 +16,7 @@ class Link {
     required this.url,
     required this.title,
     required this.timestamp,
+    required this.updatedAt,
     required this.user,
     required this.labels,
     required this.colorIndex,
@@ -31,6 +32,7 @@ class Link {
   String url;
   String title;
   DateTime timestamp;
+  DateTime updatedAt;
   String user;
   List<int> labels;
   int colorIndex;
@@ -47,6 +49,7 @@ class Link {
       url: json["url"],
       title: json["title"],
       timestamp: DateTime.parse(json["timestamp"]),
+      updatedAt: DateTime.parse(json["updated_at"]),
       user: json["user"],
       labels: List<int>.from(json["labels"].map((x) => x)),
       colorIndex: json["color"],

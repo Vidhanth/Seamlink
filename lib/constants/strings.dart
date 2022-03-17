@@ -6,6 +6,10 @@ const String passwordTooShortError =
 const String invalidNameError = "Please enter your name.";
 const String avatarApi = "https://avatars.dicebear.com/api/bottts";
 
+const Map<String, String> sortByColumns = {
+  'timestamp': 'Date Added',
+  'updated_at': 'Date Updated',
+};
 const List<String> defaultLabels = [
   'Personal',
   'Important',

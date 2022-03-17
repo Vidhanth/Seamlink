@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:seamlink/models/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -72,6 +73,7 @@ class ThemeController extends GetxController {
       await enterWipe.call();
       isDark = false;
       currentTheme = ThemeColors.fromThemeColors(lightTheme);
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('dark_mode', isDark);
       refresh();
@@ -84,6 +86,7 @@ class ThemeController extends GetxController {
       await enterWipe.call();
       isDark = true;
       currentTheme = ThemeColors.fromThemeColors(darkTheme);
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('dark_mode', isDark);
       refresh();

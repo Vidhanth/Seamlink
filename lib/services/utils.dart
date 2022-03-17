@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:menubar/menubar.dart';
 import 'package:seamlink/components/confirm_dialog.dart';
 import 'package:seamlink/components/link_options.dart';
+import 'package:seamlink/components/sorting_menu.dart';
 import 'package:seamlink/controllers/HomeController.dart';
 import 'package:seamlink/controllers/SidebarController.dart';
 import 'package:seamlink/controllers/ThemeController.dart';
@@ -44,6 +45,14 @@ void showLinkOptions(context, Link link) {
     Get.dialog(LinkOptions(link: link));
   } else {
     Get.bottomSheet(LinkOptions(link: link));
+  }
+}
+
+void showSortingMenu(context) {
+  if (isScreenWide(context)) {
+    Get.dialog(SortingMenu());
+  } else {
+    Get.bottomSheet(SortingMenu());
   }
 }
 
@@ -329,8 +338,13 @@ Future<void> hideKeyboard(context,
   return;
 }
 
-int compareLinksList(Link link1, Link link2) {
-  return link2.timestamp.compareTo(link1.timestamp);
+int compareLinksList(Link link1, Link link2, int sortBy, bool ascending) {
+  if (!ascending) {
+    if (sortBy == 0) return link2.timestamp.compareTo(link1.timestamp);
+    return link2.updatedAt.compareTo(link1.updatedAt);
+  }
+  if (sortBy == 0) return link1.timestamp.compareTo(link2.timestamp);
+  return link1.updatedAt.compareTo(link2.updatedAt);
 }
 
 Future<Link> getLinkData(Link link) async {

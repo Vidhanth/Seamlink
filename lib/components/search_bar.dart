@@ -25,65 +25,90 @@ class _SearchBarState extends State<SearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    return InputField(
-      cursorColor: themeController.currentTheme.subtext,
-      bgColor: themeController.currentTheme.mutedBg,
-      focusNode: homeController.searchFocus,
-      hint: "Search",
-      style: GoogleFonts.poppins(
-        fontSize: 18,
-        color: themeController.currentTheme.foreground,
-      ),
-      hintStyle: GoogleFonts.poppins(
-        fontSize: 18,
-        color: themeController.currentTheme.foreground.withOpacity(0.5),
-      ),
-      onChanged: (query) {
-        homeController.searchText.value = query.toLowerCase().trim();
-      },
-      prefixIcon: isDesktop
-          ? null
-          : Material(
-              type: MaterialType.transparency,
-              child: InkWell(
-                onTap: () {
-                  if (isMobile) {
-                    hideKeyboard(context);
-                    homeController.showSidebar.toggle();
-                    Get.find<SidebarController>().editMode(false);
-                  }
-                },
-                borderRadius: BorderRadius.circular(50),
-                child: Padding(
-                  padding: EdgeInsets.all(15),
-                  child: Icon(
-                    LineIcons.bars,
-                    color: themeController.currentTheme.foreground,
-                    size: 25,
+    return Row(
+      children: [
+        Expanded(
+          child: InputField(
+            cursorColor: themeController.currentTheme.subtext,
+            bgColor: themeController.currentTheme.mutedBg,
+            focusNode: homeController.searchFocus,
+            hint: "Search",
+            radius: 15,
+            style: GoogleFonts.poppins(
+              fontSize: 18,
+              color: themeController.currentTheme.foreground,
+            ),
+            hintStyle: GoogleFonts.poppins(
+              fontSize: 18,
+              color: themeController.currentTheme.foreground.withOpacity(0.5),
+            ),
+            onChanged: (query) {
+              homeController.searchText.value = query.toLowerCase().trim();
+            },
+            prefixIcon: isDesktop
+                ? null
+                : Material(
+                    type: MaterialType.transparency,
+                    child: InkWell(
+                      onTap: () {
+                        if (isMobile) {
+                          hideKeyboard(context);
+                          homeController.showSidebar.toggle();
+                          Get.find<SidebarController>().editMode(false);
+                        }
+                      },
+                      borderRadius: BorderRadius.circular(50),
+                      child: Padding(
+                        padding: EdgeInsets.all(15),
+                        child: Icon(
+                          LineIcons.bars,
+                          color: themeController.currentTheme.foreground,
+                          size: 25,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+            controller: controller,
+            suffix: Obx(
+              () => homeController.searchText.value.trim().isEmpty
+                  ? SizedBox()
+                  : InkWell(
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      borderRadius: BorderRadius.circular(50),
+                      onTap: () {
+                        homeController.searchText.value = '';
+                        controller.clear();
+                      },
+                      child: Icon(
+                        LineIcons.backspace,
+                        color: themeController.currentTheme.foreground,
+                      ),
+                    ),
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 5,
+        ),
+        Material(
+          child: InkWell(
+            borderRadius: BorderRadius.circular(50),
+            onTap: () {
+              showSortingMenu(context);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Icon(
+                Icons.sort,
+                color: themeController.currentTheme.foreground,
               ),
             ),
-      controller: controller,
-      suffix: Obx(
-        () => homeController.searchText.value.trim().isEmpty
-            ? SizedBox()
-            : InkWell(
-                focusColor: Colors.transparent,
-                hoverColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                borderRadius: BorderRadius.circular(50),
-                onTap: () {
-                  homeController.searchText.value = '';
-                  controller.clear();
-                },
-                child: Icon(
-                  LineIcons.backspace,
-                  color: themeController.currentTheme.foreground,
-                ),
-              ),
-      ),
+          ),
+        )
+      ],
     );
   }
 }
