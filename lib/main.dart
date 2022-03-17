@@ -58,6 +58,8 @@ Future<void> initializePrefs() async {
   HomeController _homeController = Get.put(HomeController());
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String username = prefs.getString('username') ?? '';
+  _homeController.ascending = prefs.getBool('ascending') ?? false;
+  _homeController.sortBy = prefs.getInt('sort_by') ?? 0;
   ThemeController.isDark = prefs.getBool('dark_mode') ?? false;
   ThemeController.mode = (prefs.getBool('auto_mode') ?? false)
       ? Mode.SYSTEM

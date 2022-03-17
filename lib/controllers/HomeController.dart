@@ -10,6 +10,7 @@ import 'package:seamlink/models/link.dart';
 import 'package:seamlink/models/result.dart';
 import 'package:seamlink/services/client.dart';
 import 'package:seamlink/services/utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeController extends GetxController {
   var linksList = <Link>[].obs;
@@ -42,10 +43,15 @@ class HomeController extends GetxController {
     }
   }
 
-  void updateSortingMethod(int sortingMethod, bool isAscending) {
-    sortBy = sortingMethod;
-    ascending = isAscending;
-    sortList();
+  void updateSortingMethod(int sortingMethod, bool isAscending) async {
+    if (sortingMethod != sortBy || isAscending != ascending) {
+      final prefs = await SharedPreferences.getInstance();
+      sortBy = sortingMethod;
+      ascending = isAscending;
+      prefs.setInt('sort_by', sortBy);
+      prefs.setBool('ascending', ascending);
+      sortList();
+    }
   }
 
   void sortList() {
