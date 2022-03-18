@@ -9,7 +9,9 @@ import 'package:seamlink/controllers/ThemeController.dart';
 import 'package:seamlink/models/link.dart';
 import 'package:seamlink/models/result.dart';
 import 'package:seamlink/services/client.dart';
+import 'package:seamlink/services/navigation.dart';
 import 'package:seamlink/services/utils.dart';
+import 'package:seamlink/views/new_link.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeController extends GetxController {
@@ -103,6 +105,27 @@ class HomeController extends GetxController {
             },
             shortcut: LogicalKeySet.fromSet({
               LogicalKeyboardKey.keyN,
+              LogicalKeyboardKey.meta,
+            }),
+          ),
+          MenuItem(
+            label: 'New Note from Clipboard',
+            enabled: true,
+            onClicked: () async {
+              String copiedText =
+                  (await Clipboard.getData('text/plain'))?.text ?? '';
+              if (copiedText.isEmpty) {
+                showSnackBar('Clipboard is empty');
+              }
+              Navigate.to(
+                page: NewLink(
+                  sharedText: copiedText,
+                ),
+              );
+            },
+            shortcut: LogicalKeySet.fromSet({
+              LogicalKeyboardKey.keyV,
+              LogicalKeyboardKey.shift,
               LogicalKeyboardKey.meta,
             }),
           ),
