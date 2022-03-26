@@ -2,6 +2,7 @@ import 'package:fade_shimmer/fade_shimmer.dart';
 import 'package:flutter/material.dart' hide Dismissible, DismissDirection;
 import 'package:line_icons/line_icons.dart';
 import 'package:octo_image/octo_image.dart';
+import 'package:seamlink/controllers/HomeController.dart';
 import 'package:seamlink/controllers/ThemeController.dart';
 import 'package:seamlink/services/extensions.dart';
 import 'dismissible.dart';
@@ -80,6 +81,16 @@ class LinkTile extends StatelessWidget {
       },
       enableDismiss: isMobile,
       child: GestureDetector(
+        onHorizontalDragUpdate: !Get.find<HomeController>().searchFocus.hasFocus
+            ? null
+            : (d) {
+                hideKeyboard(context, delay: 0.seconds);
+              },
+        onVerticalDragUpdate: !Get.find<HomeController>().searchFocus.hasFocus
+            ? null
+            : (d) {
+                hideKeyboard(context, delay: 0.seconds);
+              },
         onLongPress: () {
           onLongPress?.call();
         },

@@ -97,6 +97,7 @@ class _SearchBarState extends State<SearchBar> {
           child: InkWell(
             borderRadius: BorderRadius.circular(50),
             onTap: () {
+              hideKeyboard(context, delay: 0.seconds);
               showSortingMenu(context);
             },
             child: Padding(
