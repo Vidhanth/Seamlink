@@ -81,16 +81,20 @@ class LinkTile extends StatelessWidget {
       },
       enableDismiss: isMobile,
       child: GestureDetector(
-        onHorizontalDragUpdate: !Get.find<HomeController>().searchFocus.hasFocus
+        onHorizontalDragUpdate: isDesktop
             ? null
-            : (d) {
-                hideKeyboard(context, delay: 0.seconds);
-              },
-        onVerticalDragUpdate: !Get.find<HomeController>().searchFocus.hasFocus
+            : !Get.find<HomeController>().searchFocus.hasFocus
+                ? null
+                : (d) {
+                    hideKeyboard(context, delay: 0.seconds);
+                  },
+        onVerticalDragUpdate: isDesktop
             ? null
-            : (d) {
-                hideKeyboard(context, delay: 0.seconds);
-              },
+            : !Get.find<HomeController>().searchFocus.hasFocus
+                ? null
+                : (d) {
+                    hideKeyboard(context, delay: 0.seconds);
+                  },
         onLongPress: () {
           onLongPress?.call();
         },
