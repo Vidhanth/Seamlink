@@ -213,7 +213,7 @@ class LinkTile extends StatelessWidget {
                                 fit: BoxFit.cover,
                                 alignment: Alignment.center,
                                 placeholderBuilder: (context) =>
-                                    _buildShimmer(),
+                                    _buildShimmer(height: double.infinity),
                               ),
                             ),
                             Positioned(
@@ -345,12 +345,21 @@ class LinkTile extends StatelessWidget {
   }
 
   Widget _buildShimmer({
-    double height: 16,
+    double? height,
     bool rounded: false,
   }) {
     if (rounded)
       return FadeShimmer.round(
-        size: height,
+        size: height ?? 16,
+        baseColor: themeController.currentTheme.subtext.withOpacity(0.1),
+        highlightColor: themeController.currentTheme.subtext.withOpacity(0.25),
+      );
+
+    if (height == null)
+      return FadeShimmer(
+        width: double.infinity,
+        height: 16,
+        radius: 2,
         baseColor: themeController.currentTheme.subtext.withOpacity(0.1),
         highlightColor: themeController.currentTheme.subtext.withOpacity(0.25),
       );
