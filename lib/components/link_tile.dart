@@ -204,16 +204,17 @@ class LinkTile extends StatelessWidget {
                       children: [
                         Stack(
                           children: [
-                            OctoImage(
-                              image: NetworkImage(
-                                  link.thumbnail!.split('||').first),
-                              height: _getImageHeight(context),
-                              width: double.infinity,
-                              fadeInDuration: 400.milliseconds,
-                              fit: BoxFit.cover,
-                              alignment: Alignment.center,
-                              placeholderBuilder: (context) => _buildShimmer(
-                                  height: _getImageHeight(context)),
+                            AspectRatio(
+                              aspectRatio: 16 / 9,
+                              child: OctoImage(
+                                image: NetworkImage(
+                                    link.thumbnail!.split('||').first),
+                                fadeInDuration: 400.milliseconds,
+                                fit: BoxFit.cover,
+                                alignment: Alignment.center,
+                                placeholderBuilder: (context) =>
+                                    _buildShimmer(),
+                              ),
                             ),
                             Positioned(
                               bottom: 10,
@@ -345,7 +346,6 @@ class LinkTile extends StatelessWidget {
 
   Widget _buildShimmer({
     double height: 16,
-    double width: double.infinity,
     bool rounded: false,
   }) {
     if (rounded)
@@ -355,12 +355,15 @@ class LinkTile extends StatelessWidget {
         highlightColor: themeController.currentTheme.subtext.withOpacity(0.25),
       );
 
-    return FadeShimmer(
-      width: width,
-      height: height,
-      radius: 2,
-      baseColor: themeController.currentTheme.subtext.withOpacity(0.1),
-      highlightColor: themeController.currentTheme.subtext.withOpacity(0.25),
+    return AspectRatio(
+      aspectRatio: 16 / 9,
+      child: FadeShimmer(
+        width: double.infinity,
+        height: double.infinity,
+        radius: 2,
+        baseColor: themeController.currentTheme.subtext.withOpacity(0.1),
+        highlightColor: themeController.currentTheme.subtext.withOpacity(0.25),
+      ),
     );
   }
 
