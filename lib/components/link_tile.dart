@@ -156,7 +156,7 @@ class LinkTile extends StatelessWidget {
           child: data == null
               ? Column(
                   children: [
-                    _buildShimmer(height: _getImageHeight(context)),
+                    _buildShimmer(height: double.infinity),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         vertical: 20.0,
@@ -476,12 +476,4 @@ class LinkTile extends StatelessWidget {
             ),
     );
   }
-}
-
-double _getImageHeight(BuildContext context) {
-  if (isDesktop) return 150;
-  final size = MediaQuery.of(context).size;
-  final width = size.width - 46;
-  final height = (width * 9.0) / 16.0;
-  return height;
 }
