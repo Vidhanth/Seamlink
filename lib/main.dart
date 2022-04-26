@@ -45,7 +45,6 @@ void main() async {
   }
 
   if (isMobile) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
   }
@@ -66,6 +65,11 @@ Future<void> initializePrefs() async {
       : ThemeController.isDark
           ? Mode.DARK
           : Mode.LIGHT;
+  if (ThemeController.isDark) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  } else {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+  }
   if (username.isNotEmpty) {
     _userController.username(username);
     _homeController.refreshLinks();
