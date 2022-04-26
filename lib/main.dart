@@ -181,7 +181,72 @@ class _MainActivityState extends State<MainActivity>
                               builder: (context, snapshot) {
                                 if (!snapshot.hasData) return SizedBox();
                                 return snapshot.data.toString().isEmpty
-                                    ? Home()
+                                    ? isDesktop
+                                        ? Home()
+                                        : Stack(
+                                            children: [
+                                              Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Sidebar(),
+                                              ),
+                                              Obx(() => AnimatedPositioned(
+                                                    curve: Curves.fastOutSlowIn,
+                                                    left: Get.find<
+                                                                HomeController>()
+                                                            .showSidebar
+                                                            .isTrue
+                                                        ? context.mediaQuerySize
+                                                                .width *
+                                                            0.75
+                                                        : 0,
+                                                    duration: 500.milliseconds,
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                          boxShadow: [
+                                                            BoxShadow(
+                                                              blurRadius: 20,
+                                                              color: Colors
+                                                                  .black12,
+                                                            ),
+                                                          ]),
+                                                      height: context
+                                                          .mediaQuerySize
+                                                          .height,
+                                                      width: context
+                                                          .mediaQuerySize.width,
+                                                      child: Stack(
+                                                        children: [
+                                                          Home(),
+                                                          if (Get.find<
+                                                                  HomeController>()
+                                                              .showSidebar
+                                                              .isTrue)
+                                                            Positioned.fill(
+                                                              child: Container(
+                                                                color: Colors
+                                                                    .transparent,
+                                                                child:
+                                                                    GestureDetector(
+                                                                  onTap: () {
+                                                                    Get.find<
+                                                                            HomeController>()
+                                                                        .toggleSidebar();
+                                                                  },
+                                                                  onHorizontalDragUpdate:
+                                                                      (_) {
+                                                                    Get.find<
+                                                                            HomeController>()
+                                                                        .toggleSidebar();
+                                                                  },
+                                                                ),
+                                                              ),
+                                                            )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  )),
+                                            ],
+                                          )
                                     : NewLink(
                                         sharedText: snapshot.data.toString(),
                                       );

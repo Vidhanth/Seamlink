@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:seamlink/components/all_links_view.dart';
 import 'package:seamlink/components/filter_row.dart';
 import 'package:seamlink/components/search_bar.dart';
-import 'package:seamlink/components/sidebar.dart';
 import 'package:seamlink/constants/enum.dart';
 import 'package:seamlink/controllers/HomeController.dart';
 import 'package:seamlink/controllers/SidebarController.dart';
@@ -30,7 +29,7 @@ class Home extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async {
         if (homeController.showSidebar.isTrue) {
-          homeController.showSidebar.toggle();
+          homeController.toggleSidebar();
           return false;
         }
         return true;
@@ -252,32 +251,6 @@ class Home extends StatelessWidget {
                   ],
                 ),
               ),
-              if (homeController.showSidebar.value && isMobile)
-                GestureDetector(
-                  onTap: () {
-                    homeController.showSidebar.toggle();
-                  },
-                  onHorizontalDragUpdate: (d) {
-                    homeController.showSidebar.toggle();
-                  },
-                  child: AnimatedOpacity(
-                    opacity: homeController.showSidebar.value ? 1.0 : 0.0,
-                    duration: 1000.milliseconds,
-                    child: Container(
-                      color: Colors.black26,
-                    ),
-                    curve: Curves.fastOutSlowIn,
-                  ),
-                ),
-              if (isMobile)
-                AnimatedPositioned(
-                  left: homeController.showSidebar.value
-                      ? 0
-                      : -(MediaQuery.of(context).size.width * 0.75),
-                  child: Sidebar(),
-                  duration: 500.milliseconds,
-                  curve: Curves.fastOutSlowIn,
-                ),
             ],
           ),
         );

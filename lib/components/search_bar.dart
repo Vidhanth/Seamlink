@@ -17,11 +17,30 @@ class SearchBar extends StatefulWidget {
   _SearchBarState createState() => _SearchBarState();
 }
 
-class _SearchBarState extends State<SearchBar> {
+class _SearchBarState extends State<SearchBar> with TickerProviderStateMixin {
   final TextEditingController controller = TextEditingController();
 
   final homeController = Get.find<HomeController>();
   final themeController = Get.find<ThemeController>();
+
+  Animation<double>? _menuIconAnim;
+
+  @override
+  void initState() {
+    if (isMobile) {
+      homeController.menuIconController =
+          AnimationController(vsync: this, duration: 800.milliseconds);
+      _menuIconAnim = homeController.menuIconController!
+          .drive(CurveTween(curve: Curves.easeInOut));
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    homeController.menuIconController?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,15 +72,16 @@ class _SearchBarState extends State<SearchBar> {
                       onTap: () {
                         if (isMobile) {
                           hideKeyboard(context);
-                          homeController.showSidebar.toggle();
+                          homeController.toggleSidebar();
                           Get.find<SidebarController>().editMode(false);
                         }
                       },
                       borderRadius: BorderRadius.circular(50),
                       child: Padding(
                         padding: EdgeInsets.all(15),
-                        child: Icon(
-                          LineIcons.bars,
+                        child: AnimatedIcon(
+                          progress: _menuIconAnim!,
+                          icon: AnimatedIcons.menu_close,
                           color: themeController.currentTheme.foreground,
                           size: 25,
                         ),

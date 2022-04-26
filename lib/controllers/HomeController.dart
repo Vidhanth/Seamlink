@@ -24,6 +24,7 @@ class HomeController extends GetxController {
   bool ascending = false;
   Function openNewLink = () {};
   FocusNode searchFocus = FocusNode();
+  AnimationController? menuIconController;
 
   void linkAdded(link, {String? uid}) {
     if (uid == null) {
@@ -78,6 +79,17 @@ class HomeController extends GetxController {
       );
     }
     isLoading(false);
+  }
+
+  void toggleSidebar() {
+    if (isMobile) {
+      if (showSidebar.isTrue) {
+        menuIconController?.reverse();
+      } else {
+        menuIconController?.forward();
+      }
+      showSidebar.toggle();
+    }
   }
 
   void updateMenubar() {

@@ -29,9 +29,7 @@ class Sidebar extends StatelessWidget {
       color: Colors.transparent,
       child: Container(
         decoration: BoxDecoration(
-          color: isMobile
-              ? themeController.currentTheme.backgroundColor
-              : themeController.currentTheme.mutedBg,
+          color: themeController.currentTheme.mutedBg,
           boxShadow: [
             BoxShadow(
               color: themeController.currentTheme.shadow,
@@ -95,7 +93,7 @@ class Sidebar extends StatelessWidget {
                         onTap: () {
                           controller.selectedType(NoteType.ALL);
                           if (isMobile) {
-                            Get.find<HomeController>().showSidebar.toggle();
+                            Get.find<HomeController>().toggleSidebar();
                           }
                         },
                         icon: Icons.notes_sharp,
@@ -107,7 +105,7 @@ class Sidebar extends StatelessWidget {
                         onTap: () {
                           controller.selectedType(NoteType.NOTE);
                           if (isMobile) {
-                            Get.find<HomeController>().showSidebar.toggle();
+                            Get.find<HomeController>().toggleSidebar();
                           }
                         },
                         icon: LineIcons.stickyNote,
@@ -119,7 +117,7 @@ class Sidebar extends StatelessWidget {
                         onTap: () {
                           controller.selectedType(NoteType.LINK);
                           if (isMobile) {
-                            Get.find<HomeController>().showSidebar.toggle();
+                            Get.find<HomeController>().toggleSidebar();
                           }
                         },
                         icon: LineIcons.link,
@@ -190,9 +188,7 @@ class Sidebar extends StatelessWidget {
                                 onTap: () {
                                   controller.labelIndex(-2);
                                   if (isMobile) {
-                                    Get.find<HomeController>()
-                                        .showSidebar
-                                        .toggle();
+                                    Get.find<HomeController>().toggleSidebar();
                                   }
                                 },
                               ));
@@ -206,9 +202,7 @@ class Sidebar extends StatelessWidget {
                                 onTap: () {
                                   controller.labelIndex(-1);
                                   if (isMobile) {
-                                    Get.find<HomeController>()
-                                        .showSidebar
-                                        .toggle();
+                                    Get.find<HomeController>().toggleSidebar();
                                   }
                                 },
                               ));
@@ -252,9 +246,7 @@ class Sidebar extends StatelessWidget {
                                 } else {
                                   controller.labelIndex(index);
                                   if (isMobile) {
-                                    Get.find<HomeController>()
-                                        .showSidebar
-                                        .toggle();
+                                    Get.find<HomeController>().toggleSidebar();
                                   }
                                 }
                               },
