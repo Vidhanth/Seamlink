@@ -189,10 +189,23 @@ class _MainActivityState extends State<MainActivity>
                                         ? Home()
                                         : Stack(
                                             children: [
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Sidebar(),
-                                              ),
+                                              Obx(() => AnimatedPositioned(
+                                                    duration: 400.milliseconds,
+                                                    curve: Curves.fastOutSlowIn,
+                                                    left: Get.find<
+                                                                HomeController>()
+                                                            .showSidebar
+                                                            .isFalse
+                                                        ? context.mediaQuerySize
+                                                                .width *
+                                                            -0.25
+                                                        : 0,
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.centerLeft,
+                                                      child: Sidebar(),
+                                                    ),
+                                                  )),
                                               Obx(() => AnimatedPositioned(
                                                     curve: Curves.fastOutSlowIn,
                                                     left: Get.find<
