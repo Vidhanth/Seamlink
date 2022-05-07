@@ -90,7 +90,8 @@ class _MainActivityState extends State<MainActivity>
   Future<String> getInitialSharedText() async {
     if (isDesktop) return '';
     String sharedText = (await ReceiveSharingIntent.getInitialText()) ?? '';
-    if (Get.find<UserController>().username.value.isEmpty) {
+    if (Get.find<UserController>().username.value.isEmpty &&
+        sharedText.isNotEmpty) {
       Get.find<HomeController>().pendingSharedLink = sharedText;
       showSnackBar('Please log in first', error: true);
       return '';
