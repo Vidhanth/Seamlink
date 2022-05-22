@@ -22,8 +22,8 @@ class Navigate {
     required Widget page,
     Transitions? transition,
     Duration? duration,
-  }) {
-    Navigator.push(
+  }) async {
+    return await Navigator.push(
       Get.context!,
       SharedAxisPageRoute(
         page: page,

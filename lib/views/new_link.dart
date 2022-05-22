@@ -2,12 +2,11 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide MenuItem;
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:menubar/menubar.dart';
 import 'package:seamlink/components/color_picker.dart';
 import 'package:seamlink/components/custom_titlebar.dart';
 import 'package:seamlink/components/label_picker.dart';
@@ -20,15 +19,13 @@ import 'package:seamlink/services/extensions.dart';
 import 'package:seamlink/views/home.dart';
 
 // ignore: must_be_immutable
-class NewLink extends StatelessWidget {
+class NewLink extends StatefulWidget {
   final Link? link;
   final String? sharedText;
-  Function? refreshAutotitle;
-
-  final NewLinkController controller = NewLinkController();
-  final ThemeController themeController = Get.find();
   TextEditingController? titleController;
   TextEditingController? linkController;
+
+  final NewLinkController controller = Get.put(NewLinkController());
 
   NewLink({Key? key, this.link, this.sharedText}) : super(key: key) {
     if (linkController == null) {
@@ -45,11 +42,66 @@ class NewLink extends StatelessWidget {
   }
 
   @override
+  State<NewLink> createState() => _NewLinkState();
+}
+
+class _NewLinkState extends State<NewLink> {
+  Function? refreshAutotitle;
+
+  final ThemeController themeController = Get.find();
+
+  @override
+  void dispose() {
+    Get.delete<NewLinkController>();
+    Future.delayed(10.milliseconds, () {
+      Get.find<HomeController>().customMenubarItems([]);
+    });
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(
+      10.milliseconds,
+      () {
+        Get.find<HomeController>().customMenubarItems(
+          [
+            PlatformMenuItemGroup(
+              members: [
+                PlatformMenuItem(
+                  label: 'Save',
+                  onSelected: () async {
+                    await save();
+                  },
+                  shortcut: const SingleActivator(
+                    LogicalKeyboardKey.keyS,
+                    meta: true,
+                  ),
+                ),
+                PlatformMenuItem(
+                  label: 'Cancel',
+                  onSelected: () async {
+                    await cancel();
+                  },
+                  shortcut: new SingleActivator(
+                    LogicalKeyboardKey.keyW,
+                    meta: true,
+                  ),
+                )
+              ],
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    updateMenubar();
     return WillPopScope(
       onWillPop: () async {
-        return !controller.isSaving.value;
+        return !widget.controller.isSaving.value;
       },
       child: Column(
         children: [
@@ -89,8 +141,8 @@ class NewLink extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            link != null
-                                ? 'Edit ${noteOrLink(link!.url)}'
+                            widget.link != null
+                                ? 'Edit ${noteOrLink(widget.link!.url)}'
                                 : 'New note',
                             style: GoogleFonts.poppins(
                               fontSize: 50,
@@ -103,10 +155,10 @@ class NewLink extends StatelessWidget {
                     ),
                     TextField(
                       scrollPhysics: BouncingScrollPhysics(),
-                      controller: titleController,
+                      controller: widget.titleController,
                       onChanged: (title) {
-                        controller.autoTitle(title.trim().isEmpty &&
-                            linkController!.text.trim().isValidLink);
+                        widget.controller.autoTitle(title.trim().isEmpty &&
+                            widget.linkController!.text.trim().isValidLink);
                         refreshAutotitle?.call(() {});
                       },
                       style: GoogleFonts.poppins(
@@ -130,14 +182,14 @@ class NewLink extends StatelessWidget {
                     Expanded(
                       child: TextField(
                         scrollPhysics: BouncingScrollPhysics(),
-                        controller: linkController,
+                        controller: widget.linkController,
                         onChanged: (newLink) {
-                          controller.autoTitle(newLink.isValidLink);
+                          widget.controller.autoTitle(newLink.isValidLink);
                           refreshAutotitle?.call(() {});
                         },
                         cursorColor: themeController.currentTheme.subtext,
-                        autofocus: ((link?.url.isEmpty ?? true) &&
-                                (sharedText?.isEmpty ?? true)) ||
+                        autofocus: ((widget.link?.url.isEmpty ?? true) &&
+                                (widget.sharedText?.isEmpty ?? true)) ||
                             isDesktop,
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.normal,
@@ -167,15 +219,17 @@ class NewLink extends StatelessWidget {
                           refreshAutotitle = setState;
                           return GestureDetector(
                             onTap: () {
-                              if (!controller.autoTitle.value) {
-                                if (linkController!.text.trim().isValidLink)
-                                  controller.autoTitle(true);
+                              if (!widget.controller.autoTitle.value) {
+                                if (widget.linkController!.text
+                                    .trim()
+                                    .isValidLink)
+                                  widget.controller.autoTitle(true);
                                 else {
                                   showSnackBar("Please enter a valid link",
                                       error: true);
                                 }
                               } else {
-                                controller.autoTitle(false);
+                                widget.controller.autoTitle(false);
                               }
                               setState(() {});
                             },
@@ -184,13 +238,13 @@ class NewLink extends StatelessWidget {
                                 Checkbox(
                                   materialTapTargetSize:
                                       MaterialTapTargetSize.shrinkWrap,
-                                  value: controller.autoTitle.value,
+                                  value: widget.controller.autoTitle.value,
                                   onChanged: (val) {
                                     if (val!) {
-                                      if (linkController!.text
+                                      if (widget.linkController!.text
                                           .trim()
                                           .isValidLink)
-                                        controller.autoTitle(true);
+                                        widget.controller.autoTitle(true);
                                       else {
                                         showSnackBar(
                                           "Please enter a valid link",
@@ -198,7 +252,7 @@ class NewLink extends StatelessWidget {
                                         );
                                       }
                                     } else {
-                                      controller.autoTitle(false);
+                                      widget.controller.autoTitle(false);
                                     }
                                     setState(() {});
                                   },
@@ -238,14 +292,16 @@ class NewLink extends StatelessWidget {
                     Obx(
                       () => LabelPicker(
                         onLabelSelected: (index) {
-                          if (!controller.selectedLabelIndex.contains(index)) {
-                            controller.selectedLabelIndex.add(index);
+                          if (!widget.controller.selectedLabelIndex
+                              .contains(index)) {
+                            widget.controller.selectedLabelIndex.add(index);
                           } else {
-                            controller.selectedLabelIndex.remove(index);
+                            widget.controller.selectedLabelIndex.remove(index);
                           }
-                          controller.selectedLabelIndex.sort();
+                          widget.controller.selectedLabelIndex.sort();
                         },
-                        selectedIndices: controller.selectedLabelIndex.value,
+                        selectedIndices:
+                            widget.controller.selectedLabelIndex.value,
                       ),
                     ),
                     Padding(
@@ -257,10 +313,11 @@ class NewLink extends StatelessWidget {
                           Obx(
                             () => ColorPicker(
                               onColorSelected: (index) {
-                                controller.selectedColorIndex.value = index;
+                                widget.controller.selectedColorIndex.value =
+                                    index;
                               },
                               selectedIndex:
-                                  controller.selectedColorIndex.value,
+                                  widget.controller.selectedColorIndex.value,
                             ),
                           ),
                           SizedBox(
@@ -268,7 +325,7 @@ class NewLink extends StatelessWidget {
                           ),
                           Obx(
                             () => IgnorePointer(
-                              ignoring: controller.isSaving.value,
+                              ignoring: widget.controller.isSaving.value,
                               child: FloatingActionButton(
                                 backgroundColor:
                                     themeController.currentTheme.accent,
@@ -281,7 +338,7 @@ class NewLink extends StatelessWidget {
                                 hoverColor: themeController
                                     .currentTheme.contrastText
                                     .withOpacity(0.24),
-                                child: controller.isSaving.value
+                                child: widget.controller.isSaving.value
                                     ? SpinKitChasingDots(
                                         color: themeController
                                             .currentTheme.contrastText,
@@ -312,45 +369,9 @@ class NewLink extends StatelessWidget {
     );
   }
 
-  void updateMenubar() {
-    if (isMobile || isWindows) return;
-    setApplicationMenu([
-      Submenu(
-        label: "Actions",
-        children: [
-          MenuItem(
-            label: 'Save',
-            enabled: true,
-            onClicked: () async {
-              await save();
-            },
-            shortcut: LogicalKeySet.fromSet({
-              LogicalKeyboardKey.keyS,
-              LogicalKeyboardKey.meta,
-            }),
-          ),
-          MenuItem(
-            label: 'Cancel',
-            enabled: true,
-            onClicked: () async {
-              await cancel();
-            },
-            shortcut: LogicalKeySet.fromSet({
-              LogicalKeyboardKey.keyW,
-              LogicalKeyboardKey.meta,
-            }),
-          ),
-        ],
-      ),
-    ]);
-  }
-
   Future<void> cancel() async {
-    if (controller.isSaving.value) return;
-    Future.delayed(1.seconds, () {
-      Get.find<HomeController>().updateMenubar();
-    });
-    if (sharedText?.isEmpty ?? true) {
+    if (widget.controller.isSaving.value) return;
+    if (widget.sharedText?.isEmpty ?? true) {
       Get.back();
     } else {
       if (isAndroid) {
@@ -368,40 +389,36 @@ class NewLink extends StatelessWidget {
   }
 
   Future<void> save() async {
-    if (linkController!.text.trim().isEmpty) {
+    if (widget.linkController!.text.trim().isEmpty) {
       showSnackBar("Please enter a note", error: true);
       return;
     }
-    controller.isSaving(true);
-    String title = titleController!.text.trim();
-    if (link != null) {
-      if (link!.url == linkController!.text.trim() &&
-          link!.title == title &&
-          link!.colorIndex == controller.selectedColorIndex.value &&
-          link!.autotitle == controller.autoTitle.value &&
-          listEquals(link!.labels, controller.selectedLabelIndex)) {
+    widget.controller.isSaving(true);
+    String title = widget.titleController!.text.trim();
+    if (widget.link != null) {
+      if (widget.link!.url == widget.linkController!.text.trim() &&
+          widget.link!.title == title &&
+          widget.link!.colorIndex ==
+              widget.controller.selectedColorIndex.value &&
+          widget.link!.autotitle == widget.controller.autoTitle.value &&
+          listEquals(
+              widget.link!.labels, widget.controller.selectedLabelIndex)) {
         await hideKeyboard(Get.context!);
-        Future.delayed(1.seconds, () {
-          Get.find<HomeController>().updateMenubar();
-        });
         Get.back();
         return;
       }
     }
     bool result = await saveLink(
       Get.context!,
-      linkController!.text.trim(),
-      controller.autoTitle.value ? '' : title,
-      controller.selectedColorIndex.value,
-      controller.selectedLabelIndex,
-      controller.autoTitle.value,
-      uid: link?.uid,
+      widget.linkController!.text.trim(),
+      widget.controller.autoTitle.value ? '' : title,
+      widget.controller.selectedColorIndex.value,
+      widget.controller.selectedLabelIndex,
+      widget.controller.autoTitle.value,
+      uid: widget.link?.uid,
     );
     if (result) {
-      Future.delayed(1.seconds, () {
-        Get.find<HomeController>().updateMenubar();
-      });
-      if (sharedText?.isEmpty ?? true) {
+      if (widget.sharedText?.isEmpty ?? true) {
         Get.back();
       } else {
         if (isAndroid) {
@@ -417,7 +434,7 @@ class NewLink extends StatelessWidget {
         }
       }
     } else {
-      controller.isSaving(false);
+      widget.controller.isSaving(false);
     }
   }
 }

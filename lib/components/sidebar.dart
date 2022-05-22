@@ -174,7 +174,7 @@ class Sidebar extends StatelessWidget {
                 return Expanded(
                   child: Scrollbar(
                     controller: scrollController,
-                    isAlwaysShown: true,
+                    thumbVisibility: true,
                     child: ListView.builder(
                       controller: scrollController,
                       physics: BouncingScrollPhysics(),
@@ -349,7 +349,6 @@ class Sidebar extends StatelessWidget {
                           splashRadius: 29,
                           onPressed: () async {
                             await themeController.switchTheme();
-                            Get.find<HomeController>().updateMenubar();
                           },
                           icon: Icon(
                             ThemeController.isAuto

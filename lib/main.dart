@@ -106,7 +106,7 @@ class _MainActivityState extends State<MainActivity>
 
   @override
   void initState() {
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     if (isMobile) {
       _sharedTextSub =
           ReceiveSharingIntent.getTextStream().listen((String value) {
@@ -130,7 +130,7 @@ class _MainActivityState extends State<MainActivity>
   @override
   void dispose() {
     _sharedTextSub?.cancel();
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
@@ -286,7 +286,7 @@ class _MainActivityState extends State<MainActivity>
 
   void setAutoTheme() {
     if (ThemeController.isAuto) {
-      if (WidgetsBinding.instance?.window.platformBrightness ==
+      if (WidgetsBinding.instance.window.platformBrightness ==
           Brightness.dark) {
         if (!ThemeController.isDark) Get.find<ThemeController>().setDark();
       } else {

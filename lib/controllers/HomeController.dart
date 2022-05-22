@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:menubar/menubar.dart';
 import 'package:seamlink/constants/enum.dart';
 import 'package:seamlink/constants/strings.dart';
 import 'package:seamlink/controllers/SidebarController.dart';
-import 'package:seamlink/controllers/ThemeController.dart';
 import 'package:seamlink/models/link.dart';
 import 'package:seamlink/models/result.dart';
 import 'package:seamlink/services/client.dart';
@@ -19,6 +17,7 @@ class HomeController extends GetxController {
   var searchText = ''.obs;
   var isLoading = true.obs;
   var showSidebar = false.obs;
+  var customMenubarItems = [].obs;
   var pendingSharedLink = '';
   int sortBy = 0;
   bool ascending = false;
@@ -63,7 +62,6 @@ class HomeController extends GetxController {
   }
 
   void refreshLinks() async {
-    updateMenubar();
     isLoading(true);
     Get.find<SidebarController>().refreshLabels();
     final list = await Client.fetchLinks(
@@ -92,135 +90,165 @@ class HomeController extends GetxController {
     }
   }
 
-  void updateMenubar() {
-    if (isMobile || isWindows) return;
-    setApplicationMenu([
-      Submenu(
-        label: "Actions",
-        children: [
-          MenuItem(
-            label: 'Search',
-            enabled: true,
-            onClicked: () {
-              searchFocus.requestFocus();
-            },
-            shortcut: LogicalKeySet.fromSet({
-              LogicalKeyboardKey.keyS,
-            }),
+  List getMenuItems() {
+    if (customMenubarItems.isNotEmpty) {
+      return customMenubarItems;
+    }
+    return [
+      PlatformMenuItemGroup(
+        members: [
+          PlatformMenuItemGroup(
+            members: [
+              PlatformMenu(
+                label: 'New',
+                menus: [
+                  PlatformMenuItem(
+                    label: 'New Note',
+                    shortcut: const SingleActivator(LogicalKeyboardKey.keyN,
+                        meta: true),
+                    onSelected: () {
+                      openNewLink.call();
+                    },
+                  ),
+                  PlatformMenuItem(
+                    label: 'New Note from Clipboard',
+                    onSelected: () async {
+                      String copiedText =
+                          (await Clipboard.getData('text/plain'))?.text ?? '';
+                      if (copiedText.isEmpty) {
+                        showSnackBar('Clipboard is empty');
+                      }
+                      Navigate.to(
+                        page: NewLink(
+                          sharedText: copiedText,
+                        ),
+                      );
+                    },
+                    shortcut: const SingleActivator(
+                      LogicalKeyboardKey.keyV,
+                      meta: true,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-          MenuDivider(),
-          MenuItem(
-            label: 'New Note',
-            enabled: true,
-            onClicked: () {
-              openNewLink.call();
-            },
-            shortcut: LogicalKeySet.fromSet({
-              LogicalKeyboardKey.keyN,
-              LogicalKeyboardKey.meta,
-            }),
+          PlatformMenuItemGroup(
+            members: [
+              PlatformMenuItem(
+                label: 'Refresh',
+                shortcut:
+                    const SingleActivator(LogicalKeyboardKey.keyR, meta: true),
+                onSelected: () {
+                  refreshLinks();
+                },
+              ),
+              PlatformMenuItem(
+                label: 'Search',
+                shortcut: const CharacterActivator('s'),
+                onSelected: () {
+                  searchFocus.requestFocus();
+                },
+              ),
+            ],
           ),
-          MenuItem(
-            label: 'New Note from Clipboard',
-            enabled: true,
-            onClicked: () async {
-              String copiedText =
-                  (await Clipboard.getData('text/plain'))?.text ?? '';
-              if (copiedText.isEmpty) {
-                showSnackBar('Clipboard is empty');
-              }
-              Navigate.to(
-                page: NewLink(
-                  sharedText: copiedText,
-                ),
-              );
-            },
-            shortcut: LogicalKeySet.fromSet({
-              LogicalKeyboardKey.keyV,
-              LogicalKeyboardKey.shift,
-              LogicalKeyboardKey.meta,
-            }),
-          ),
-          MenuItem(
-            label: 'Refresh',
-            enabled: true,
-            onClicked: () {
-              refreshLinks();
-            },
-            shortcut: LogicalKeySet.fromSet({
-              LogicalKeyboardKey.keyR,
-              LogicalKeyboardKey.meta,
-            }),
-          ),
-          MenuDivider(),
-          MenuItem(
-            label: 'Show All',
-            enabled: true,
-            onClicked: () {
-              Get.find<SidebarController>().selectedType(NoteType.ALL);
-            },
-            shortcut: LogicalKeySet.fromSet({
-              LogicalKeyboardKey.meta,
-              LogicalKeyboardKey.shift,
-              LogicalKeyboardKey.keyA,
-            }),
-          ),
-          MenuItem(
-            label: 'Show Only Notes',
-            enabled: true,
-            onClicked: () {
-              Get.find<SidebarController>().selectedType(NoteType.NOTE);
-            },
-            shortcut: LogicalKeySet.fromSet({
-              LogicalKeyboardKey.meta,
-              LogicalKeyboardKey.shift,
-              LogicalKeyboardKey.keyN,
-            }),
-          ),
-          MenuItem(
-            label: 'Show Only Links',
-            enabled: true,
-            onClicked: () {
-              Get.find<SidebarController>().selectedType(NoteType.LINK);
-            },
-            shortcut: LogicalKeySet.fromSet({
-              LogicalKeyboardKey.meta,
-              LogicalKeyboardKey.shift,
-              LogicalKeyboardKey.keyL,
-            }),
-          ),
-          MenuDivider(),
-          MenuItem(
-            label: 'Logout',
-            enabled: true,
-            onClicked: () {
-              logout();
-            },
-            shortcut: LogicalKeySet.fromSet({
-              LogicalKeyboardKey.meta,
-              LogicalKeyboardKey.shift,
-              LogicalKeyboardKey.escape,
-            }),
-          ),
-          MenuDivider(),
-          MenuItem(
-            label: ThemeController.isAuto
-                ? 'Light Mode'
-                : ThemeController.isDark
-                    ? 'System Theme'
-                    : 'Dark Mode',
-            enabled: true,
-            onClicked: () async {
-              await Get.find<ThemeController>().switchTheme();
-              updateMenubar();
-            },
-            shortcut: LogicalKeySet.fromSet({
-              LogicalKeyboardKey.meta,
-              LogicalKeyboardKey.keyT,
-            }),
+          PlatformMenuItemGroup(
+            members: [
+              PlatformMenu(
+                label: 'Sort',
+                menus: [
+                  PlatformMenuItemGroup(
+                    members: [
+                      PlatformMenuItem(
+                        label: 'Date Added',
+                        onSelected: () {
+                          final homeController = Get.find<HomeController>();
+                          homeController.updateSortingMethod(
+                            0,
+                            homeController.ascending,
+                          );
+                        },
+                      ),
+                      PlatformMenuItem(
+                        label: 'Date Updated',
+                        onSelected: () {
+                          final homeController = Get.find<HomeController>();
+                          homeController.updateSortingMethod(
+                            1,
+                            homeController.ascending,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                  PlatformMenuItemGroup(
+                    members: [
+                      PlatformMenuItem(
+                        label: 'Newest First',
+                        onSelected: () {
+                          final homeController = Get.find<HomeController>();
+                          homeController.updateSortingMethod(
+                            homeController.sortBy,
+                            false,
+                          );
+                        },
+                      ),
+                      PlatformMenuItem(
+                        label: 'Oldest First',
+                        onSelected: () {
+                          final homeController = Get.find<HomeController>();
+                          homeController.updateSortingMethod(
+                            homeController.sortBy,
+                            true,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              PlatformMenu(
+                label: 'Filter',
+                menus: [
+                  PlatformMenuItem(
+                    label: 'All',
+                    shortcut: SingleActivator(
+                      LogicalKeyboardKey.keyA,
+                      shift: true,
+                      meta: true,
+                    ),
+                    onSelected: () {
+                      Get.find<SidebarController>().selectedType(NoteType.ALL);
+                    },
+                  ),
+                  PlatformMenuItem(
+                    label: 'Links Only',
+                    shortcut: SingleActivator(
+                      LogicalKeyboardKey.keyL,
+                      shift: true,
+                      meta: true,
+                    ),
+                    onSelected: () {
+                      Get.find<SidebarController>().selectedType(NoteType.LINK);
+                    },
+                  ),
+                  PlatformMenuItem(
+                    label: 'Notes Only',
+                    shortcut: SingleActivator(
+                      LogicalKeyboardKey.keyN,
+                      shift: true,
+                      meta: true,
+                    ),
+                    onSelected: () {
+                      Get.find<SidebarController>().selectedType(NoteType.NOTE);
+                    },
+                  ),
+                ],
+              ),
+            ],
           ),
         ],
-      ),
-    ]);
+      )
+    ];
   }
 }

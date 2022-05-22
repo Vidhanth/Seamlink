@@ -6,7 +6,6 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:menubar/menubar.dart';
 import 'package:seamlink/components/confirm_dialog.dart';
 import 'package:seamlink/components/link_options.dart';
 import 'package:seamlink/components/sorting_menu.dart';
@@ -29,7 +28,9 @@ String noteOrLink(String url) {
 }
 
 Future<void> logout() async {
-  if (isDesktop && !isWindows) setApplicationMenu([]);
+  while (Navigator.canPop(Get.context!)) {
+    Navigator.pop(Get.context!);
+  }
   await SharedPreferences.getInstance()
     ..remove('username');
   Get.find<UserController>().username('');
@@ -171,6 +172,7 @@ Future<bool?> deleteLabel(
       return false;
     }
   }
+  return false;
 }
 
 Future<bool?> newLabelDialog(
