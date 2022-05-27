@@ -77,6 +77,15 @@ class Home extends StatelessWidget {
                     ],
                   ),
                 if (PlatformProvidedMenuItem.hasMenu(
+                    PlatformProvidedMenuItemType.servicesSubmenu))
+                  const PlatformMenuItemGroup(
+                    members: [
+                      PlatformProvidedMenuItem(
+                        type: PlatformProvidedMenuItemType.servicesSubmenu,
+                      )
+                    ],
+                  ),
+                if (PlatformProvidedMenuItem.hasMenu(
                     PlatformProvidedMenuItemType.quit))
                   const PlatformProvidedMenuItem(
                       type: PlatformProvidedMenuItemType.quit),
