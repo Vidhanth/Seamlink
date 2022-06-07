@@ -123,7 +123,7 @@ class LinkTile extends StatelessWidget {
           child: Material(
             color: Colors.transparent,
             child: InkWell(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(12.5),
               splashColor: colorsList[link.colorIndex].withOpacity(0.15),
               highlightColor: Colors.transparent,
               hoverColor: colorsList[link.colorIndex].withOpacity(0.15),
