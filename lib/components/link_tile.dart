@@ -130,16 +130,18 @@ class LinkTile extends StatelessWidget {
               onTap: () {
                 onTap.call();
               },
-              child: link.url.isYoutubeLink
-                  ? _buildYoutubeCard()
-                  : SingleFutureBuilder(
-                      future: getLink,
-                      condition: !(link.autotitle && link.title.isEmpty),
-                      fallbackData: link,
-                      childBuilder: (context, data) {
-                        return _buildNote(data);
-                      },
-                    ),
+              child: SingleFutureBuilder(
+                future: getLink,
+                condition: !(link.autotitle &&
+                    link.title != null &&
+                    (link.title?.isEmpty ?? false)),
+                fallbackData: link,
+                childBuilder: (context, data) {
+                  return link.url.isYoutubeLink
+                      ? _buildYoutubeCard(data)
+                      : _buildNote(data);
+                },
+              ),
             ),
           ),
         ),
@@ -147,26 +149,135 @@ class LinkTile extends StatelessWidget {
     );
   }
 
-  Widget _buildYoutubeCard() {
-    return SingleFutureBuilder(
-      fallbackData: link,
-      childBuilder: (context, data) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(13),
-          child: data == null
-              ? Column(
+  Widget _buildYoutubeCard(data) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(13),
+      child: data == null
+          ? Column(
+              children: [
+                _buildShimmer(height: double.infinity),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20.0,
+                    horizontal: 15.0,
+                  ),
+                  child: Row(
+                    children: [
+                      _buildShimmer(
+                        height: 40,
+                        rounded: true,
+                      ),
+                      SizedBox(
+                        width: 15.0,
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildShimmer(),
+                            SizedBox(
+                              height: 3.0,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 50.0),
+                              child: _buildShimmer(),
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 80.0),
+                              child: _buildShimmer(),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            )
+          : link.thumbnail == null
+              ? _buildNote(data)
+              : Column(
                   children: [
-                    _buildShimmer(height: double.infinity),
+                    Stack(
+                      children: [
+                        AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: OctoImage(
+                            image:
+                                NetworkImage(link.thumbnail!.split('||').first),
+                            fadeInDuration: 400.milliseconds,
+                            fit: BoxFit.cover,
+                            alignment: Alignment.center,
+                            placeholderBuilder: (context) =>
+                                _buildShimmer(height: double.infinity),
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 10,
+                          right: 10,
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            child: SubstringHighlight(
+                              textAlign: TextAlign.center,
+                              text: link.message! +
+                                  (link.url.contains('playlist')
+                                      ? ' videos'
+                                      : ''),
+                              term: searchText,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              textStyle: GoogleFonts.poppins(
+                                color: themeController.currentTheme.foreground,
+                                fontSize: 12.5,
+                              ),
+                              textStyleHighlight: GoogleFonts.poppins(
+                                color:
+                                    themeController.currentTheme.contrastText,
+                                backgroundColor:
+                                    themeController.currentTheme.foreground,
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                              color: themeController
+                                  .currentTheme.backgroundColor
+                                  .withOpacity(0.85),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    if (link.progress != null)
+                      LinearProgressIndicator(
+                        value: link.progress,
+                        color: Colors.red,
+                        backgroundColor: themeController.currentTheme.mutedBg,
+                      ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         vertical: 20.0,
                         horizontal: 15.0,
                       ),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          _buildShimmer(
-                            height: 40,
-                            rounded: true,
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: OctoImage(
+                              image: NetworkImage(
+                                link.thumbnail!.split('||').last,
+                              ),
+                              placeholderBuilder: (context) {
+                                return _buildShimmer(
+                                  height: 40,
+                                  rounded: true,
+                                );
+                              },
+                              height: 40,
+                            ),
                           ),
                           SizedBox(
                             width: 15.0,
@@ -175,65 +286,17 @@ class LinkTile extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                _buildShimmer(),
-                                SizedBox(
-                                  height: 3.0,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 50.0),
-                                  child: _buildShimmer(),
-                                ),
-                                SizedBox(
-                                  height: 10.0,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 80.0),
-                                  child: _buildShimmer(),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                )
-              : link.thumbnail == null
-                  ? _buildNote(data)
-                  : Column(
-                      children: [
-                        Stack(
-                          children: [
-                            AspectRatio(
-                              aspectRatio: 16 / 9,
-                              child: OctoImage(
-                                image: NetworkImage(
-                                    link.thumbnail!.split('||').first),
-                                fadeInDuration: 400.milliseconds,
-                                fit: BoxFit.cover,
-                                alignment: Alignment.center,
-                                placeholderBuilder: (context) =>
-                                    _buildShimmer(height: double.infinity),
-                              ),
-                            ),
-                            Positioned(
-                              bottom: 10,
-                              right: 10,
-                              child: Container(
-                                padding: EdgeInsets.all(5),
-                                child: SubstringHighlight(
-                                  textAlign: TextAlign.center,
-                                  text: link.message! +
-                                      (link.url.contains('playlist')
-                                          ? ' videos'
-                                          : ''),
+                                SubstringHighlight(
+                                  text: link.title ?? "",
                                   term: searchText,
-                                  maxLines: 1,
+                                  textAlign: TextAlign.start,
+                                  maxLines: 10,
                                   overflow: TextOverflow.ellipsis,
                                   textStyle: GoogleFonts.poppins(
                                     color:
                                         themeController.currentTheme.foreground,
-                                    fontSize: 12.5,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 15,
                                   ),
                                   textStyleHighlight: GoogleFonts.poppins(
                                     color: themeController
@@ -242,105 +305,35 @@ class LinkTile extends StatelessWidget {
                                         themeController.currentTheme.foreground,
                                   ),
                                 ),
-                                decoration: BoxDecoration(
-                                  color: themeController
-                                      .currentTheme.backgroundColor
-                                      .withOpacity(0.85),
-                                  borderRadius: BorderRadius.circular(5),
+                                SizedBox(
+                                  height: 5.0,
                                 ),
-                              ),
-                            )
-                          ],
-                        ),
-                        if (link.progress != null)
-                          LinearProgressIndicator(
-                            value: link.progress,
-                            color: Colors.red,
-                            backgroundColor:
-                                themeController.currentTheme.mutedBg,
-                          ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 20.0,
-                            horizontal: 15.0,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: OctoImage(
-                                  image: NetworkImage(
-                                    link.thumbnail!.split('||').last,
+                                SubstringHighlight(
+                                  text: link.subtitle!,
+                                  term: searchText,
+                                  textAlign: TextAlign.start,
+                                  maxLines: 10,
+                                  overflow: TextOverflow.ellipsis,
+                                  textStyle: GoogleFonts.poppins(
+                                    color:
+                                        themeController.currentTheme.foreground,
+                                    fontSize: 15,
                                   ),
-                                  placeholderBuilder: (context) {
-                                    return _buildShimmer(
-                                      height: 40,
-                                      rounded: true,
-                                    );
-                                  },
-                                  height: 40,
+                                  textStyleHighlight: GoogleFonts.poppins(
+                                    color: themeController
+                                        .currentTheme.contrastText,
+                                    backgroundColor:
+                                        themeController.currentTheme.foreground,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 15.0,
-                              ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SubstringHighlight(
-                                      text: link.title,
-                                      term: searchText,
-                                      textAlign: TextAlign.start,
-                                      maxLines: 10,
-                                      overflow: TextOverflow.ellipsis,
-                                      textStyle: GoogleFonts.poppins(
-                                        color: themeController
-                                            .currentTheme.foreground,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 15,
-                                      ),
-                                      textStyleHighlight: GoogleFonts.poppins(
-                                        color: themeController
-                                            .currentTheme.contrastText,
-                                        backgroundColor: themeController
-                                            .currentTheme.foreground,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 5.0,
-                                    ),
-                                    SubstringHighlight(
-                                      text: link.subtitle!,
-                                      term: searchText,
-                                      textAlign: TextAlign.start,
-                                      maxLines: 10,
-                                      overflow: TextOverflow.ellipsis,
-                                      textStyle: GoogleFonts.poppins(
-                                        color: themeController
-                                            .currentTheme.foreground,
-                                        fontSize: 15,
-                                      ),
-                                      textStyleHighlight: GoogleFonts.poppins(
-                                        color: themeController
-                                            .currentTheme.contrastText,
-                                        backgroundColor: themeController
-                                            .currentTheme.foreground,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-        );
-      },
-      condition: !(link.autotitle && link.title.isEmpty),
-      future: getLink,
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
     );
   }
 
@@ -385,9 +378,10 @@ class LinkTile extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (link.title.isNotEmpty) ...[
+                  if (link.title != null &&
+                      (link.title?.isNotEmpty ?? false)) ...[
                     SubstringHighlight(
-                      text: link.title,
+                      text: link.title!,
                       textAlign: TextAlign.center,
                       term: searchText,
                       maxLines: 3,

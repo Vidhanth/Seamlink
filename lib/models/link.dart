@@ -30,7 +30,7 @@ class Link {
 
   String uid;
   String url;
-  String title;
+  String? title;
   DateTime timestamp;
   DateTime updatedAt;
   String user;
@@ -71,7 +71,7 @@ class Link {
 
   bool contains(String query) {
     return url.toLowerCase().contains(query) ||
-        title.toLowerCase().contains(query) ||
+        (title?.toLowerCase().contains(query) ?? false) ||
         (subtitle?.toLowerCase().contains(query) ?? false) ||
         (message?.toLowerCase().contains(query) ?? false);
   }

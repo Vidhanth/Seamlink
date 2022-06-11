@@ -79,8 +79,10 @@ class LinkOptions extends StatelessWidget {
           _buildOption("Share ${noteOrLink(link.url)}", LineIcons.share,
               () async {
             Get.back();
-            String textToShare =
-                (!link.autotitle ? link.title + "\n" : '') + link.url;
+            String textToShare = (!link.autotitle && link.title != null
+                    ? link.title! + "\n"
+                    : '') +
+                link.url;
             Share.share(textToShare);
           }),
         ],

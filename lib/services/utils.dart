@@ -351,15 +351,17 @@ int compareLinksList(Link link1, Link link2, int sortBy, bool ascending) {
 
 Future<Link> getLinkData(Link link) async {
   if (link.autotitle) {
-    if (link.title.isNotEmpty) return link;
+    if (link.title?.isNotEmpty ?? false) return link;
     if (link.url.isValidLink) {
       if (link.url.isYoutubeLink) {
+        print(link.url);
         link = await YoutubeData.getDetails(link);
       } else if (link.url.isRedditLink) {
         link = await RedditData.getDetails(link);
       } else {
         link.title = await UrlParser.getUrlTitle(link.url);
       }
+      if (link.title!.isEmpty) link.title = null;
     }
   }
   return link;

@@ -18,6 +18,11 @@ class YoutubeData {
     String rawDetails = await _getDataFromApi(id, playlist: playlist);
     Map<String, dynamic> details = json.decode(rawDetails);
 
+    if (details['items'].isEmpty) {
+      link.title = "";
+      return link;
+    }
+
     String channelData =
         await _getChannelDetails(details['items'][0]['snippet']['channelId']);
     Map<String, dynamic> channelDetails = json.decode(channelData);
