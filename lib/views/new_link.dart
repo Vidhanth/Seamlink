@@ -154,6 +154,7 @@ class _NewLinkState extends State<NewLink> {
                       ),
                     ),
                     TextField(
+                      textInputAction: TextInputAction.next,
                       scrollPhysics: BouncingScrollPhysics(),
                       controller: widget.titleController,
                       onChanged: (title) {
