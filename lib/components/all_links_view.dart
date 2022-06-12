@@ -86,21 +86,7 @@ class AllLinksView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 3,
-                ),
-                TextButton(
-                  onPressed: () {
-                    Get.find<HomeController>().refreshLinks();
-                  },
-                  style: TextButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    primary: themeController.currentTheme.foreground,
-                    textStyle: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  child: Text('Refresh'),
+                  height: isDesktop ? 5 : 0,
                 ),
                 TextButton(
                   onPressed: () {
