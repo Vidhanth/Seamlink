@@ -1,5 +1,6 @@
 import 'package:fade_shimmer/fade_shimmer.dart';
 import 'package:flutter/material.dart' hide Dismissible, DismissDirection;
+import 'package:flutter/services.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:seamlink/controllers/HomeController.dart';
@@ -13,6 +14,22 @@ import 'package:seamlink/constants/colors.dart';
 import 'package:seamlink/models/link.dart';
 import 'package:seamlink/services/utils.dart';
 import 'package:substring_highlight/substring_highlight.dart';
+
+class OptionsIntent extends Intent {
+  const OptionsIntent();
+}
+
+class OpenIntent extends Intent {
+  const OpenIntent();
+}
+
+class DeleteIntent extends Intent {
+  const DeleteIntent();
+}
+
+class OpenAndDeleteIntent extends Intent {
+  const OpenAndDeleteIntent();
+}
 
 // ignore: must_be_immutable
 class LinkTile extends StatelessWidget {
@@ -28,6 +45,19 @@ class LinkTile extends StatelessWidget {
   final Function onDismissed;
 
   final ThemeController themeController = Get.find();
+
+  final shortcutsMap = {
+    SingleActivator(LogicalKeyboardKey.space): OptionsIntent(),
+    SingleActivator(LogicalKeyboardKey.enter): OpenIntent(),
+    SingleActivator(
+      isMacOS ? LogicalKeyboardKey.backspace : LogicalKeyboardKey.delete,
+    ): DeleteIntent(),
+    SingleActivator(
+      isMacOS ? LogicalKeyboardKey.backspace : LogicalKeyboardKey.delete,
+      shift: isWindows,
+      meta: isMacOS,
+    ): OpenAndDeleteIntent(),
+  };
 
   LinkTile({
     Key? key,
@@ -47,7 +77,7 @@ class LinkTile extends StatelessWidget {
     this.getLink = getLinkData(link);
   }
 
-  Future<bool> _confirmDismiss(direction) async {
+  Future<bool> _confirmDismiss() async {
     hideKeyboard(Get.context, delay: 0.milliseconds);
     return await confirmDialog(Get.context, "Delete ${noteOrLink(link.url)}?",
             "Are you sure you want to delete this ${noteOrLink(link.url)}? This cannot be undone.") ??
@@ -74,73 +104,97 @@ class LinkTile extends StatelessWidget {
         ),
       ),
       confirmDismiss: (direction) async {
-        return await _confirmDismiss(direction);
+        return await _confirmDismiss();
       },
       onDismissed: (direction) {
         onDismissed.call(direction);
       },
       enableDismiss: isMobile,
-      child: GestureDetector(
-        onHorizontalDragUpdate: isDesktop
-            ? null
-            : !Get.find<HomeController>().searchFocus.hasFocus
-                ? null
-                : (d) {
-                    hideKeyboard(context, delay: 0.seconds);
-                  },
-        onVerticalDragUpdate: isDesktop
-            ? null
-            : !Get.find<HomeController>().searchFocus.hasFocus
-                ? null
-                : (d) {
-                    hideKeyboard(context, delay: 0.seconds);
-                  },
-        onLongPress: () {
-          onLongPress?.call();
-        },
-        onSecondaryTap: () {
-          onSecondaryTap?.call();
-        },
-        onTertiaryTapDown: (d) {
-          onTertiaryTap?.call();
-        },
-        child: AnimatedContainer(
-          margin: margin,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: themeController.currentTheme.backgroundColor,
-            boxShadow: [
-              BoxShadow(
-                  blurRadius: 5, color: themeController.currentTheme.shadow),
-            ],
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(
-              color: colorsList[link.colorIndex],
-              width: 2,
+      child: Shortcuts(
+        shortcuts: shortcutsMap,
+        child: Actions(
+          actions: <Type, Action<Intent>>{
+            OptionsIntent: CallbackAction<OptionsIntent>(
+              onInvoke: (OptionsIntent intent) =>
+                  {showLinkOptions(context, link)},
             ),
-          ),
-          duration: 500.milliseconds,
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(12.5),
-              splashColor: colorsList[link.colorIndex].withOpacity(0.15),
-              highlightColor: Colors.transparent,
-              hoverColor: colorsList[link.colorIndex].withOpacity(0.15),
-              onTap: () {
-                onTap.call();
+            OpenIntent: CallbackAction<OpenIntent>(
+              onInvoke: (OpenIntent intent) => {onTap.call()},
+            ),
+            DeleteIntent: CallbackAction<DeleteIntent>(
+              onInvoke: (DeleteIntent intent) async => {
+                if (await _confirmDismiss()) {onDismissed.call(null)}
               },
-              child: SingleFutureBuilder(
-                future: getLink,
-                condition: !(link.autotitle &&
-                    link.title != null &&
-                    (link.title?.isEmpty ?? false)),
-                fallbackData: link,
-                childBuilder: (context, data) {
-                  return link.url.isYoutubeLink
-                      ? _buildYoutubeCard(data)
-                      : _buildNote(data);
-                },
+            ),
+            OpenAndDeleteIntent: CallbackAction<OpenAndDeleteIntent>(
+              onInvoke: (OpenAndDeleteIntent intent) =>
+                  {openAndDelete(context, link)},
+            ),
+          },
+          child: GestureDetector(
+            onHorizontalDragUpdate: isDesktop
+                ? null
+                : !Get.find<HomeController>().searchFocus.hasFocus
+                    ? null
+                    : (d) {
+                        hideKeyboard(context, delay: 0.seconds);
+                      },
+            onVerticalDragUpdate: isDesktop
+                ? null
+                : !Get.find<HomeController>().searchFocus.hasFocus
+                    ? null
+                    : (d) {
+                        hideKeyboard(context, delay: 0.seconds);
+                      },
+            onLongPress: () {
+              onLongPress?.call();
+            },
+            onSecondaryTap: () {
+              onSecondaryTap?.call();
+            },
+            onTertiaryTapDown: (d) {
+              onTertiaryTap?.call();
+            },
+            child: AnimatedContainer(
+              margin: margin,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: themeController.currentTheme.backgroundColor,
+                boxShadow: [
+                  BoxShadow(
+                      blurRadius: 5,
+                      color: themeController.currentTheme.shadow),
+                ],
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(
+                  color: colorsList[link.colorIndex],
+                  width: 2,
+                ),
+              ),
+              duration: 500.milliseconds,
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(12.5),
+                  splashColor: colorsList[link.colorIndex].withOpacity(0.15),
+                  highlightColor: Colors.transparent,
+                  hoverColor: colorsList[link.colorIndex].withOpacity(0.15),
+                  onTap: () {
+                    onTap.call();
+                  },
+                  child: SingleFutureBuilder(
+                    future: getLink,
+                    condition: !(link.autotitle &&
+                        link.title != null &&
+                        (link.title?.isEmpty ?? false)),
+                    fallbackData: link,
+                    childBuilder: (context, data) {
+                      return link.url.isYoutubeLink
+                          ? _buildYoutubeCard(data)
+                          : _buildNote(data);
+                    },
+                  ),
+                ),
               ),
             ),
           ),
