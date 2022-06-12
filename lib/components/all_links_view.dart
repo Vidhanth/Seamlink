@@ -102,6 +102,24 @@ class AllLinksView extends StatelessWidget {
                   ),
                   child: Text('Refresh'),
                 ),
+                TextButton(
+                  onPressed: () {
+                    Navigate.to(
+                      page: NewLink(
+                        sharedText: searchText,
+                      ),
+                    );
+                  },
+                  style: TextButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    primary: themeController.currentTheme.foreground,
+                    textStyle: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  child: Text('Create note "${searchText.clamp(limit: 15)}"'),
+                ),
               ],
             ),
           ],
