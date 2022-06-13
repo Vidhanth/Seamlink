@@ -85,27 +85,29 @@ class AllLinksView extends StatelessWidget {
                     color: themeController.currentTheme.foreground,
                   ),
                 ),
-                SizedBox(
-                  height: isDesktop ? 5 : 0,
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigate.to(
-                      page: NewLink(
-                        sharedText: searchText,
-                      ),
-                    );
-                  },
-                  style: TextButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    primary: themeController.currentTheme.foreground,
-                    textStyle: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w600,
-                    ),
+                if (searchText.isNotEmpty) ...[
+                  SizedBox(
+                    height: isDesktop ? 5 : 0,
                   ),
-                  child: Text('Create note "${searchText.clamp(limit: 15)}"'),
-                ),
+                  TextButton(
+                    onPressed: () {
+                      Navigate.to(
+                        page: NewLink(
+                          sharedText: searchText,
+                        ),
+                      );
+                    },
+                    style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      primary: themeController.currentTheme.foreground,
+                      textStyle: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    child: Text('Create note "${searchText.clamp(limit: 15)}"'),
+                  ),
+                ]
               ],
             ),
           ],
