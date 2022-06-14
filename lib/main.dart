@@ -15,6 +15,7 @@ import 'package:seamlink/controllers/ThemeController.dart';
 import 'package:seamlink/controllers/UserController.dart';
 import 'package:seamlink/services/navigation.dart';
 import 'package:seamlink/services/utils.dart';
+import 'package:seamlink/views/auth_view.dart';
 import 'package:seamlink/views/home.dart';
 import 'package:seamlink/views/new_link.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -185,89 +186,93 @@ class _MainActivityState extends State<MainActivity>
                               future: getInitialSharedText(),
                               builder: (context, snapshot) {
                                 if (!snapshot.hasData) return SizedBox();
-                                return snapshot.data.toString().isEmpty
-                                    ? isDesktop
-                                        ? Home()
-                                        : Stack(
-                                            children: [
-                                              Obx(() => AnimatedPositioned(
-                                                    duration: 400.milliseconds,
-                                                    curve: Curves.fastOutSlowIn,
-                                                    left: Get.find<
+                                return Obx(() {
+                                  if (Get.find<UserController>()
+                                      .username
+                                      .isEmpty) return AuthView();
+                                  return snapshot.data.toString().isEmpty
+                                      ? isDesktop
+                                          ? Home()
+                                          : Stack(
+                                              children: [
+                                                AnimatedPositioned(
+                                                  duration: 400.milliseconds,
+                                                  curve: Curves.fastOutSlowIn,
+                                                  left: Get.find<
+                                                              HomeController>()
+                                                          .showSidebar
+                                                          .isFalse
+                                                      ? context.mediaQuerySize
+                                                              .width *
+                                                          -0.25
+                                                      : 0,
+                                                  child: Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: Sidebar(),
+                                                  ),
+                                                ),
+                                                AnimatedPositioned(
+                                                  curve: Curves.fastOutSlowIn,
+                                                  left: Get.find<
+                                                              HomeController>()
+                                                          .showSidebar
+                                                          .isTrue
+                                                      ? context.mediaQuerySize
+                                                              .width *
+                                                          0.75
+                                                      : 0,
+                                                  duration: 500.milliseconds,
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                            blurRadius: 20,
+                                                            color:
+                                                                Colors.black12,
+                                                          ),
+                                                        ]),
+                                                    height: context
+                                                        .mediaQuerySize.height,
+                                                    width: context
+                                                        .mediaQuerySize.width,
+                                                    child: Stack(
+                                                      children: [
+                                                        Home(),
+                                                        if (Get.find<
                                                                 HomeController>()
                                                             .showSidebar
-                                                            .isFalse
-                                                        ? context.mediaQuerySize
-                                                                .width *
-                                                            -0.25
-                                                        : 0,
-                                                    child: Align(
-                                                      alignment:
-                                                          Alignment.centerLeft,
-                                                      child: Sidebar(),
-                                                    ),
-                                                  )),
-                                              Obx(() => AnimatedPositioned(
-                                                    curve: Curves.fastOutSlowIn,
-                                                    left: Get.find<
-                                                                HomeController>()
-                                                            .showSidebar
-                                                            .isTrue
-                                                        ? context.mediaQuerySize
-                                                                .width *
-                                                            0.75
-                                                        : 0,
-                                                    duration: 500.milliseconds,
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                          boxShadow: [
-                                                            BoxShadow(
-                                                              blurRadius: 20,
+                                                            .isTrue)
+                                                          Positioned.fill(
+                                                            child: Container(
                                                               color: Colors
-                                                                  .black12,
-                                                            ),
-                                                          ]),
-                                                      height: context
-                                                          .mediaQuerySize
-                                                          .height,
-                                                      width: context
-                                                          .mediaQuerySize.width,
-                                                      child: Stack(
-                                                        children: [
-                                                          Home(),
-                                                          if (Get.find<
-                                                                  HomeController>()
-                                                              .showSidebar
-                                                              .isTrue)
-                                                            Positioned.fill(
-                                                              child: Container(
-                                                                color: Colors
-                                                                    .transparent,
-                                                                child:
-                                                                    GestureDetector(
-                                                                  onTap: () {
-                                                                    Get.find<
-                                                                            HomeController>()
-                                                                        .toggleSidebar();
-                                                                  },
-                                                                  onHorizontalDragUpdate:
-                                                                      (_) {
-                                                                    Get.find<
-                                                                            HomeController>()
-                                                                        .toggleSidebar();
-                                                                  },
-                                                                ),
+                                                                  .transparent,
+                                                              child:
+                                                                  GestureDetector(
+                                                                onTap: () {
+                                                                  Get.find<
+                                                                          HomeController>()
+                                                                      .toggleSidebar();
+                                                                },
+                                                                onHorizontalDragUpdate:
+                                                                    (_) {
+                                                                  Get.find<
+                                                                          HomeController>()
+                                                                      .toggleSidebar();
+                                                                },
                                                               ),
-                                                            )
-                                                        ],
-                                                      ),
+                                                            ),
+                                                          )
+                                                      ],
                                                     ),
-                                                  )),
-                                            ],
-                                          )
-                                    : NewLink(
-                                        sharedText: snapshot.data.toString(),
-                                      );
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                      : NewLink(
+                                          sharedText: snapshot.data.toString(),
+                                        );
+                                });
                               },
                             ),
                           ),

@@ -305,10 +305,6 @@ class Sidebar extends StatelessWidget {
                             padding: const EdgeInsets.only(left: 5.0),
                             child: InkWell(
                               onTap: () async {
-                                if (isMobile) {
-                                  Get.find<HomeController>().toggleSidebar();
-                                  await Future.delayed(800.milliseconds);
-                                }
                                 logout();
                               },
                               hoverColor:
