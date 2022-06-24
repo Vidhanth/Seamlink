@@ -31,6 +31,10 @@ class OpenAndDeleteIntent extends Intent {
   const OpenAndDeleteIntent();
 }
 
+class CopyIntent extends Intent {
+  const CopyIntent();
+}
+
 // ignore: must_be_immutable
 class LinkTile extends StatelessWidget {
   Link link;
@@ -57,6 +61,11 @@ class LinkTile extends StatelessWidget {
       shift: isWindows,
       meta: isMacOS,
     ): OpenAndDeleteIntent(),
+    SingleActivator(
+      LogicalKeyboardKey.keyC,
+      meta: isMacOS,
+      control: isWindows,
+    ): CopyIntent(),
   };
 
   LinkTile({
@@ -129,6 +138,13 @@ class LinkTile extends StatelessWidget {
             OpenAndDeleteIntent: CallbackAction<OpenAndDeleteIntent>(
               onInvoke: (OpenAndDeleteIntent intent) =>
                   {openAndDelete(context, link)},
+            ),
+            CopyIntent: CallbackAction<CopyIntent>(
+              onInvoke: (CopyIntent intent) {
+                link.url.copyToClipboard();
+                showSnackBar("Copied to clipboard");
+                return null;
+              },
             ),
           },
           child: GestureDetector(
