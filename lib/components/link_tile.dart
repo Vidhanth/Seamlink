@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:seamlink/controllers/HomeController.dart';
+import 'package:seamlink/controllers/SidebarController.dart';
 import 'package:seamlink/controllers/ThemeController.dart';
 import 'package:seamlink/services/extensions.dart';
 import 'dismissible.dart';
@@ -205,9 +206,60 @@ class LinkTile extends StatelessWidget {
                         (link.title?.isEmpty ?? false)),
                     fallbackData: link,
                     childBuilder: (context, data) {
-                      return link.url.isYoutubeLink
-                          ? _buildYoutubeCard(data)
-                          : _buildNote(data);
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Center(
+                            child: link.url.isYoutubeLink
+                                ? _buildYoutubeCard(data)
+                                : _buildNote(data),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 15, right: 15, bottom: 10, top: 5),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: link.labels.map((labelIndex) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 3.0,
+                                    ),
+                                    child: data == null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 5.0, top: 10),
+                                            child: FadeShimmer(
+                                              width: 75,
+                                              height: 30,
+                                              radius: 10,
+                                              baseColor: themeController
+                                                  .currentTheme.subtext
+                                                  .withOpacity(0.1),
+                                              highlightColor: themeController
+                                                  .currentTheme.subtext
+                                                  .withOpacity(0.25),
+                                            ),
+                                          )
+                                        : FilterChip(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            label: Text(
+                                                Get.find<SidebarController>()
+                                                    .labels[labelIndex]),
+                                            onSelected: (bool) {
+                                              Get.find<SidebarController>()
+                                                  .labelIndex(labelIndex);
+                                            },
+                                          ),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
                     },
                   ),
                 ),
@@ -326,9 +378,11 @@ class LinkTile extends StatelessWidget {
                         color: Colors.red,
                         backgroundColor: themeController.currentTheme.mutedBg,
                       ),
+                    SizedBox(
+                      height: 15,
+                    ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                        vertical: 20.0,
                         horizontal: 15.0,
                       ),
                       child: Row(
@@ -444,10 +498,15 @@ class LinkTile extends StatelessWidget {
       duration: 400.milliseconds,
       child: data != null
           ? Padding(
-              padding: padding,
+              padding: EdgeInsets.symmetric(
+                horizontal: 15,
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  SizedBox(
+                    height: 15,
+                  ),
                   if (link.title != null &&
                       (link.title?.isNotEmpty ?? false)) ...[
                     SubstringHighlight(
