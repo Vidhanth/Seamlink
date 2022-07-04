@@ -245,9 +245,12 @@ class LinkTile extends StatelessWidget {
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(10)),
-                                            label: Text(
+                                            label: Obx(() {
+                                              return Text(
                                                 Get.find<SidebarController>()
-                                                    .labels[labelIndex]),
+                                                    .labels[labelIndex],
+                                              );
+                                            }),
                                             onSelected: (bool) {
                                               Get.find<SidebarController>()
                                                   .labelIndex(labelIndex);
