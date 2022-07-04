@@ -123,7 +123,9 @@ class BottomDialog extends StatelessWidget {
               cursorColor: themeController.currentTheme.subtext,
               bgColor: themeController.currentTheme.mutedBg,
               controller: _textController,
-              onSubmitted: onSubmitted!,
+              onSubmitted: (_) {
+                onSubmitted!.call(_textController!);
+              },
               autofocus: true,
               hint: hint ?? 'Label',
               hintStyle: GoogleFonts.poppins(
