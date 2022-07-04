@@ -216,7 +216,7 @@ class LinkTile extends StatelessWidget {
                           ),
                           Padding(
                             padding: EdgeInsets.only(
-                                left: 15, right: 15, bottom: 10, top: 5),
+                                left: 15, right: 15, bottom: 15, top: 10),
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
