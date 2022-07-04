@@ -189,8 +189,7 @@ Future<bool?> newLabelDialog(
     labels += sbController.labels.value;
     if (labels.any((element) =>
         element.toString().toLowerCase() == newLabel.toLowerCase())) {
-      showSnackBar('Label already exists.', error: true);
-      return false;
+      return Result(false, message: "Label already exists.");
     } else {
       isSaving = true;
       labels.add(newLabel);
@@ -198,11 +197,10 @@ Future<bool?> newLabelDialog(
           Get.find<UserController>().username.value, labels);
       if (result.success) {
         sbController.labels.add(newLabel);
-        return true;
+        return Result(true, message: "Label created.");
       } else {
-        showSnackBar('There was an error. Please try again.', error: true);
         isSaving = false;
-        return false;
+        return Result(false, message: 'There was an error. Please try again.');
       }
     }
   };
@@ -210,8 +208,9 @@ Future<bool?> newLabelDialog(
     return await Get.dialog(
       BottomDialog(
         onSubmitted: (controller) async {
-          bool success = await onSubmitted.call(controller);
-          Get.back(result: success);
+          Result result = await onSubmitted.call(controller);
+          Get.back(result: result.success);
+          showSnackBar(result.message, error: !result.success);
         },
         showTextField: true,
         onCancel: () {
@@ -228,8 +227,9 @@ Future<bool?> newLabelDialog(
   return await Get.bottomSheet(
     BottomDialog(
       onSubmitted: (controller) async {
-        bool success = await onSubmitted.call(controller);
-        Get.back(result: success);
+        Result result = await onSubmitted.call(controller);
+        Get.back(result: result.success);
+        showSnackBar(result.message, error: !result.success);
       },
       showTextField: true,
       onCancel: () {
@@ -260,12 +260,10 @@ Future<bool?> editLabelDialog(
     labels += sbController.labels.value;
 
     if (newLabel.isEmpty) {
-      showSnackBar('Please enter a valid name.', error: true);
-      return false;
+      return Result(false, message: "Please enter a valid name.");
     } else if (labels.any((element) =>
         element.toString().toLowerCase() == newLabel.toLowerCase())) {
-      showSnackBar('Label already exists.', error: true);
-      return false;
+      return Result(false, message: "Label already exists.");
     } else {
       isSaving = true;
       labels[index] = newLabel;
@@ -273,11 +271,10 @@ Future<bool?> editLabelDialog(
           Get.find<UserController>().username.value, labels);
       if (result.success) {
         sbController.labels[index] = newLabel;
-        return true;
+        return Result(true, message: "Label updated.");
       } else {
-        showSnackBar('There was an error. Please try again.', error: true);
         isSaving = false;
-        return false;
+        return Result(false, message: 'There was an error. Please try again.');
       }
     }
   };
@@ -285,8 +282,9 @@ Future<bool?> editLabelDialog(
     return await Get.dialog(
       BottomDialog(
         onSubmitted: (controller) async {
-          bool success = await onSubmitted.call(controller);
-          Get.back(result: success);
+          Result result = await onSubmitted.call(controller);
+          Get.back(result: result.success);
+          showSnackBar(result.message, error: !result.success);
         },
         optionalText: "DELETE",
         onOptional: () async {
@@ -309,8 +307,9 @@ Future<bool?> editLabelDialog(
   return await Get.bottomSheet(
     BottomDialog(
       onSubmitted: (controller) async {
-        bool success = await onSubmitted.call(controller);
-        Get.back(result: success);
+        Result result = await onSubmitted.call(controller);
+        Get.back(result: result.success);
+        showSnackBar(result.message, error: !result.success);
       },
       showTextField: true,
       onCancel: () {
