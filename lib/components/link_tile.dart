@@ -242,6 +242,13 @@ class LinkTile extends StatelessWidget {
                                             ),
                                           )
                                         : FilterChip(
+                                            backgroundColor: themeController
+                                                .currentTheme.foreground
+                                                .withOpacity(0.10),
+                                            labelStyle: GoogleFonts.poppins(
+                                              color: themeController
+                                                  .currentTheme.foreground,
+                                            ),
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(10)),
