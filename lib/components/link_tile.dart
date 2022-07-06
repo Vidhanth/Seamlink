@@ -216,14 +216,15 @@ class LinkTile extends StatelessWidget {
                           ),
                           Padding(
                             padding: EdgeInsets.only(
-                                left: 15, right: 15, bottom: 15, top: 10),
+                                left: 15, right: 15, bottom: 5, top: 10),
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
                                 children: link.labels.map((labelIndex) {
                                   return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 3.0,
+                                    padding: const EdgeInsets.only(
+                                      right: 3.0,
+                                      bottom: 10.0,
                                     ),
                                     child: data == null
                                         ? Padding(
