@@ -223,13 +223,11 @@ class LinkTile extends StatelessWidget {
                                 children: link.labels.map((labelIndex) {
                                   return Padding(
                                     padding: const EdgeInsets.only(
-                                      right: 3.0,
-                                      bottom: 10.0,
-                                    ),
+                                        right: 3.0, bottom: 5, top: 0),
                                     child: data == null
                                         ? Padding(
                                             padding: const EdgeInsets.only(
-                                                bottom: 5.0, top: 10),
+                                                bottom: 5.0, top: 0),
                                             child: FadeShimmer(
                                               width: 75,
                                               height: 30,
