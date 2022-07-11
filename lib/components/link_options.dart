@@ -99,6 +99,10 @@ class LinkOptions extends StatelessWidget {
             Get.back();
           }
         }),
+        _buildOption("Details", LineIcons.infoCircle, () async {
+          Get.back();
+          showLinkDetails(context, link);
+        }),
       ],
     );
   }

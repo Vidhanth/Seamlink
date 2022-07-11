@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 extension d on Duration {
   String toDurationString() {
@@ -62,5 +63,14 @@ extension s on String {
 
   void copyToClipboard() {
     Clipboard.setData(new ClipboardData(text: this));
+  }
+}
+
+extension dt on DateTime {
+  String get displayString {
+    DateTime date = DateTime.parse(this.toString());
+    DateFormat formatter = DateFormat(DateFormat.YEAR_MONTH_DAY);
+    DateFormat time = DateFormat(DateFormat.HOUR_MINUTE);
+    return "${formatter.format(date)}  ${time.format(date)}";
   }
 }

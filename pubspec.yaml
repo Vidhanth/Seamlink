@@ -38,6 +38,7 @@ dependencies:
   octo_image: ^1.0.0+1
   flutter_svg:
   share_plus: ^3.0.4
+  intl: ^0.17.0
   window_size:
     git:
       url: git://github.com/google/flutter-desktop-embedding.git

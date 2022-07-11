@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:seamlink/components/confirm_dialog.dart';
+import 'package:seamlink/components/link_details.dart';
 import 'package:seamlink/components/link_options.dart';
 import 'package:seamlink/components/sorting_menu.dart';
 import 'package:seamlink/controllers/HomeController.dart';
@@ -54,6 +55,14 @@ void showSortingMenu(context) {
     Get.dialog(SortingMenu());
   } else {
     Get.bottomSheet(SortingMenu());
+  }
+}
+
+void showLinkDetails(context, Link link) {
+  if (isScreenWide(context)) {
+    Get.dialog(LinkDetails(link: link));
+  } else {
+    Get.bottomSheet(LinkDetails(link: link));
   }
 }
 
