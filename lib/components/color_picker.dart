@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:seamlink/constants/colors.dart';
 import 'package:seamlink/controllers/ThemeController.dart';
+import 'package:seamlink/services/utils.dart';
 
 class ColorPicker extends StatelessWidget {
   final Function onColorSelected;
   final int selectedIndex;
+  static final size = isDesktop ? 30.0 : 35.0;
 
   final ThemeController themeController = Get.find();
 
@@ -41,12 +43,12 @@ class ColorPicker extends StatelessWidget {
                     },
                     borderRadius: BorderRadius.circular(30),
                     child: Container(
-                      height: 30,
-                      width: 30,
+                      height: size,
+                      width: size,
                       child: index == selectedIndex
                           ? Container(
-                              height: 30,
-                              width: 30,
+                              height: size,
+                              width: size,
                               decoration: BoxDecoration(
                                 color: themeController.currentTheme.hoverColor,
                                 shape: BoxShape.circle,

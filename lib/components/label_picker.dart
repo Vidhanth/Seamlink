@@ -9,6 +9,10 @@ class LabelPicker extends StatelessWidget {
   final Function(int) onLabelSelected;
   final List<int> selectedIndices;
 
+  static final labelPadding = isDesktop
+      ? EdgeInsets.symmetric(vertical: 4, horizontal: 10)
+      : EdgeInsets.symmetric(vertical: 6, horizontal: 13);
+
   late final SidebarController sidebarController;
   final ThemeController themeController = Get.find();
 
@@ -27,7 +31,8 @@ class LabelPicker extends StatelessWidget {
     List<dynamic> labelsList = sidebarController.labels;
     return Obx(
       () => SingleChildScrollView(
-        padding: EdgeInsets.only(top: 10.0, left: 20, right: 20),
+        padding: EdgeInsets.only(
+            top: 7.0, left: 20, right: 20, bottom: isDesktop ? 0 : 5),
         physics: BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -48,8 +53,7 @@ class LabelPicker extends StatelessWidget {
                     },
                     borderRadius: BorderRadius.circular(30),
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                      padding: labelPadding,
                       decoration: BoxDecoration(
                         color: Colors.transparent,
                         border: Border.all(
@@ -71,14 +75,14 @@ class LabelPicker extends StatelessWidget {
                 );
               }
               return Padding(
-                padding: EdgeInsets.only(right: 5),
+                padding: EdgeInsets.only(right: 7),
                 child: InkWell(
                   onTap: () {
                     onLabelSelected.call(index);
                   },
                   borderRadius: BorderRadius.circular(30),
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                    padding: labelPadding,
                     decoration: BoxDecoration(
                       color: selectedIndices.contains(index)
                           ? themeController.currentTheme.accent
