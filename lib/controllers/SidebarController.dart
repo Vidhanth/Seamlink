@@ -30,6 +30,12 @@ class SidebarController extends GetxController {
       } catch (e) {}
   }
 
+  void reset() {
+    userAvatar(Uint8List(0));
+    labels.clear();
+    labelIndex(-2);
+  }
+
   @override
   void onInit() async {
     super.onInit();

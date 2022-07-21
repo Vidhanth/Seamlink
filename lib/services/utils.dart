@@ -34,12 +34,9 @@ Future<void> logout() async {
   }
   await SharedPreferences.getInstance()
     ..remove('username');
-  Get.find<UserController>().username('');
-  Get.find<SidebarController>().userAvatar(Uint8List(0));
-  Get.find<SidebarController>().labels.clear();
-  Get.find<SidebarController>().labelIndex(-2);
-  Get.find<HomeController>().linksList.clear();
-  Get.find<HomeController>().showSidebar(false);
+  Get.find<UserController>().reset();
+  Get.find<SidebarController>().reset();
+  Get.find<HomeController>().reset();
 }
 
 void showLinkOptions(context, Link link) {

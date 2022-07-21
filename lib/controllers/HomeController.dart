@@ -90,6 +90,12 @@ class HomeController extends GetxController {
     }
   }
 
+  void reset() {
+    linksList.clear();
+    showSidebar(false);
+    searchText('');
+  }
+
   List getMenuItems() {
     if (customMenubarItems.isNotEmpty) {
       return customMenubarItems;
