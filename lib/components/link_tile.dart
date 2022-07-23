@@ -381,7 +381,7 @@ class LinkTile extends StatelessWidget {
                         )
                       ],
                     ),
-                    if (link.progress != null)
+                    if (link.progress != null && link.progress != 0)
                       LinearProgressIndicator(
                         value: link.progress,
                         color: Colors.red,
