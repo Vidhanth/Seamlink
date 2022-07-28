@@ -136,10 +136,11 @@ class LinkTile extends StatelessWidget {
                 if (await _confirmDismiss()) {onDismissed.call(null)}
               },
             ),
-            OpenAndDeleteIntent: CallbackAction<OpenAndDeleteIntent>(
-              onInvoke: (OpenAndDeleteIntent intent) =>
-                  {openAndDelete(context, link)},
-            ),
+            if (link.url.isValidLink)
+              OpenAndDeleteIntent: CallbackAction<OpenAndDeleteIntent>(
+                onInvoke: (OpenAndDeleteIntent intent) =>
+                    {openAndDelete(context, link)},
+              ),
             CopyIntent: CallbackAction<CopyIntent>(
               onInvoke: (CopyIntent intent) {
                 link.url.copyToClipboard();
