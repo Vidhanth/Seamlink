@@ -22,9 +22,26 @@ import 'package:seamlink/services/extensions.dart';
 import 'package:seamlink/services/parsers/youtube_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
 
 String noteOrLink(String url) {
   return url.isValidLink ? "link" : "note";
+}
+
+Future<String> getDataFromApi(String url) async {
+  var request = http.Request(
+      'GET',
+      Uri.parse(
+        url,
+      ));
+
+  http.StreamedResponse response = await request.send();
+
+  if (response.statusCode == 200) {
+    return await response.stream.bytesToString();
+  } else {
+    throw Exception();
+  }
 }
 
 Future<void> logout() async {

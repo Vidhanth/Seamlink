@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
 import 'package:seamlink/models/link.dart';
 import 'package:seamlink/services/parsers/url_parser.dart';
+import 'package:seamlink/services/utils.dart';
 import '../extensions.dart';
 
 class YoutubeData {
@@ -74,23 +74,10 @@ class YoutubeData {
     String id, {
     bool playlist = false,
   }) async {
-    String url = playlist
+    String apiUrl = playlist
         ? 'https://www.googleapis.com/youtube/v3/playlists?id=$id&key=AIzaSyDOAca4V6Nll2OcJKVDl7n74VN5n_SzbrI&part=snippet&part=contentDetails&fields=items(snippet(title,channelTitle,channelId,thumbnails(maxres/url,high/url)),contentDetails/itemCount)'
         : 'https://www.googleapis.com/youtube/v3/videos?id=$id&key=AIzaSyDOAca4V6Nll2OcJKVDl7n74VN5n_SzbrI&part=snippet&part=contentDetails&fields=items(snippet(title,channelTitle,channelId,thumbnails(maxres/url,high/url)),contentDetails/duration)';
-
-    var request = http.Request(
-        'GET',
-        Uri.parse(
-          url,
-        ));
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      return await response.stream.bytesToString();
-    } else {
-      throw Exception();
-    }
+    return await getDataFromApi(apiUrl);
   }
 
   static String _getVideoID(String url) {
@@ -148,20 +135,8 @@ class YoutubeData {
   }
 
   static Future<String> _getChannelDetails(String id) async {
-    String url =
+    String apiUrl =
         'https://www.googleapis.com/youtube/v3/channels?id=$id&key=AIzaSyDOAca4V6Nll2OcJKVDl7n74VN5n_SzbrI&part=snippet&fields=items(snippet(thumbnails(default/url)))';
-    var request = http.Request(
-        'GET',
-        Uri.parse(
-          url,
-        ));
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      return await response.stream.bytesToString();
-    } else {
-      throw Exception();
-    }
+    return await getDataFromApi(apiUrl);
   }
 }

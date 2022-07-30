@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
 import 'package:seamlink/models/link.dart';
 import 'package:seamlink/services/parsers/url_parser.dart';
+import 'package:seamlink/services/utils.dart';
 
 class RedditData {
   static Future<Link> getDetails(Link link) async {
@@ -40,18 +40,7 @@ class RedditData {
   }
 
   static Future<String> _getDataFromApi(String query) async {
-    var request = http.Request(
-        'GET',
-        Uri.parse(
-          'https://api.reddit.com/api/info/?$query',
-        ));
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      return await response.stream.bytesToString();
-    } else {
-      throw Exception();
-    }
+    String apiUrl = 'https://api.reddit.com/api/info/?$query';
+    return await getDataFromApi(apiUrl);
   }
 }
