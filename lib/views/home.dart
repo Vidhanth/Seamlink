@@ -163,40 +163,30 @@ class Home extends StatelessWidget {
                               right: 20,
                               child: Row(
                                 children: [
-                                  AnimatedOpacity(
-                                    duration: 300.milliseconds,
-                                    opacity: (isDesktop ||
-                                            homeController.linksList.isNotEmpty)
-                                        ? 1
-                                        : 0,
-                                    child: FloatingActionButton(
-                                      heroTag: 'refresh',
-                                      onPressed: () {
-                                        homeController.refreshLinks();
-                                      },
-                                      hoverColor: themeController
-                                          .currentTheme.contrastText
-                                          .withOpacity(0.24),
-                                      focusColor: themeController
-                                          .currentTheme.contrastText
-                                          .withOpacity(0.24),
-                                      splashColor: themeController
-                                          .currentTheme.contrastText
-                                          .withOpacity(0.24),
-                                      backgroundColor:
-                                          themeController.currentTheme.accent,
-                                      child: Icon(
-                                        Icons.refresh,
-                                        color: themeController
-                                            .currentTheme.contrastText,
-                                      ),
+                                  FloatingActionButton(
+                                    heroTag: 'refresh',
+                                    onPressed: () {
+                                      homeController.refreshLinks();
+                                    },
+                                    hoverColor: themeController
+                                        .currentTheme.contrastText
+                                        .withOpacity(0.24),
+                                    focusColor: themeController
+                                        .currentTheme.contrastText
+                                        .withOpacity(0.24),
+                                    splashColor: themeController
+                                        .currentTheme.contrastText
+                                        .withOpacity(0.24),
+                                    backgroundColor:
+                                        themeController.currentTheme.accent,
+                                    child: Icon(
+                                      Icons.refresh,
+                                      color: themeController
+                                          .currentTheme.contrastText,
                                     ),
                                   ),
                                   SizedBox(
-                                    width: (isDesktop ||
-                                            homeController.linksList.isNotEmpty)
-                                        ? 5
-                                        : 0,
+                                    width: 5,
                                   ),
                                   OpenContainer(
                                     closedColor: themeController
