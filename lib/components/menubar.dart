@@ -75,7 +75,7 @@ class MenuBar extends StatelessWidget {
               ],
             ),
           ],
-          body: child,
+          child: child,
         );
       });
     return child;

@@ -122,9 +122,10 @@ class FilterRow extends StatelessWidget {
               sidebarController.labelIndex(-2);
             },
             style: TextButton.styleFrom(
+              foregroundColor: themeController.currentTheme.foreground,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-              primary: themeController.currentTheme.foreground,
+                borderRadius: BorderRadius.circular(10),
+              ),
               textStyle: GoogleFonts.poppins(
                 fontWeight: FontWeight.w600,
               ),
