@@ -288,36 +288,33 @@ class _NewLinkState extends State<NewLink> {
                             width: 15,
                           ),
                           Obx(
-                            () => IgnorePointer(
-                              ignoring: controller.isSaving.value,
-                              child: FloatingActionButton(
-                                backgroundColor:
-                                    themeController.currentTheme.accent,
-                                focusColor: themeController
-                                    .currentTheme.contrastText
-                                    .withOpacity(0.24),
-                                splashColor: themeController
-                                    .currentTheme.contrastText
-                                    .withOpacity(0.24),
-                                hoverColor: themeController
-                                    .currentTheme.contrastText
-                                    .withOpacity(0.24),
-                                child: controller.isSaving.value
-                                    ? SpinKitChasingDots(
-                                        color: themeController
-                                            .currentTheme.contrastText,
-                                        size: 20,
-                                      )
-                                    : Icon(
-                                        Icons.check_rounded,
-                                        color: themeController
-                                            .currentTheme.contrastText,
-                                      ),
-                                onPressed: () async {
-                                  await hideKeyboard(context);
-                                  await save();
-                                },
-                              ),
+                            () => FloatingActionButton(
+                              backgroundColor:
+                                  themeController.currentTheme.accent,
+                              focusColor: themeController
+                                  .currentTheme.contrastText
+                                  .withOpacity(0.24),
+                              splashColor: themeController
+                                  .currentTheme.contrastText
+                                  .withOpacity(0.24),
+                              hoverColor: themeController
+                                  .currentTheme.contrastText
+                                  .withOpacity(0.24),
+                              child: controller.isSaving.value
+                                  ? SpinKitChasingDots(
+                                      color: themeController
+                                          .currentTheme.contrastText,
+                                      size: 20,
+                                    )
+                                  : Icon(
+                                      Icons.check_rounded,
+                                      color: themeController
+                                          .currentTheme.contrastText,
+                                    ),
+                              onPressed: () async {
+                                await hideKeyboard(context);
+                                await save();
+                              },
                             ),
                           ),
                         ],
@@ -353,6 +350,7 @@ class _NewLinkState extends State<NewLink> {
   }
 
   Future<void> save() async {
+    if (controller.isSaving.value) return;
     if (linkController!.text.trim().isEmpty) {
       showSnackBar("Please enter a note", error: true);
       return;
