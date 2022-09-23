@@ -37,7 +37,7 @@ dependencies:
   fade_shimmer: ^2.0.1
   octo_image: ^1.0.0+1
   flutter_svg:
-  share_plus: ^3.0.4
+  share_plus: ^4.4.0
   intl: ^0.17.0
   flutter_dotenv:
   window_size:
