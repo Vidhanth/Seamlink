@@ -79,20 +79,24 @@ class HomeController extends GetxController {
     isLoading(false);
   }
 
-  void toggleSidebar() {
+  void toggleSidebar({bool? value}) {
     if (isMobile) {
+      if (value != null) {
+        if (value == showSidebar.value) return;
+      }
       if (showSidebar.isTrue) {
         menuIconController?.reverse();
       } else {
         menuIconController?.forward();
       }
-      showSidebar.toggle();
+      if (value != null) showSidebar(value);
+      if (value == null) showSidebar.toggle();
     }
   }
 
   void reset() {
     linksList.clear();
-    showSidebar(false);
+    toggleSidebar(value: false);
     searchText('');
   }
 

@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:seamlink/components/avatar.dart';
 import 'package:seamlink/components/color_picker.dart';
 import 'package:seamlink/components/custom_titlebar.dart';
 import 'package:seamlink/components/label_picker.dart';
@@ -89,12 +90,12 @@ class _NewLinkState extends State<NewLink> {
                       padding:
                           const EdgeInsets.only(right: 25, top: 10, left: 5),
                       child: Row(
-                        mainAxisAlignment: isScreenWide(context)
-                            ? MainAxisAlignment.start
-                            : MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(right: 20),
+                            padding: EdgeInsets.only(
+                              right: isScreenWide(context) ? 20 : 5,
+                            ),
                             child: InkWell(
                               onTap: () async {
                                 await hideKeyboard(context);
@@ -103,7 +104,7 @@ class _NewLinkState extends State<NewLink> {
                               borderRadius: BorderRadius.circular(200),
                               child: Icon(
                                 Icons.chevron_left_rounded,
-                                size: 60,
+                                size: isScreenWide(context) ? 60 : 50,
                                 color: themeController.currentTheme.foreground,
                               ),
                             ),
@@ -113,11 +114,14 @@ class _NewLinkState extends State<NewLink> {
                                 ? 'Edit ${noteOrLink(widget.link!.url)}'
                                 : 'New note',
                             style: GoogleFonts.poppins(
-                              fontSize: 50,
+                              fontSize: isScreenWide(context) ? 50 : 45,
                               fontWeight: FontWeight.bold,
                               color: themeController.currentTheme.foreground,
                             ),
                           ),
+                          Spacer(),
+                          if (widget.sharedText?.isNotEmpty ?? false)
+                            if (!isDesktop) Avatar(),
                         ],
                       ),
                     ),

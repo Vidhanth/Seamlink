@@ -266,6 +266,84 @@ Future<bool?> newLabelDialog(
   );
 }
 
+Future<bool?> switchUserDialog(context, title, message,
+    {bool refreshOnSwitch = false}) async {
+  bool isSaving = false;
+  refreshOnSwitch = Get.find<HomeController>().showSidebar.value;
+  if (!refreshOnSwitch) {
+    refreshOnSwitch = Navigator.canPop(context);
+  }
+  Function(TextEditingController) onSubmitted = (controller) async {
+    if (isSaving) return false;
+    String newUser = controller.text.trim();
+    if (newUser == Get.find<UserController>().username.value)
+      return Result(true);
+    isSaving = true;
+    Result result = await Client.doesUserExist(newUser);
+    isSaving = false;
+    print(result.message);
+    if (result.success) {
+      if (result.message) {
+        Get.find<SidebarController>().reset();
+        Get.find<UserController>().username(newUser);
+        Get.find<SidebarController>().refreshLabels();
+        if (refreshOnSwitch) {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('username', newUser);
+          Get.find<HomeController>().reset();
+          Get.find<HomeController>().refreshLinks();
+          Get.find<HomeController>().toggleSidebar(value: false);
+        }
+        return Result(true, message: "Switched to $newUser");
+      } else {
+        return Result(false, message: "This user doesn't exist");
+      }
+    } else {
+      return Result(false, message: "Something went wrong.");
+    }
+  };
+  if (isScreenWide(context))
+    return await Get.dialog(
+      BottomDialog(
+        onSubmitted: (controller) async {
+          Result result = await onSubmitted.call(controller);
+          Get.back(result: result.success);
+          showSnackBar(result.message, error: !result.success);
+        },
+        showTextField: true,
+        hint: "Username",
+        onCancel: () {
+          Get.back(result: false);
+        },
+        title: title,
+        message: message,
+        confirmText: "DONE",
+        cancelText: "CANCEL",
+      ),
+      useSafeArea: true,
+    );
+
+  return await Get.bottomSheet(
+    BottomDialog(
+      onSubmitted: (controller) async {
+        Result result = await onSubmitted.call(controller);
+        Get.back(result: result.success);
+        showSnackBar(result.message, error: !result.success);
+      },
+      showTextField: true,
+      hint: "Username",
+      onCancel: () {
+        Get.back(result: false);
+      },
+      title: title,
+      message: message,
+      confirmText: "DONE",
+      cancelText: "CANCEL",
+    ),
+    isScrollControlled: true,
+  );
+}
+
 Future<bool?> editLabelDialog(
   context,
   index,

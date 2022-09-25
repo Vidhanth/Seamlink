@@ -1,9 +1,9 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:seamlink/components/avatar.dart';
 import 'package:seamlink/components/label_tile.dart';
 import 'package:seamlink/constants/enum.dart';
 import 'package:seamlink/controllers/HomeController.dart';
@@ -268,23 +268,7 @@ class Sidebar extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Container(
-                      height: 40,
-                      width: 40,
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: themeController.currentTheme.splashColor,
-                      ),
-                      child: Obx(
-                        () => controller.userAvatar.value.length == 0
-                            ? Icon(LineIcons.user)
-                            : SvgPicture.memory(
-                                controller.userAvatar.value,
-                                height: 30,
-                              ),
-                      ),
-                    ),
+                    Avatar(),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
