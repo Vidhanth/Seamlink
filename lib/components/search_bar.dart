@@ -121,7 +121,7 @@ class _SearchBarState extends State<SearchBar> with TickerProviderStateMixin {
               showSortingMenu(context);
             },
             child: Padding(
-              padding: const EdgeInsets.all(15.0),
+              padding: const EdgeInsets.only(left: 15.0, right: 10),
               child: Icon(
                 Icons.sort,
                 color: themeController.currentTheme.foreground,
