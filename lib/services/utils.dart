@@ -271,7 +271,11 @@ Future<bool?> switchUserDialog(context, title, message,
   bool isSaving = false;
   refreshOnSwitch = Get.find<HomeController>().showSidebar.value;
   if (!refreshOnSwitch) {
-    refreshOnSwitch = Navigator.canPop(context);
+    if (isDesktop) {
+      refreshOnSwitch = true;
+    } else {
+      refreshOnSwitch = Navigator.canPop(context);
+    }
   }
   Function(TextEditingController) onSubmitted = (controller) async {
     if (isSaving) return false;
