@@ -142,7 +142,10 @@ class AllLinksView extends StatelessWidget {
                       onTap: () async {
                         hideKeyboard(context);
                         if (linksList[index].url.isValidLink) {
-                          launchUrl(Uri.parse(linksList[index].url));
+                          launchUrl(
+                            Uri.parse(linksList[index].url),
+                            mode: LaunchMode.externalApplication,
+                          );
                         } else {
                           Navigate.to(
                             page: NewLink(link: linksList[index]),
@@ -207,7 +210,10 @@ class AllLinksView extends StatelessWidget {
                       link: linksList[index],
                       onTap: () async {
                         if (linksList[index].url.isValidLink) {
-                          launchUrl(Uri.parse(linksList[index].url));
+                          launchUrl(
+                            Uri.parse(linksList[index].url),
+                            mode: LaunchMode.externalApplication,
+                          );
                         } else {
                           Navigate.to(
                             page: NewLink(link: linksList[index]),

@@ -553,7 +553,10 @@ Future<void> openAndDelete(context, Link link) async {
   if (await confirmDialog(context, "Open and delete link?",
           "Are you sure you want to open and then delete this link? This cannot be undone.") ??
       false) {
-    if (await launchUrl(Uri.parse(link.url))) {
+    if (await launchUrl(
+      Uri.parse(link.url),
+      mode: LaunchMode.externalApplication,
+    )) {
       await Get.find<HomeController>().deleteLink(context, link.uid);
       Get.back();
     } else {
