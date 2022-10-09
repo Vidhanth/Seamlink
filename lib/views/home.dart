@@ -35,14 +35,15 @@ class Home extends StatelessWidget {
       },
       child: MenuBar(
         child: Builder(builder: (context) {
-          if (homeController.pendingSharedLink.isNotEmpty) {
+          String pendingLink = homeController.pendingSharedLink;
+          homeController.pendingSharedLink = "";
+          if (pendingLink.isNotEmpty) {
             Future.delayed(100.milliseconds, () {
               Navigate.to(
                 page: NewLink(
-                  sharedText: homeController.pendingSharedLink,
+                  sharedText: pendingLink,
                 ),
               );
-              homeController.pendingSharedLink = '';
             });
           }
           return Scaffold(

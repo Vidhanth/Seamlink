@@ -103,6 +103,14 @@ class _MainActivityState extends State<MainActivity>
       showSnackBar('Please log in first', error: true);
       return '';
     }
+    if (isIOS && sharedText.isNotEmpty) {
+      Navigate.to(
+        page: NewLink(
+          sharedText: sharedText,
+        ),
+      );
+      return '';
+    }
     return (sharedText);
   }
 
