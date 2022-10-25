@@ -13,7 +13,7 @@
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		7D4FAD2E26B12E1A0063A783 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D4FAD2D26B12E1A0063A783 /* ShareViewController.swift */; };
 		7D4FAD3126B12E1A0063A783 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D4FAD2F26B12E1A0063A783 /* MainInterface.storyboard */; };
-		7D4FAD3526B12E1A0063A783 /* Share Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 7D4FAD2B26B12E1A0063A783 /* Share Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		7D4FAD3526B12E1A0063A783 /* Share Extension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7D4FAD2B26B12E1A0063A783 /* Share Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
@@ -30,15 +30,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		7D4FAD3626B12E1A0063A783 /* Embed App Extensions */ = {
+		7D4FAD3626B12E1A0063A783 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				7D4FAD3526B12E1A0063A783 /* Share Extension.appex in Embed App Extensions */,
+				7D4FAD3526B12E1A0063A783 /* Share Extension.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		9705A1C41CF9048500538489 /* Embed Frameworks */ = {
@@ -207,7 +207,7 @@
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				32E8D47DD7C895EA723668E1 /* [CP] Embed Pods Frameworks */,
-				7D4FAD3626B12E1A0063A783 /* Embed App Extensions */,
+				7D4FAD3626B12E1A0063A783 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
