@@ -21,10 +21,10 @@ class MenuBar extends StatelessWidget {
         bool isLoggedIn = Get.find<UserController>().username.isNotEmpty;
 
         return PlatformMenuBar(
-          menus: <MenuItem>[
+          menus: <PlatformMenuItem>[
             PlatformMenu(
               label: 'Seamlink',
-              menus: <MenuItem>[
+              menus: <PlatformMenuItem>[
                 if (isLoggedIn) ...Get.find<HomeController>().getMenuItems(),
                 PlatformMenuItemGroup(
                   members: [

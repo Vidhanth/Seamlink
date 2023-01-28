@@ -2,7 +2,7 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart' hide MenuItem;
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
@@ -53,8 +53,7 @@ class _NewLinkState extends State<NewLink> {
     controller = Get.put(NewLinkController());
     if (linkController == null) {
       titleController ??= TextEditingController(text: widget.link?.title);
-      linkController ??=
-          TextEditingController(text: widget.link?.url ?? widget.sharedText);
+      linkController ??= TextEditingController(text: widget.link?.url ?? widget.sharedText);
       controller.selectedColorIndex.value = widget.link?.colorIndex ?? 0;
       controller.selectedLabelIndex.value += widget.link?.labels ?? [];
       if (widget.link != null) {
@@ -87,8 +86,7 @@ class _NewLinkState extends State<NewLink> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding:
-                          const EdgeInsets.only(right: 25, top: 10, left: 5),
+                      padding: const EdgeInsets.only(right: 25, top: 10, left: 5),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -110,9 +108,7 @@ class _NewLinkState extends State<NewLink> {
                             ),
                           ),
                           Text(
-                            widget.link != null
-                                ? 'Edit ${noteOrLink(widget.link!.url)}'
-                                : 'New note',
+                            widget.link != null ? 'Edit ${noteOrLink(widget.link!.url)}' : 'New note',
                             style: GoogleFonts.poppins(
                               fontSize: isScreenWide(context) ? 50 : 45,
                               fontWeight: FontWeight.bold,
@@ -130,8 +126,7 @@ class _NewLinkState extends State<NewLink> {
                       scrollPhysics: BouncingScrollPhysics(),
                       controller: titleController,
                       onChanged: (title) {
-                        controller.autoTitle(title.trim().isEmpty &&
-                            linkController!.text.trim().isValidLink);
+                        controller.autoTitle(title.trim().isEmpty && linkController!.text.trim().isValidLink);
                         refreshAutotitle?.call(() {});
                       },
                       style: GoogleFonts.poppins(
@@ -142,8 +137,7 @@ class _NewLinkState extends State<NewLink> {
                       maxLines: 1,
                       cursorColor: themeController.currentTheme.subtext,
                       decoration: InputDecoration(
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                         border: OutlineInputBorder(borderSide: BorderSide.none),
                         hintText: 'Title',
                         hintStyle: GoogleFonts.poppins(
@@ -161,9 +155,7 @@ class _NewLinkState extends State<NewLink> {
                           refreshAutotitle?.call(() {});
                         },
                         cursorColor: themeController.currentTheme.subtext,
-                        autofocus: ((widget.link?.url.isEmpty ?? true) &&
-                                (widget.sharedText?.isEmpty ?? true)) ||
-                            isDesktop,
+                        autofocus: ((widget.link?.url.isEmpty ?? true) && (widget.sharedText?.isEmpty ?? true)) || isDesktop,
                         style: GoogleFonts.poppins(
                           fontWeight: FontWeight.normal,
                           fontSize: 20,
@@ -196,8 +188,7 @@ class _NewLinkState extends State<NewLink> {
                                 if (linkController!.text.trim().isValidLink)
                                   controller.autoTitle(true);
                                 else {
-                                  showSnackBar("Please enter a valid link",
-                                      error: true);
+                                  showSnackBar("Please enter a valid link", error: true);
                                 }
                               } else {
                                 controller.autoTitle(false);
@@ -207,14 +198,11 @@ class _NewLinkState extends State<NewLink> {
                             child: Row(
                               children: [
                                 Checkbox(
-                                  materialTapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
+                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                   value: controller.autoTitle.value,
                                   onChanged: (val) {
                                     if (val!) {
-                                      if (linkController!.text
-                                          .trim()
-                                          .isValidLink)
+                                      if (linkController!.text.trim().isValidLink)
                                         controller.autoTitle(true);
                                       else {
                                         showSnackBar(
@@ -228,18 +216,13 @@ class _NewLinkState extends State<NewLink> {
                                     setState(() {});
                                   },
                                   side: BorderSide(
-                                    color:
-                                        themeController.currentTheme.foreground,
+                                    color: themeController.currentTheme.foreground,
                                     width: 2,
                                   ),
-                                  focusColor:
-                                      themeController.currentTheme.focusColor,
-                                  hoverColor:
-                                      themeController.currentTheme.hoverColor,
-                                  checkColor:
-                                      themeController.currentTheme.contrastText,
-                                  activeColor:
-                                      themeController.currentTheme.accent,
+                                  focusColor: themeController.currentTheme.focusColor,
+                                  hoverColor: themeController.currentTheme.hoverColor,
+                                  checkColor: themeController.currentTheme.contrastText,
+                                  activeColor: themeController.currentTheme.accent,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(30),
                                   ),
@@ -248,8 +231,7 @@ class _NewLinkState extends State<NewLink> {
                                   child: AutoSizeText(
                                     'Fetch title from link',
                                     style: GoogleFonts.poppins(
-                                      color: themeController.currentTheme.accent
-                                          .withOpacity(0.75),
+                                      color: themeController.currentTheme.accent.withOpacity(0.75),
                                       fontSize: 17,
                                     ),
                                     minFontSize: 1,
@@ -274,8 +256,7 @@ class _NewLinkState extends State<NewLink> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(
-                          top: 5, bottom: 20, left: 15, right: 20),
+                      padding: EdgeInsets.only(top: 5, bottom: 20, left: 15, right: 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -284,8 +265,7 @@ class _NewLinkState extends State<NewLink> {
                               onColorSelected: (index) {
                                 controller.selectedColorIndex.value = index;
                               },
-                              selectedIndex:
-                                  controller.selectedColorIndex.value,
+                              selectedIndex: controller.selectedColorIndex.value,
                             ),
                           ),
                           SizedBox(
@@ -293,27 +273,18 @@ class _NewLinkState extends State<NewLink> {
                           ),
                           Obx(
                             () => FloatingActionButton(
-                              backgroundColor:
-                                  themeController.currentTheme.accent,
-                              focusColor: themeController
-                                  .currentTheme.contrastText
-                                  .withOpacity(0.24),
-                              splashColor: themeController
-                                  .currentTheme.contrastText
-                                  .withOpacity(0.24),
-                              hoverColor: themeController
-                                  .currentTheme.contrastText
-                                  .withOpacity(0.24),
+                              backgroundColor: themeController.currentTheme.accent,
+                              focusColor: themeController.currentTheme.contrastText.withOpacity(0.24),
+                              splashColor: themeController.currentTheme.contrastText.withOpacity(0.24),
+                              hoverColor: themeController.currentTheme.contrastText.withOpacity(0.24),
                               child: controller.isSaving.value
                                   ? SpinKitChasingDots(
-                                      color: themeController
-                                          .currentTheme.contrastText,
+                                      color: themeController.currentTheme.contrastText,
                                       size: 20,
                                     )
                                   : Icon(
                                       Icons.check_rounded,
-                                      color: themeController
-                                          .currentTheme.contrastText,
+                                      color: themeController.currentTheme.contrastText,
                                     ),
                               onPressed: () async {
                                 await hideKeyboard(context);

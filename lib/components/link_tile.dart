@@ -473,7 +473,7 @@ class LinkTile extends StatelessWidget {
 
   Widget _buildShimmer({
     double? height,
-    bool rounded: false,
+    bool rounded = false,
   }) {
     if (rounded)
       return FadeShimmer.round(

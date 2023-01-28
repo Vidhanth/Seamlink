@@ -23,57 +23,46 @@ class Client {
     String? sortBy,
     bool? ascending,
   }) async {
-    final response = await client
-        .from('SavedLinks')
-        .select('*')
-        .eq('user', _userController.username.value)
-        .order(sortBy ?? 'timestamp', ascending: ascending ?? false)
-        .execute();
-    if (response.error == null) {
-      return response.data;
-    } else {
+    try {
+      final response = await client
+          .from('SavedLinks')
+          .select('*')
+          .eq('user', _userController.username.value)
+          .order(sortBy ?? 'timestamp', ascending: ascending ?? false);
+      return response;
+    } catch (e) {
       return 'e';
     }
   }
 
-  static Future<dynamic> fetchColumns(String columns) async {
-    final response = await client
-        .from(linksTabel)
-        .select(columns)
-        .eq('user', _userController.username.value)
-        .execute();
-    if (response.error == null) {
-      return response.data;
-    } else {
-      return '';
+  static Future<Result> getLabels(String user) async {
+    try {
+      final response = await client.from(usersTabel).select('labels').eq('id', user);
+      return Result(
+        true,
+        message: response.first["labels"],
+      );
+    } catch (e) {
+      return Result(false);
     }
   }
 
-  static Future<Result> getLabels(String user) async {
-    final response =
-        await client.from(usersTabel).select('labels').eq('id', user).execute();
-    return Result(
-      response.error == null,
-      message: response.data?.first["labels"],
-    );
-  }
-
   static Future<Result> updateLabels(String user, List labels) async {
-    final response = await client
-        .from(usersTabel)
-        .update({"labels": labels})
-        .eq('id', user)
-        .execute();
-    return Result(
-      response.error == null,
-      message: response.data?.first["labels"],
-    );
+    try {
+      await client.from(usersTabel).update({"labels": labels}).eq('id', user);
+      return Result(true);
+    } catch (e) {
+      return Result(false);
+    }
   }
 
   static Future<Result> doesUserExist(String user) async {
-    final response =
-        await client.from(usersTabel).select('id').eq('id', user).execute();
-    return Result(response.error == null, message: response.data?.isNotEmpty);
+    try {
+      final response = await client.from(usersTabel).select('id').eq('id', user);
+      return Result(true, message: response.isNotEmpty);
+    } catch (e) {
+      return Result(false);
+    }
   }
 
   static Future<Result> saveLink({
@@ -84,61 +73,65 @@ class Client {
     required List<int> labels,
     required bool autotitle,
   }) async {
-    var response;
-    if (uid != null) {
-      String updatedAt = DateTime.now().toUtc().toIso8601String();
-      response = await client.from(linksTabel).upsert([
-        {
-          "uid": uid,
-          "url": url,
-          "title": title,
-          "color": colorIndex,
-          "labels": labels,
-          "user": _userController.username.value,
-          "autotitle": autotitle,
-          "updated_at": updatedAt,
-        },
-      ]).execute();
-    } else {
-      if (_userController.username.value.isEmpty) {
-        return Result(
-          false,
-          message: 'Make sure you are logged in first.',
-        );
+    try {
+      var response;
+      if (uid != null) {
+        String updatedAt = DateTime.now().toUtc().toIso8601String();
+        response = await client.from(linksTabel).upsert([
+          {
+            "uid": uid,
+            "url": url,
+            "title": title,
+            "color": colorIndex,
+            "labels": labels,
+            "user": _userController.username.value,
+            "autotitle": autotitle,
+            "updated_at": updatedAt,
+          },
+        ]).select();
+      } else {
+        if (_userController.username.value.isEmpty) {
+          return Result(
+            false,
+            message: 'Make sure you are logged in first.',
+          );
+        }
+        response = await client.from(linksTabel).insert([
+          {
+            "url": url,
+            "title": autotitle ? "" : title,
+            "color": colorIndex,
+            "labels": labels,
+            "user": _userController.username.value,
+            "autotitle": autotitle,
+          },
+        ]).select();
       }
-      response = await client.from(linksTabel).insert([
-        {
-          "url": url,
-          "title": autotitle ? "" : title,
-          "color": colorIndex,
-          "labels": labels,
-          "user": _userController.username.value,
-          "autotitle": autotitle,
-        },
-      ]).execute();
+      return Result(true, message: response.first);
+    } catch (e) {
+      return Result(false);
     }
-    return Result(
-      response.error == null,
-      message: response.data?.first,
-    );
   }
 
   static Future<Result> updateLinks(requestData) async {
     if (requestData.isEmpty) {
       return Result(true);
     }
-    var response = await client.from(linksTabel).upsert(requestData).execute();
-    return Result(
-      response.error == null,
-      message: response.data?.first,
-    );
+    try {
+      await client.from(linksTabel).upsert(requestData);
+      return Result(true);
+    } catch (e) {
+      return Result(false);
+    }
   }
 
   static Future<Result> deleteLink(String uid) async {
-    final response =
-        await client.from(linksTabel).delete().eq('uid', uid).execute();
-    Result result = Result(response.error == null,
-        message: response.error == null ? response.data?.first["uid"] : null);
-    return result;
+    try {
+      await client.from(linksTabel).delete().eq('uid', uid);
+      Result result = Result(true);
+      return result;
+    } catch (e) {
+      return Result(false);
+    }
   }
 }
