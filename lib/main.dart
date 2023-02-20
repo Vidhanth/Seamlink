@@ -164,10 +164,13 @@ class _MainActivityState extends State<MainActivity>
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
               canvasColor: themeController.currentTheme.backgroundColor,
-              backgroundColor: themeController.currentTheme.backgroundColor,
+              colorScheme: Theme.of(context).colorScheme.copyWith(
+                    background: themeController.currentTheme.backgroundColor,
+                    brightness: ThemeController.isDark
+                        ? Brightness.dark
+                        : Brightness.light,
+                  ),
               textTheme: GoogleFonts.poppinsTextTheme(),
-              brightness:
-                  ThemeController.isDark ? Brightness.dark : Brightness.light,
             ),
             color: themeController.currentTheme.backgroundColor,
             home: Builder(
