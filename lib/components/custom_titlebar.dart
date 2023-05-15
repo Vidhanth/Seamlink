@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide SearchBar;
 import 'package:get/get.dart';
 import 'package:seamlink/components/search_bar.dart';
 import 'package:seamlink/controllers/ThemeController.dart';
