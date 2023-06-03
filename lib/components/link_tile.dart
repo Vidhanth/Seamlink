@@ -225,7 +225,8 @@ class LinkTile extends StatelessWidget {
                                   return Padding(
                                     padding: const EdgeInsets.only(
                                         right: 3.0, bottom: 5, top: 0),
-                                    child: data == null
+                                    child: data == null || Get.find<SidebarController>()
+                                                    .labels.isEmpty
                                         ? Padding(
                                             padding: const EdgeInsets.only(
                                                 bottom: 5.0, top: 0),
