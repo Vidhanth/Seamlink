@@ -26,8 +26,7 @@ class FilterRow extends StatelessWidget {
             ),
             child: FadeIn(
               child: FilterChip(
-                backgroundColor:
-                    themeController.currentTheme.foreground.withOpacity(0.10),
+                backgroundColor: themeController.currentTheme.foreground.withOpacity(0.10),
                 onSelected: (val) {
                   sidebarController.selectedType(NoteType.ALL);
                 },
@@ -47,10 +46,7 @@ class FilterRow extends StatelessWidget {
                 labelStyle: GoogleFonts.poppins(
                   color: themeController.currentTheme.foreground,
                 ),
-                label: Text(
-                    sidebarController.selectedType.value == NoteType.LINK
-                        ? "Links"
-                        : "Notes"),
+                label: Text(sidebarController.selectedType.value == NoteType.LINK ? "Links" : "Notes"),
               ),
             ),
           ),
@@ -58,8 +54,7 @@ class FilterRow extends StatelessWidget {
           sidebarController.labelIndex.value == -1
               ? FadeIn(
                   child: FilterChip(
-                    backgroundColor: themeController.currentTheme.foreground
-                        .withOpacity(0.10),
+                    backgroundColor: themeController.currentTheme.foreground.withOpacity(0.10),
                     onSelected: (val) {
                       sidebarController.labelIndex(-2);
                     },
@@ -86,8 +81,7 @@ class FilterRow extends StatelessWidget {
                 )
               : FadeIn(
                   child: FilterChip(
-                    backgroundColor: themeController.currentTheme.foreground
-                        .withOpacity(0.10),
+                    backgroundColor: themeController.currentTheme.foreground.withOpacity(0.10),
                     onSelected: (val) {
                       sidebarController.labelIndex(-2);
                     },
@@ -108,13 +102,11 @@ class FilterRow extends StatelessWidget {
                       color: themeController.currentTheme.foreground,
                     ),
                     label: Text(
-                      sidebarController
-                          .labels[sidebarController.labelIndex.value],
+                      sidebarController.labels[sidebarController.labelIndex.value],
                     ),
                   ),
                 ),
-        if (sidebarController.selectedType.value != NoteType.ALL ||
-            sidebarController.labelIndex.value != -2) ...[
+        if (sidebarController.selectedType.value != NoteType.ALL || sidebarController.labelIndex.value != -2) ...[
           Spacer(),
           TextButton(
             onPressed: () {

@@ -11,8 +11,7 @@ enum Transitions {
 extension on Transitions {
   SharedAxisTransitionType get getTransition {
     if (this == Transitions.SCALED) return SharedAxisTransitionType.scaled;
-    if (this == Transitions.HORIZONTAL)
-      return SharedAxisTransitionType.horizontal;
+    if (this == Transitions.HORIZONTAL) return SharedAxisTransitionType.horizontal;
     return SharedAxisTransitionType.vertical;
   }
 }
@@ -71,8 +70,7 @@ class SharedAxisPageRoute extends PageRouteBuilder {
             return SharedAxisTransition(
               animation: primaryAnimation,
               secondaryAnimation: secondaryAnimation,
-              transitionType:
-                  transitionType ?? SharedAxisTransitionType.horizontal,
+              transitionType: transitionType ?? SharedAxisTransitionType.horizontal,
               child: child,
             );
           },

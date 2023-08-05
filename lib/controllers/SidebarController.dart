@@ -16,15 +16,13 @@ class SidebarController extends GetxController {
   var editMode = false.obs;
 
   Future refreshLabels() async {
-    Result result =
-        await Client.getLabels(Get.find<UserController>().username.value);
+    Result result = await Client.getLabels(Get.find<UserController>().username.value);
     if (result.success) {
       labels.value = result.message;
     }
     if (userAvatar.value.length == 0)
       try {
-        final String url =
-            '$avatarApi/${Get.find<UserController>().username}.svg';
+        final String url = '$avatarApi/${Get.find<UserController>().username}.svg';
         final response = await get(Uri.parse(url));
         userAvatar.value = response.bodyBytes;
       } catch (e) {}

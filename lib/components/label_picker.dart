@@ -9,16 +9,12 @@ class LabelPicker extends StatelessWidget {
   final Function(int) onLabelSelected;
   final List<int> selectedIndices;
 
-  static final labelPadding = isDesktop
-      ? EdgeInsets.symmetric(vertical: 4, horizontal: 10)
-      : EdgeInsets.symmetric(vertical: 6, horizontal: 13);
+  static final labelPadding = isDesktop ? EdgeInsets.symmetric(vertical: 4, horizontal: 10) : EdgeInsets.symmetric(vertical: 6, horizontal: 13);
 
   late final SidebarController sidebarController;
   final ThemeController themeController = Get.find();
 
-  LabelPicker(
-      {Key? key, required this.onLabelSelected, required this.selectedIndices})
-      : super(key: key) {
+  LabelPicker({Key? key, required this.onLabelSelected, required this.selectedIndices}) : super(key: key) {
     try {
       sidebarController = Get.find<SidebarController>();
     } catch (e) {
@@ -31,8 +27,7 @@ class LabelPicker extends StatelessWidget {
     List<dynamic> labelsList = sidebarController.labels;
     return Obx(
       () => SingleChildScrollView(
-        padding: EdgeInsets.only(
-            top: 7.0, left: 20, right: 20, bottom: isDesktop ? 0 : 5),
+        padding: EdgeInsets.only(top: 7.0, left: 20, right: 20, bottom: isDesktop ? 0 : 5),
         physics: BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -56,17 +51,14 @@ class LabelPicker extends StatelessWidget {
                       padding: labelPadding,
                       decoration: BoxDecoration(
                         color: Colors.transparent,
-                        border: Border.all(
-                            color: themeController.currentTheme.accent
-                                .withOpacity(0.6)),
+                        border: Border.all(color: themeController.currentTheme.accent.withOpacity(0.6)),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Center(
                         child: Text(
                           '+ Create new',
                           style: GoogleFonts.poppins(
-                            color: themeController.currentTheme.accent
-                                .withOpacity(0.6),
+                            color: themeController.currentTheme.accent.withOpacity(0.6),
                           ),
                         ),
                       ),
@@ -84,12 +76,8 @@ class LabelPicker extends StatelessWidget {
                   child: Container(
                     padding: labelPadding,
                     decoration: BoxDecoration(
-                      color: selectedIndices.contains(index)
-                          ? themeController.currentTheme.accent
-                          : Colors.transparent,
-                      border: Border.all(
-                          color: themeController.currentTheme.accent
-                              .withOpacity(0.6)),
+                      color: selectedIndices.contains(index) ? themeController.currentTheme.accent : Colors.transparent,
+                      border: Border.all(color: themeController.currentTheme.accent.withOpacity(0.6)),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Center(
@@ -98,8 +86,7 @@ class LabelPicker extends StatelessWidget {
                         style: GoogleFonts.poppins(
                           color: selectedIndices.contains(index)
                               ? themeController.currentTheme.contrastText
-                              : themeController.currentTheme.accent
-                                  .withOpacity(0.6),
+                              : themeController.currentTheme.accent.withOpacity(0.6),
                         ),
                       ),
                     ),

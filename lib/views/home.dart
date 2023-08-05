@@ -64,56 +64,33 @@ class Home extends StatelessWidget {
                                     height: 10,
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 10),
+                                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                     child: SearchBar(),
                                   ),
                                 ],
                                 Obx(
                                   () {
-                                    SidebarController sidebarController =
-                                        Get.find();
+                                    SidebarController sidebarController = Get.find();
                                     return Expanded(
                                       child: AnimatedSwitcher(
                                         duration: 500.milliseconds,
                                         child: homeController.isLoading.value
                                             ? Padding(
-                                                padding: EdgeInsets.only(
-                                                    bottom: 30.0),
-                                                child: SpinKitChasingDots(
-                                                    size: 30,
-                                                    color: themeController
-                                                        .currentTheme.accent),
+                                                padding: EdgeInsets.only(bottom: 30.0),
+                                                child: SpinKitChasingDots(size: 30, color: themeController.currentTheme.accent),
                                               )
                                             : Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   AnimatedContainer(
-                                                    margin: (sidebarController
-                                                                    .selectedType
-                                                                    .value !=
-                                                                NoteType.ALL ||
-                                                            sidebarController
-                                                                    .labelIndex
-                                                                    .value !=
-                                                                -2)
-                                                        ? EdgeInsets.only(
-                                                            left: 25,
-                                                            top: 0,
-                                                            bottom: 0)
+                                                    margin: (sidebarController.selectedType.value != NoteType.ALL ||
+                                                            sidebarController.labelIndex.value != -2)
+                                                        ? EdgeInsets.only(left: 25, top: 0, bottom: 0)
                                                         : EdgeInsets.zero,
                                                     width: double.infinity,
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    height: (sidebarController
-                                                                    .selectedType
-                                                                    .value !=
-                                                                NoteType.ALL ||
-                                                            sidebarController
-                                                                    .labelIndex
-                                                                    .value !=
-                                                                -2)
+                                                    alignment: Alignment.centerLeft,
+                                                    height: (sidebarController.selectedType.value != NoteType.ALL ||
+                                                            sidebarController.labelIndex.value != -2)
                                                         ? 50
                                                         : 0,
                                                     duration: 300.milliseconds,
@@ -122,32 +99,20 @@ class Home extends StatelessWidget {
                                                   ),
                                                   Expanded(
                                                     child: RefreshIndicator(
-                                                      color: themeController
-                                                          .currentTheme.accent,
+                                                      color: themeController.currentTheme.accent,
                                                       onRefresh: () async {
                                                         searchFocus.unfocus();
                                                         showSnackBar(
                                                           "Links were updated.",
                                                         );
-                                                        homeController
-                                                            .refreshLinks();
+                                                        homeController.refreshLinks();
                                                         return;
                                                       },
                                                       child: AllLinksView(
-                                                        allLinks: homeController
-                                                            .linksList.value,
-                                                        searchText:
-                                                            homeController
-                                                                .searchText
-                                                                .value,
-                                                        selectedType:
-                                                            sidebarController
-                                                                .selectedType
-                                                                .value,
-                                                        labelIndex:
-                                                            sidebarController
-                                                                .labelIndex
-                                                                .value,
+                                                        allLinks: homeController.linksList.value,
+                                                        searchText: homeController.searchText.value,
+                                                        selectedType: sidebarController.selectedType.value,
+                                                        labelIndex: sidebarController.labelIndex.value,
                                                       ),
                                                     ),
                                                   ),
@@ -169,66 +134,43 @@ class Home extends StatelessWidget {
                                     onPressed: () {
                                       homeController.refreshLinks();
                                     },
-                                    hoverColor: themeController
-                                        .currentTheme.contrastText
-                                        .withOpacity(0.24),
-                                    focusColor: themeController
-                                        .currentTheme.contrastText
-                                        .withOpacity(0.24),
-                                    splashColor: themeController
-                                        .currentTheme.contrastText
-                                        .withOpacity(0.24),
-                                    backgroundColor:
-                                        themeController.currentTheme.accent,
+                                    hoverColor: themeController.currentTheme.contrastText.withOpacity(0.24),
+                                    focusColor: themeController.currentTheme.contrastText.withOpacity(0.24),
+                                    splashColor: themeController.currentTheme.contrastText.withOpacity(0.24),
+                                    backgroundColor: themeController.currentTheme.accent,
                                     child: Icon(
                                       Icons.refresh,
-                                      color: themeController
-                                          .currentTheme.contrastText,
+                                      color: themeController.currentTheme.contrastText,
                                     ),
                                   ),
                                   SizedBox(
                                     width: 5,
                                   ),
                                   OpenContainer(
-                                    closedColor: themeController
-                                        .currentTheme.backgroundColor,
-                                    middleColor: themeController
-                                        .currentTheme.backgroundColor,
-                                    openColor: themeController
-                                        .currentTheme.backgroundColor,
+                                    closedColor: themeController.currentTheme.backgroundColor,
+                                    middleColor: themeController.currentTheme.backgroundColor,
+                                    openColor: themeController.currentTheme.backgroundColor,
                                     closedElevation: 15,
                                     closedShape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(100.0)),
+                                      borderRadius: BorderRadius.all(Radius.circular(100.0)),
                                     ),
                                     transitionDuration: 400.milliseconds,
-                                    transitionType:
-                                        ContainerTransitionType.fadeThrough,
+                                    transitionType: ContainerTransitionType.fadeThrough,
                                     closedBuilder: (_, openContainer) {
-                                      homeController.openNewLink =
-                                          openContainer;
+                                      homeController.openNewLink = openContainer;
                                       return FloatingActionButton(
                                         heroTag: 'new_link',
                                         onPressed: () {
-                                          hideKeyboard(context,
-                                              delay: 0.milliseconds);
+                                          hideKeyboard(context, delay: 0.milliseconds);
                                           openContainer.call();
                                         },
-                                        hoverColor: themeController
-                                            .currentTheme.contrastText
-                                            .withOpacity(0.24),
-                                        focusColor: themeController
-                                            .currentTheme.contrastText
-                                            .withOpacity(0.24),
-                                        splashColor: themeController
-                                            .currentTheme.contrastText
-                                            .withOpacity(0.24),
-                                        backgroundColor:
-                                            themeController.currentTheme.accent,
+                                        hoverColor: themeController.currentTheme.contrastText.withOpacity(0.24),
+                                        focusColor: themeController.currentTheme.contrastText.withOpacity(0.24),
+                                        splashColor: themeController.currentTheme.contrastText.withOpacity(0.24),
+                                        backgroundColor: themeController.currentTheme.accent,
                                         child: Icon(
                                           Icons.add,
-                                          color: themeController
-                                              .currentTheme.contrastText,
+                                          color: themeController.currentTheme.contrastText,
                                         ),
                                       );
                                     },

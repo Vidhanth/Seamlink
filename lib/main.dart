@@ -52,8 +52,7 @@ void main() async {
   }
 
   if (isMobile) {
-    SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
   }
   runApp(MainActivity());
 }
@@ -90,15 +89,13 @@ class MainActivity extends StatefulWidget {
   _MainActivityState createState() => _MainActivityState();
 }
 
-class _MainActivityState extends State<MainActivity>
-    with WidgetsBindingObserver {
+class _MainActivityState extends State<MainActivity> with WidgetsBindingObserver {
   StreamSubscription? _sharedTextSub;
 
   Future<String> getInitialSharedText() async {
     if (isDesktop) return '';
     String sharedText = (await ReceiveSharingIntent.getInitialText()) ?? '';
-    if (Get.find<UserController>().username.value.isEmpty &&
-        sharedText.isNotEmpty) {
+    if (Get.find<UserController>().username.value.isEmpty && sharedText.isNotEmpty) {
       Get.find<HomeController>().pendingSharedLink = sharedText;
       showSnackBar('Please log in first', error: true);
       return '';
@@ -123,8 +120,7 @@ class _MainActivityState extends State<MainActivity>
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     if (isMobile) {
-      _sharedTextSub =
-          ReceiveSharingIntent.getTextStream().listen((String value) {
+      _sharedTextSub = ReceiveSharingIntent.getTextStream().listen((String value) {
         if (Get.find<UserController>().username.value.isEmpty) {
           Get.find<HomeController>().pendingSharedLink = value;
           showSnackBar('Please log in first', error: true);
@@ -166,9 +162,7 @@ class _MainActivityState extends State<MainActivity>
               canvasColor: themeController.currentTheme.backgroundColor,
               colorScheme: Theme.of(context).colorScheme.copyWith(
                     background: themeController.currentTheme.backgroundColor,
-                    brightness: ThemeController.isDark
-                        ? Brightness.dark
-                        : Brightness.light,
+                    brightness: ThemeController.isDark ? Brightness.dark : Brightness.light,
                   ),
               textTheme: GoogleFonts.poppinsTextTheme(),
             ),
@@ -179,11 +173,7 @@ class _MainActivityState extends State<MainActivity>
                   children: [
                     isDesktop
                         ? Obx(() {
-                            return Get.find<UserController>()
-                                    .username
-                                    .isNotEmpty
-                                ? Sidebar()
-                                : SizedBox();
+                            return Get.find<UserController>().username.isNotEmpty ? Sidebar() : SizedBox();
                           })
                         : SizedBox(),
                     Expanded(
@@ -191,11 +181,8 @@ class _MainActivityState extends State<MainActivity>
                         children: [
                           if (isMacOS) ...[
                             Obx(() => CustomTitleBar(
-                                  macStyle: Get.find<UserController>()
-                                      .username
-                                      .isNotEmpty,
-                                  title:
-                                      Get.find<UserController>().username.value,
+                                  macStyle: Get.find<UserController>().username.isNotEmpty,
+                                  title: Get.find<UserController>().username.value,
                                 ))
                           ],
                           Expanded(
@@ -204,9 +191,7 @@ class _MainActivityState extends State<MainActivity>
                               builder: (context, snapshot) {
                                 if (!snapshot.hasData) return SizedBox();
                                 return Obx(() {
-                                  if (Get.find<UserController>()
-                                      .username
-                                      .isEmpty) return AuthView();
+                                  if (Get.find<UserController>().username.isEmpty) return AuthView();
                                   return snapshot.data.toString().isEmpty
                                       ? isDesktop
                                           ? Home()
@@ -215,67 +200,38 @@ class _MainActivityState extends State<MainActivity>
                                                 AnimatedPositioned(
                                                   duration: 400.milliseconds,
                                                   curve: Curves.fastOutSlowIn,
-                                                  left: Get.find<
-                                                              HomeController>()
-                                                          .showSidebar
-                                                          .isFalse
-                                                      ? context.mediaQuerySize
-                                                              .width *
-                                                          -0.25
-                                                      : 0,
+                                                  left: Get.find<HomeController>().showSidebar.isFalse ? context.mediaQuerySize.width * -0.25 : 0,
                                                   child: Align(
-                                                    alignment:
-                                                        Alignment.centerLeft,
+                                                    alignment: Alignment.centerLeft,
                                                     child: Sidebar(),
                                                   ),
                                                 ),
                                                 AnimatedPositioned(
                                                   curve: Curves.fastOutSlowIn,
-                                                  left: Get.find<
-                                                              HomeController>()
-                                                          .showSidebar
-                                                          .isTrue
-                                                      ? context.mediaQuerySize
-                                                              .width *
-                                                          0.75
-                                                      : 0,
+                                                  left: Get.find<HomeController>().showSidebar.isTrue ? context.mediaQuerySize.width * 0.75 : 0,
                                                   duration: 500.milliseconds,
                                                   child: Container(
-                                                    decoration: BoxDecoration(
-                                                        boxShadow: [
-                                                          BoxShadow(
-                                                            blurRadius: 20,
-                                                            color:
-                                                                Colors.black12,
-                                                          ),
-                                                        ]),
-                                                    height: context
-                                                        .mediaQuerySize.height,
-                                                    width: context
-                                                        .mediaQuerySize.width,
+                                                    decoration: BoxDecoration(boxShadow: [
+                                                      BoxShadow(
+                                                        blurRadius: 20,
+                                                        color: Colors.black12,
+                                                      ),
+                                                    ]),
+                                                    height: context.mediaQuerySize.height,
+                                                    width: context.mediaQuerySize.width,
                                                     child: Stack(
                                                       children: [
                                                         Home(),
-                                                        if (Get.find<
-                                                                HomeController>()
-                                                            .showSidebar
-                                                            .isTrue)
+                                                        if (Get.find<HomeController>().showSidebar.isTrue)
                                                           Positioned.fill(
                                                             child: Container(
-                                                              color: Colors
-                                                                  .transparent,
-                                                              child:
-                                                                  GestureDetector(
+                                                              color: Colors.transparent,
+                                                              child: GestureDetector(
                                                                 onTap: () {
-                                                                  Get.find<
-                                                                          HomeController>()
-                                                                      .toggleSidebar();
+                                                                  Get.find<HomeController>().toggleSidebar();
                                                                 },
-                                                                onHorizontalDragUpdate:
-                                                                    (_) {
-                                                                  Get.find<
-                                                                          HomeController>()
-                                                                      .toggleSidebar();
+                                                                onHorizontalDragUpdate: (_) {
+                                                                  Get.find<HomeController>().toggleSidebar();
                                                                 },
                                                               ),
                                                             ),
@@ -308,8 +264,7 @@ class _MainActivityState extends State<MainActivity>
 
   void setAutoTheme() {
     if (ThemeController.isAuto) {
-      if (WidgetsBinding.instance.window.platformBrightness ==
-          Brightness.dark) {
+      if (WidgetsBinding.instance.window.platformBrightness == Brightness.dark) {
         if (!ThemeController.isDark) Get.find<ThemeController>().setDark();
       } else {
         if (ThemeController.isDark) Get.find<ThemeController>().setLight();

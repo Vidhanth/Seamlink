@@ -11,8 +11,7 @@ class MenuBar extends StatelessWidget {
   final Widget child;
   final bool enable;
 
-  const MenuBar({Key? key, required this.child, required this.enable})
-      : super(key: key);
+  const MenuBar({Key? key, required this.child, required this.enable}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +58,7 @@ class MenuBar extends StatelessWidget {
                       ),
                     ],
                   ),
-                if (PlatformProvidedMenuItem.hasMenu(
-                    PlatformProvidedMenuItemType.servicesSubmenu))
+                if (PlatformProvidedMenuItem.hasMenu(PlatformProvidedMenuItemType.servicesSubmenu))
                   const PlatformMenuItemGroup(
                     members: [
                       PlatformProvidedMenuItem(
@@ -68,10 +66,8 @@ class MenuBar extends StatelessWidget {
                       )
                     ],
                   ),
-                if (PlatformProvidedMenuItem.hasMenu(
-                    PlatformProvidedMenuItemType.quit))
-                  const PlatformProvidedMenuItem(
-                      type: PlatformProvidedMenuItemType.quit),
+                if (PlatformProvidedMenuItem.hasMenu(PlatformProvidedMenuItemType.quit))
+                  const PlatformProvidedMenuItem(type: PlatformProvidedMenuItemType.quit),
               ],
             ),
           ],

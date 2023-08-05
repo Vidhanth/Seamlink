@@ -11,8 +11,7 @@ import 'package:seamlink/services/utils.dart';
 class CustomTitleBar extends StatelessWidget {
   bool? macStyle;
   String? title;
-  CustomTitleBar({Key? key, this.macStyle = true, this.title})
-      : super(key: key) {
+  CustomTitleBar({Key? key, this.macStyle = true, this.title}) : super(key: key) {
     title ??= "s e a m l i n k   d e s k t o p".toUpperCase();
   }
 
@@ -29,11 +28,7 @@ class CustomTitleBar extends StatelessWidget {
             height: (isWindows ? 35 : 30) * (macStyle! ? 3 : 1),
             color: themeController.currentTheme.backgroundColor,
             alignment: Alignment.center,
-            width: MediaQuery.of(context).size.width -
-                (title!.isEmpty
-                    ? 0
-                    : (MediaQuery.of(context).size.width * 0.2)
-                        .clamp(200, 400)),
+            width: MediaQuery.of(context).size.width - (title!.isEmpty ? 0 : (MediaQuery.of(context).size.width * 0.2).clamp(200, 400)),
             child: MoveWindow(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -41,8 +36,7 @@ class CustomTitleBar extends StatelessWidget {
                   !macStyle!
                       ? Container(
                           child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: Platform.isWindows ? 10 : 7.5),
+                          padding: EdgeInsets.symmetric(horizontal: Platform.isWindows ? 10 : 7.5),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -52,8 +46,7 @@ class CustomTitleBar extends StatelessWidget {
                         ))
                       : Expanded(
                           child: Padding(
-                            padding: EdgeInsets.only(
-                                top: 15, bottom: 10, left: 25, right: 25),
+                            padding: EdgeInsets.only(top: 15, bottom: 10, left: 25, right: 25),
                             child: SearchBar(),
                           ),
                         ),

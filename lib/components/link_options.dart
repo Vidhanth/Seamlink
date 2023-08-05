@@ -55,39 +55,30 @@ class LinkOptions extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         if (link.url.isValidLink) ...[
-          _buildOption("Open and delete link", LineIcons.alternateExternalLink,
-              () async {
+          _buildOption("Open and delete link", LineIcons.alternateExternalLink, () async {
             Get.back();
             await openAndDelete(context, link);
           }),
         ],
-        _buildOption(
-            link.url.isValidLink ? "Edit link" : "Edit note", LineIcons.edit,
-            () async {
+        _buildOption(link.url.isValidLink ? "Edit link" : "Edit note", LineIcons.edit, () async {
           Get.back();
           Navigate.to(
             page: NewLink(link: link),
           );
         }),
-        _buildOption(link.url.isValidLink ? "Copy link" : "Copy contents",
-            LineIcons.clipboardAlt, () {
+        _buildOption(link.url.isValidLink ? "Copy link" : "Copy contents", LineIcons.clipboardAlt, () {
           link.url.copyToClipboard();
           Get.back();
           showSnackBar("Copied to clipboard!");
         }),
         if (isMobile) ...[
-          _buildOption("Share ${noteOrLink(link.url)}", LineIcons.share,
-              () async {
+          _buildOption("Share ${noteOrLink(link.url)}", LineIcons.share, () async {
             Get.back();
-            String textToShare = (!link.autotitle && link.title != null
-                    ? link.title! + "\n"
-                    : '') +
-                link.url;
+            String textToShare = (!link.autotitle && link.title != null ? link.title! + "\n" : '') + link.url;
             Share.share(textToShare);
           }),
         ],
-        _buildOption(link.url.isValidLink ? "Delete link" : "Delete note",
-            LineIcons.trash, () async {
+        _buildOption(link.url.isValidLink ? "Delete link" : "Delete note", LineIcons.trash, () async {
           Get.back();
           if (await confirmDialog(
                 context,

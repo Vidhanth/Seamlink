@@ -33,14 +33,11 @@ class Sidebar extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: themeController.currentTheme.shadow,
-              blurRadius:
-                  Get.find<HomeController>().showSidebar.isTrue ? 200 : 0,
+              blurRadius: Get.find<HomeController>().showSidebar.isTrue ? 200 : 0,
             )
           ],
         ),
-        width: isDesktop
-            ? (size.width * 0.2).clamp(200, 400)
-            : (size.width * 0.75),
+        width: isDesktop ? (size.width * 0.2).clamp(200, 400) : (size.width * 0.75),
         height: size.height,
         child: SafeArea(
           child: Column(
@@ -49,9 +46,7 @@ class Sidebar extends StatelessWidget {
               if (isMacOS)
                 Container(
                   height: 30,
-                  width: isDesktop
-                      ? (size.width * 0.2).clamp(200, 400)
-                      : (size.width * 0.75),
+                  width: isDesktop ? (size.width * 0.2).clamp(200, 400) : (size.width * 0.75),
                   child: MoveWindow(),
                 ),
               Padding(
@@ -80,16 +75,14 @@ class Sidebar extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12),
+                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12),
                 child: Divider(),
               ),
               Obx(() => Column(
                     children: [
                       LabelTile(
                         label: 'All',
-                        isSelected:
-                            controller.selectedType.value == NoteType.ALL,
+                        isSelected: controller.selectedType.value == NoteType.ALL,
                         onTap: () {
                           controller.selectedType(NoteType.ALL);
                           if (isMobile) {
@@ -100,8 +93,7 @@ class Sidebar extends StatelessWidget {
                       ),
                       LabelTile(
                         label: 'Notes',
-                        isSelected:
-                            controller.selectedType.value == NoteType.NOTE,
+                        isSelected: controller.selectedType.value == NoteType.NOTE,
                         onTap: () {
                           controller.selectedType(NoteType.NOTE);
                           if (isMobile) {
@@ -112,8 +104,7 @@ class Sidebar extends StatelessWidget {
                       ),
                       LabelTile(
                         label: 'Links',
-                        isSelected:
-                            controller.selectedType.value == NoteType.LINK,
+                        isSelected: controller.selectedType.value == NoteType.LINK,
                         onTap: () {
                           controller.selectedType(NoteType.LINK);
                           if (isMobile) {
@@ -134,9 +125,7 @@ class Sidebar extends StatelessWidget {
                   children: [
                     Text(
                       "L A B E L S",
-                      style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w500,
-                          color: themeController.currentTheme.foreground),
+                      style: GoogleFonts.poppins(fontWeight: FontWeight.w500, color: themeController.currentTheme.foreground),
                       textAlign: TextAlign.start,
                     ),
                     Material(
@@ -257,8 +246,7 @@ class Sidebar extends StatelessWidget {
                 );
               }),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12),
+                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12),
                 child: Divider(),
               ),
               Padding(
@@ -291,12 +279,9 @@ class Sidebar extends StatelessWidget {
                               onTap: () async {
                                 logout();
                               },
-                              hoverColor:
-                                  themeController.currentTheme.hoverColor,
-                              splashColor:
-                                  themeController.currentTheme.splashColor,
-                              focusColor:
-                                  themeController.currentTheme.focusColor,
+                              hoverColor: themeController.currentTheme.hoverColor,
+                              splashColor: themeController.currentTheme.splashColor,
+                              focusColor: themeController.currentTheme.focusColor,
                               borderRadius: BorderRadius.circular(8),
                               child: Padding(
                                 padding: EdgeInsets.symmetric(

@@ -28,8 +28,7 @@ class RedditData {
       if (substring.isEmpty) return '';
       return 'id=t3_' + substring;
     } else if (url.contains('reddit.com/')) {
-      String pattern =
-          r"https\://(w{3}.)?reddit\.com/r/.*/comments/([a-z0-9]*)/.*";
+      String pattern = r"https\://(w{3}.)?reddit\.com/r/.*/comments/([a-z0-9]*)/.*";
       RegExp exp = RegExp(pattern);
       Iterable<RegExpMatch> matches = exp.allMatches(url);
       if (matches.isEmpty) return '';

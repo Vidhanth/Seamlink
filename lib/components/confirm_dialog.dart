@@ -173,8 +173,7 @@ class BottomDialog extends StatelessWidget {
                   splashColor: themeController.currentTheme.splashColor,
                   hoverColor: themeController.currentTheme.hoverColor,
                   focusColor: themeController.currentTheme.focusColor,
-                  textColor:
-                      themeController.currentTheme.accent.withOpacity(0.7),
+                  textColor: themeController.currentTheme.accent.withOpacity(0.7),
                   text: optionalText!,
                   padding: EdgeInsets.symmetric(
                     vertical: 15,
@@ -188,10 +187,8 @@ class BottomDialog extends StatelessWidget {
             ],
             Flexible(
               child: Button(
-                splashColor:
-                    themeController.currentTheme.contrastText.withOpacity(0.24),
-                hoverColor:
-                    themeController.currentTheme.contrastText.withOpacity(0.24),
+                splashColor: themeController.currentTheme.contrastText.withOpacity(0.24),
+                hoverColor: themeController.currentTheme.contrastText.withOpacity(0.24),
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
                 onTap: () {
                   if (showTextField!)

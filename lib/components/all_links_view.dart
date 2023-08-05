@@ -50,10 +50,7 @@ class AllLinksView extends StatelessWidget {
         typeMatch = true;
       else
         typeMatch = link.type! == selectedType;
-      if ((link.contains(searchText) ||
-              searchLabels(searchText, link.labels)) &&
-          typeMatch &&
-          labelMatch) {
+      if ((link.contains(searchText) || searchLabels(searchText, link.labels)) && typeMatch && labelMatch) {
         linksList.add(link);
       }
     });
@@ -70,9 +67,7 @@ class AllLinksView extends StatelessWidget {
                   height: (constraints.maxHeight / 2) - 100,
                 ),
                 Icon(
-                  searchText.isNotEmpty
-                      ? Icons.search_off_rounded
-                      : Icons.shopping_cart_outlined,
+                  searchText.isNotEmpty ? Icons.search_off_rounded : Icons.shopping_cart_outlined,
                   size: 80,
                   color: themeController.currentTheme.foreground,
                 ),
@@ -120,8 +115,7 @@ class AllLinksView extends StatelessWidget {
       return AnimationLimiter(
         child: ListView(
           padding: EdgeInsets.only(bottom: 40, top: 10),
-          physics:
-              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: List.generate(
             linksList.length,
             (index) {
@@ -134,8 +128,7 @@ class AllLinksView extends StatelessWidget {
                     child: LinkTile(
                       onDismissed: (direction) async {
                         hideKeyboard(context);
-                        await Get.find<HomeController>()
-                            .deleteLink(context, linksList[index].uid);
+                        await Get.find<HomeController>().deleteLink(context, linksList[index].uid);
                       },
                       searchText: searchText,
                       link: linksList[index],
@@ -181,10 +174,8 @@ class AllLinksView extends StatelessWidget {
           staggeredTiles: List.generate(linksList.length, (index) {
             return StaggeredTile.fit(1);
           }),
-          physics:
-              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          crossAxisCount:
-              (MediaQuery.of(context).size.width / 300).floor().clamp(2, 5),
+          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          crossAxisCount: (MediaQuery.of(context).size.width / 300).floor().clamp(2, 5),
           mainAxisSpacing: 15,
           crossAxisSpacing: 15,
           padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
@@ -193,17 +184,14 @@ class AllLinksView extends StatelessWidget {
             (index) {
               return AnimationConfiguration.staggeredGrid(
                 position: index,
-                columnCount: (MediaQuery.of(context).size.width / 300)
-                    .floor()
-                    .clamp(2, 5),
+                columnCount: (MediaQuery.of(context).size.width / 300).floor().clamp(2, 5),
                 child: FadeInAnimation(
                   duration: 400.milliseconds,
                   child: SlideAnimation(
                     duration: 400.milliseconds,
                     child: LinkTile(
                       onDismissed: (direction) async {
-                        await Get.find<HomeController>()
-                            .deleteLink(context, linksList[index].uid);
+                        await Get.find<HomeController>().deleteLink(context, linksList[index].uid);
                       },
                       margin: EdgeInsets.zero,
                       searchText: searchText,

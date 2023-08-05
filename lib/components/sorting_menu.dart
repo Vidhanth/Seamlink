@@ -36,8 +36,7 @@ class SortingMenu extends StatelessWidget {
                   ),
                   trailing: Icon(
                     Icons.check,
-                    color: sortByColumns.keys.toList().indexOf(key) ==
-                            homeController.sortBy
+                    color: sortByColumns.keys.toList().indexOf(key) == homeController.sortBy
                         ? themeController.currentTheme.foreground
                         : Colors.transparent,
                   ),
@@ -67,13 +66,10 @@ class SortingMenu extends StatelessWidget {
           children: [false, true]
               .map(
                 (ascending) => ListTile(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                   trailing: Icon(
                     Icons.check,
-                    color: ascending == homeController.ascending
-                        ? themeController.currentTheme.foreground
-                        : Colors.transparent,
+                    color: ascending == homeController.ascending ? themeController.currentTheme.foreground : Colors.transparent,
                   ),
                   onTap: () {
                     homeController.updateSortingMethod(

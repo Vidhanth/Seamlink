@@ -19,12 +19,8 @@ class _WipeState extends State<Wipe> {
   Color iconColor = ThemeController.lightTheme.foreground;
 
   runEnterAnimation() async {
-    backgroundColor = ThemeController.isDark
-        ? ThemeController.lightTheme.backgroundColor
-        : ThemeController.darkTheme.backgroundColor;
-    iconColor = ThemeController.isDark
-        ? ThemeController.lightTheme.foreground
-        : ThemeController.darkTheme.foreground;
+    backgroundColor = ThemeController.isDark ? ThemeController.lightTheme.backgroundColor : ThemeController.darkTheme.backgroundColor;
+    iconColor = ThemeController.isDark ? ThemeController.lightTheme.foreground : ThemeController.darkTheme.foreground;
     setState(() {
       run = true;
     });
@@ -74,9 +70,7 @@ class _WipeState extends State<Wipe> {
                           ? FadeInUp(
                               delay: 0.milliseconds,
                               child: Icon(
-                                ThemeController.isDark
-                                    ? Icons.light_mode_outlined
-                                    : Icons.dark_mode_outlined,
+                                ThemeController.isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
                                 color: iconColor,
                                 size: 100,
                               ),

@@ -52,8 +52,7 @@ class ThemeController extends GetxController {
       await setDark();
       mode = Mode.DARK;
     } else if (mode == Mode.DARK) {
-      if (WidgetsBinding.instance.window.platformBrightness ==
-          Brightness.dark) {
+      if (WidgetsBinding.instance.window.platformBrightness == Brightness.dark) {
         if (!isDark) await setDark();
       } else {
         if (isDark) await setLight();
@@ -95,8 +94,7 @@ class ThemeController extends GetxController {
   }
 
   static ThemeColors _getAutoTheme() {
-    if (WidgetsBinding.instance.window.platformBrightness == Brightness.dark)
-      return darkTheme;
+    if (WidgetsBinding.instance.window.platformBrightness == Brightness.dark) return darkTheme;
     return lightTheme;
   }
 }

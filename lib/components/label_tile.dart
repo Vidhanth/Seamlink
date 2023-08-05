@@ -49,9 +49,7 @@ class LabelTile extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             margin: EdgeInsets.only(top: 0),
             decoration: BoxDecoration(
-              color: isSelected
-                  ? themeController.currentTheme.splashColor
-                  : Colors.transparent,
+              color: isSelected ? themeController.currentTheme.splashColor : Colors.transparent,
             ),
             alignment: Alignment.centerLeft,
             child: Row(

@@ -63,8 +63,7 @@ class InputField extends StatelessWidget {
         child: Stack(
           children: [
             Theme(
-              data: Theme.of(context)
-                  .copyWith(primaryColor: themeController.currentTheme.accent),
+              data: Theme.of(context).copyWith(primaryColor: themeController.currentTheme.accent),
               child: TextField(
                 autofocus: autofocus ?? false,
                 focusNode: focusNode ?? FocusNode(),
@@ -73,8 +72,7 @@ class InputField extends StatelessWidget {
                   onSubmitted?.call(string);
                 },
                 inputFormatters: inputFormatters,
-                controller:
-                    controller ?? TextEditingController(text: initialText),
+                controller: controller ?? TextEditingController(text: initialText),
                 obscureText: obscureText,
                 keyboardType: keyboardType,
                 style: style,

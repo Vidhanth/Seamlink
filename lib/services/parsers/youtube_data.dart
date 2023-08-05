@@ -23,8 +23,7 @@ class YoutubeData {
       return link;
     }
 
-    String channelData =
-        await _getChannelDetails(details['items'][0]['snippet']['channelId']);
+    String channelData = await _getChannelDetails(details['items'][0]['snippet']['channelId']);
     Map<String, dynamic> channelDetails = json.decode(channelData);
 
     String title, channelTitle, extra;
@@ -35,8 +34,7 @@ class YoutubeData {
       if (playlist) {
         extra = details['items'][0]['contentDetails']['itemCount'].toString();
       } else {
-        Duration duration =
-            _parseDuration(details['items'][0]['contentDetails']['duration']);
+        Duration duration = _parseDuration(details['items'][0]['contentDetails']['duration']);
         extra = duration.toDurationString();
         progress = _getProgess(link.url, duration);
       }
@@ -48,14 +46,11 @@ class YoutubeData {
       title = details['items'][0]['snippet']['title'];
       channelTitle = details['items'][0]['snippet']['channelTitle'];
       try {
-        thumbnail =
-            details['items'][0]['snippet']['thumbnails']['maxres']['url'];
+        thumbnail = details['items'][0]['snippet']['thumbnails']['maxres']['url'];
       } catch (e) {
         thumbnail = details['items'][0]['snippet']['thumbnails']['high']['url'];
       }
-      thumbnail = (thumbnail ?? '') +
-          '||' +
-          channelDetails['items'][0]['snippet']['thumbnails']['default']['url'];
+      thumbnail = (thumbnail ?? '') + '||' + channelDetails['items'][0]['snippet']['thumbnails']['default']['url'];
     } catch (e) {
       link.title = await UrlParser.getUrlTitle(link.url);
       return link;
@@ -103,8 +98,7 @@ class YoutubeData {
     for (int i = 0; i < duration.length; i++) {
       duration[i] = int.parse(matches.first.group(i + 1) ?? '0');
     }
-    return Duration(
-        hours: duration[0], minutes: duration[1], seconds: duration[2]);
+    return Duration(hours: duration[0], minutes: duration[1], seconds: duration[2]);
   }
 
   static double? _getProgess(String url, Duration totalDuration) {

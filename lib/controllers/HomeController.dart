@@ -57,15 +57,13 @@ class HomeController extends GetxController {
   }
 
   void sortList() {
-    linksList.sort(
-        (link1, link2) => compareLinksList(link1, link2, sortBy, ascending));
+    linksList.sort((link1, link2) => compareLinksList(link1, link2, sortBy, ascending));
   }
 
   void refreshLinks() async {
     isLoading(true);
     Get.find<SidebarController>().refreshLabels();
-    final list = await Client.fetchLinks(
-        sortBy: sortByColumns.keys.toList()[sortBy], ascending: ascending);
+    final list = await Client.fetchLinks(sortBy: sortByColumns.keys.toList()[sortBy], ascending: ascending);
     if (list is List<dynamic>) {
       var newList = linkFromJson(list);
       linksList.value = newList;
@@ -114,8 +112,7 @@ class HomeController extends GetxController {
                 menus: [
                   PlatformMenuItem(
                     label: 'New Note',
-                    shortcut: const SingleActivator(LogicalKeyboardKey.keyN,
-                        meta: true),
+                    shortcut: const SingleActivator(LogicalKeyboardKey.keyN, meta: true),
                     onSelected: () {
                       openNewLink.call();
                     },
@@ -123,8 +120,7 @@ class HomeController extends GetxController {
                   PlatformMenuItem(
                     label: 'New Note from Clipboard',
                     onSelected: () async {
-                      String copiedText =
-                          (await Clipboard.getData('text/plain'))?.text ?? '';
+                      String copiedText = (await Clipboard.getData('text/plain'))?.text ?? '';
                       if (copiedText.isEmpty) {
                         showSnackBar('Clipboard is empty');
                       }
@@ -147,8 +143,7 @@ class HomeController extends GetxController {
             members: [
               PlatformMenuItem(
                 label: 'Refresh',
-                shortcut:
-                    const SingleActivator(LogicalKeyboardKey.keyR, meta: true),
+                shortcut: const SingleActivator(LogicalKeyboardKey.keyR, meta: true),
                 onSelected: () {
                   refreshLinks();
                 },

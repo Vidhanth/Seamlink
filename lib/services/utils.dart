@@ -176,21 +176,18 @@ Future<bool?> deleteLabel(
         }
       }
       sidebarController.labels.removeAt(index);
-      Result finalResult = await Client.updateLabels(
-          userController.username.value, sidebarController.labels);
+      Result finalResult = await Client.updateLabels(userController.username.value, sidebarController.labels);
       if (finalResult.success) {
         homeController.refreshLinks();
         return true;
       } else {
         homeController.refreshLinks();
-        showSnackBar("An error occured. Please try deleting the label again.",
-            error: true);
+        showSnackBar("An error occured. Please try deleting the label again.", error: true);
         return false;
       }
     } else {
       homeController.refreshLinks();
-      showSnackBar("An error occured. Please try deleting the label again.",
-          error: true);
+      showSnackBar("An error occured. Please try deleting the label again.", error: true);
       return false;
     }
   }
@@ -209,14 +206,12 @@ Future<bool?> newLabelDialog(
     var sbController = Get.find<SidebarController>();
     List labels = [];
     labels += sbController.labels.value;
-    if (labels.any((element) =>
-        element.toString().toLowerCase() == newLabel.toLowerCase())) {
+    if (labels.any((element) => element.toString().toLowerCase() == newLabel.toLowerCase())) {
       return Result(false, message: "Label already exists.");
     } else {
       isSaving = true;
       labels.add(newLabel);
-      Result result = await Client.updateLabels(
-          Get.find<UserController>().username.value, labels);
+      Result result = await Client.updateLabels(Get.find<UserController>().username.value, labels);
       if (result.success) {
         sbController.labels.add(newLabel);
         return Result(true, message: "Label created.");
@@ -266,8 +261,7 @@ Future<bool?> newLabelDialog(
   );
 }
 
-Future<bool?> switchUserDialog(context, title, message,
-    {bool refreshOnSwitch = false}) async {
+Future<bool?> switchUserDialog(context, title, message, {bool refreshOnSwitch = false}) async {
   bool isSaving = false;
   refreshOnSwitch = Get.find<HomeController>().showSidebar.value;
   if (!refreshOnSwitch) {
@@ -280,8 +274,7 @@ Future<bool?> switchUserDialog(context, title, message,
   Function(TextEditingController) onSubmitted = (controller) async {
     if (isSaving) return false;
     String newUser = controller.text.trim();
-    if (newUser == Get.find<UserController>().username.value)
-      return Result(true);
+    if (newUser == Get.find<UserController>().username.value) return Result(true);
     isSaving = true;
     Result result = await Client.doesUserExist(newUser);
     isSaving = false;
@@ -365,14 +358,12 @@ Future<bool?> editLabelDialog(
 
     if (newLabel.isEmpty) {
       return Result(false, message: "Please enter a valid name.");
-    } else if (labels.any((element) =>
-        element.toString().toLowerCase() == newLabel.toLowerCase())) {
+    } else if (labels.any((element) => element.toString().toLowerCase() == newLabel.toLowerCase())) {
       return Result(false, message: "Label already exists.");
     } else {
       isSaving = true;
       labels[index] = newLabel;
-      Result result = await Client.updateLabels(
-          Get.find<UserController>().username.value, labels);
+      Result result = await Client.updateLabels(Get.find<UserController>().username.value, labels);
       if (result.success) {
         sbController.labels[index] = newLabel;
         return Result(true, message: "Label updated.");
@@ -434,8 +425,7 @@ Future<bool?> editLabelDialog(
   );
 }
 
-Future<void> hideKeyboard(context,
-    {delay = const Duration(milliseconds: 200)}) async {
+Future<void> hideKeyboard(context, {delay = const Duration(milliseconds: 200)}) async {
   if (FocusScope.of(context).hasFocus) {
     FocusScope.of(context).unfocus();
     await Future.delayed(delay);
@@ -470,9 +460,7 @@ Future<Link> getLinkData(Link link) async {
   return link;
 }
 
-Future<bool> saveLink(context, String url, String title, int colorIndex,
-    List<int> labels, bool autotitle,
-    {String? uid}) async {
+Future<bool> saveLink(context, String url, String title, int colorIndex, List<int> labels, bool autotitle, {String? uid}) async {
   hideKeyboard(context);
   HomeController? controller;
 
@@ -525,21 +513,16 @@ showSnackBar(message, {error = false, title}) {
         ? Text(
             title,
             style: GoogleFonts.poppins(
-              color: error
-                  ? Colors.white
-                  : Get.find<ThemeController>().currentTheme.foreground,
+              color: error ? Colors.white : Get.find<ThemeController>().currentTheme.foreground,
               fontWeight: FontWeight.bold,
             ),
           )
         : null,
-    backgroundColor:
-        error ? Colors.red : Get.find<ThemeController>().currentTheme.mutedBg,
+    backgroundColor: error ? Colors.red : Get.find<ThemeController>().currentTheme.mutedBg,
     messageText: Text(
       message,
       style: GoogleFonts.poppins(
-        color: error
-            ? Colors.white
-            : Get.find<ThemeController>().currentTheme.foreground,
+        color: error ? Colors.white : Get.find<ThemeController>().currentTheme.foreground,
       ),
     ),
     duration: 2.seconds,
@@ -550,8 +533,7 @@ showSnackBar(message, {error = false, title}) {
 }
 
 Future<void> openAndDelete(context, Link link) async {
-  if (await confirmDialog(context, "Open and delete link?",
-          "Are you sure you want to open and then delete this link? This cannot be undone.") ??
+  if (await confirmDialog(context, "Open and delete link?", "Are you sure you want to open and then delete this link? This cannot be undone.") ??
       false) {
     if (await launchUrl(
       Uri.parse(link.url),
@@ -568,9 +550,7 @@ Future<void> openAndDelete(context, Link link) async {
 bool searchLabels(String query, List<int> labels) {
   bool labelExists = false;
   List allLabels = Get.find<SidebarController>().labels;
-  allLabels
-      .where((label) => labels.contains(allLabels.indexOf(label)))
-      .forEach((label) {
+  allLabels.where((label) => labels.contains(allLabels.indexOf(label))).forEach((label) {
     labelExists = label.toString().toLowerCase().contains(query);
   });
   return labelExists;

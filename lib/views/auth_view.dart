@@ -96,8 +96,7 @@ class _AuthViewState extends State<AuthView> {
                           textAlign: TextAlign.center,
                         ),
                         Container(
-                          width: MediaQuery.of(context).size.width *
-                              (isMobile ? 0.8 : 0.45),
+                          width: MediaQuery.of(context).size.width * (isMobile ? 0.8 : 0.45),
                           child: InputField(
                             bgColor: themeController.currentTheme.mutedBg,
                             radius: 25,
@@ -108,10 +107,8 @@ class _AuthViewState extends State<AuthView> {
                             ),
                             controller: userController,
                             hint: 'Username',
-                            hintStyle: GoogleFonts.poppins(
-                                color: themeController.currentTheme.subtext),
-                            style: GoogleFonts.poppins(
-                                color: themeController.currentTheme.foreground),
+                            hintStyle: GoogleFonts.poppins(color: themeController.currentTheme.subtext),
+                            style: GoogleFonts.poppins(color: themeController.currentTheme.foreground),
                             padding: EdgeInsets.symmetric(
                               horizontal: 20,
                               vertical: 20,
@@ -123,20 +120,14 @@ class _AuthViewState extends State<AuthView> {
                           ),
                         ),
                         Container(
-                          width: MediaQuery.of(context).size.width *
-                              (isMobile ? 0.8 : 0.45),
+                          width: MediaQuery.of(context).size.width * (isMobile ? 0.8 : 0.45),
                           child: Button(
                             padding: EdgeInsets.symmetric(vertical: 17.5),
                             radius: 25,
                             text: "Take me in!",
-                            splashColor: themeController
-                                .currentTheme.contrastText
-                                .withOpacity(0.12),
-                            hoverColor: themeController
-                                .currentTheme.contrastText
-                                .withOpacity(0.12),
-                            textColor:
-                                themeController.currentTheme.contrastText,
+                            splashColor: themeController.currentTheme.contrastText.withOpacity(0.12),
+                            hoverColor: themeController.currentTheme.contrastText.withOpacity(0.12),
+                            textColor: themeController.currentTheme.contrastText,
                             onTap: () async {
                               await submitUsername();
                             },

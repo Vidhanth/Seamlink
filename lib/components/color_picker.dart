@@ -11,9 +11,7 @@ class ColorPicker extends StatelessWidget {
 
   final ThemeController themeController = Get.find();
 
-  ColorPicker(
-      {Key? key, required this.onColorSelected, required this.selectedIndex})
-      : super(key: key);
+  ColorPicker({Key? key, required this.onColorSelected, required this.selectedIndex}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

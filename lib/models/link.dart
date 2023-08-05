@@ -7,8 +7,7 @@ List<Link> linkFromJson(json) => List<Link>.from(json.map((x) {
       return Link.fromJson(x);
     }));
 
-String linkToJson(List<Link> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String linkToJson(List<Link> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Link {
   Link({

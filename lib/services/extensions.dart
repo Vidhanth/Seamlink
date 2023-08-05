@@ -40,13 +40,11 @@ extension s on String {
   }
 
   bool get isYoutubeLink {
-    return this.toLowerCase().contains('youtube.com/') ||
-        this.toLowerCase().contains('youtu.be/');
+    return this.toLowerCase().contains('youtube.com/') || this.toLowerCase().contains('youtu.be/');
   }
 
   bool get isRedditLink {
-    return this.toLowerCase().contains('reddit.com/') ||
-        this.toLowerCase().contains('redd.it/');
+    return this.toLowerCase().contains('reddit.com/') || this.toLowerCase().contains('redd.it/');
   }
 
   String formatTitle() {

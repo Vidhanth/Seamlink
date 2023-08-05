@@ -28,10 +28,8 @@ class _SearchBarState extends State<SearchBar> with TickerProviderStateMixin {
   @override
   void initState() {
     if (isMobile) {
-      homeController.menuIconController =
-          AnimationController(vsync: this, duration: 800.milliseconds);
-      _menuIconAnim = homeController.menuIconController!
-          .drive(CurveTween(curve: Curves.easeInOut));
+      homeController.menuIconController = AnimationController(vsync: this, duration: 800.milliseconds);
+      _menuIconAnim = homeController.menuIconController!.drive(CurveTween(curve: Curves.easeInOut));
     }
     super.initState();
   }
