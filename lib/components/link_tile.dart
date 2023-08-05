@@ -89,8 +89,8 @@ class LinkTile extends StatelessWidget {
 
   Future<bool> _confirmDismiss() async {
     hideKeyboard(Get.context, delay: 0.milliseconds);
-    return await confirmDialog(Get.context, "Delete ${noteOrLink(link.url)}?",
-            "Are you sure you want to delete this ${noteOrLink(link.url)}? This cannot be undone.") ??
+    return await confirmDialog(
+            Get.context, "Delete ${noteOrLink(link.url)}?", "Are you sure you want to delete this ${noteOrLink(link.url)}? This cannot be undone.") ??
         false;
   }
 
@@ -125,8 +125,7 @@ class LinkTile extends StatelessWidget {
         child: Actions(
           actions: <Type, Action<Intent>>{
             OptionsIntent: CallbackAction<OptionsIntent>(
-              onInvoke: (OptionsIntent intent) =>
-                  {showLinkOptions(context, link)},
+              onInvoke: (OptionsIntent intent) => {showLinkOptions(context, link)},
             ),
             OpenIntent: CallbackAction<OpenIntent>(
               onInvoke: (OpenIntent intent) => {onTap.call()},
@@ -138,8 +137,7 @@ class LinkTile extends StatelessWidget {
             ),
             if (link.url.isValidLink)
               OpenAndDeleteIntent: CallbackAction<OpenAndDeleteIntent>(
-                onInvoke: (OpenAndDeleteIntent intent) =>
-                    {openAndDelete(context, link)},
+                onInvoke: (OpenAndDeleteIntent intent) => {openAndDelete(context, link)},
               ),
             CopyIntent: CallbackAction<CopyIntent>(
               onInvoke: (CopyIntent intent) {
@@ -164,12 +162,6 @@ class LinkTile extends StatelessWidget {
                     : (d) {
                         hideKeyboard(context, delay: 0.seconds);
                       },
-            onLongPress: () {
-              onLongPress?.call();
-            },
-            onSecondaryTap: () {
-              onSecondaryTap?.call();
-            },
             onTertiaryTapDown: (d) {
               onTertiaryTap?.call();
             },
@@ -179,9 +171,7 @@ class LinkTile extends StatelessWidget {
               decoration: BoxDecoration(
                 color: themeController.currentTheme.backgroundColor,
                 boxShadow: [
-                  BoxShadow(
-                      blurRadius: 5,
-                      color: themeController.currentTheme.shadow),
+                  BoxShadow(blurRadius: 5, color: themeController.currentTheme.shadow),
                 ],
                 borderRadius: BorderRadius.circular(15),
                 border: Border.all(
@@ -200,68 +190,55 @@ class LinkTile extends StatelessWidget {
                   onTap: () {
                     onTap.call();
                   },
+                  onLongPress: () {
+                    onLongPress?.call();
+                  },
+                  onSecondaryTap: () {
+                    onSecondaryTap?.call();
+                  },
                   child: SingleFutureBuilder(
                     future: getLink,
-                    condition: !(link.autotitle &&
-                        link.title != null &&
-                        (link.title?.isEmpty ?? false)),
+                    condition: !(link.autotitle && link.title != null && (link.title?.isEmpty ?? false)),
                     fallbackData: link,
                     childBuilder: (context, data) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Center(
-                            child: link.url.isYoutubeLink
-                                ? _buildYoutubeCard(data)
-                                : _buildNote(data),
+                            child: link.url.isYoutubeLink ? _buildYoutubeCard(data) : _buildNote(data),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(
-                                left: 15, right: 15, bottom: 5, top: 10),
+                            padding: EdgeInsets.only(left: 15, right: 15, bottom: 5, top: 10),
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
                                 children: link.labels.map((labelIndex) {
                                   return Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 3.0, bottom: 5, top: 0),
-                                    child: data == null || Get.find<SidebarController>()
-                                                    .labels.isEmpty
+                                    padding: const EdgeInsets.only(right: 3.0, bottom: 5, top: 0),
+                                    child: data == null || Get.find<SidebarController>().labels.isEmpty
                                         ? Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 5.0, top: 0),
+                                            padding: const EdgeInsets.only(bottom: 5.0, top: 0),
                                             child: FadeShimmer(
                                               width: 75,
                                               height: 30,
                                               radius: 10,
-                                              baseColor: themeController
-                                                  .currentTheme.subtext
-                                                  .withOpacity(0.1),
-                                              highlightColor: themeController
-                                                  .currentTheme.subtext
-                                                  .withOpacity(0.25),
+                                              baseColor: themeController.currentTheme.subtext.withOpacity(0.1),
+                                              highlightColor: themeController.currentTheme.subtext.withOpacity(0.25),
                                             ),
                                           )
                                         : FilterChip(
-                                            backgroundColor: themeController
-                                                .currentTheme.foreground
-                                                .withOpacity(0.10),
+                                            backgroundColor: themeController.currentTheme.foreground.withOpacity(0.10),
                                             labelStyle: GoogleFonts.poppins(
-                                              color: themeController
-                                                  .currentTheme.foreground,
+                                              color: themeController.currentTheme.foreground,
                                             ),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
+                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                                             label: Obx(() {
                                               return Text(
-                                                Get.find<SidebarController>()
-                                                    .labels[labelIndex],
+                                                Get.find<SidebarController>().labels[labelIndex],
                                               );
                                             }),
                                             onSelected: (bool) {
-                                              Get.find<SidebarController>()
-                                                  .labelIndex(labelIndex);
+                                              Get.find<SidebarController>().labelIndex(labelIndex);
                                             },
                                           ),
                                   );
@@ -339,13 +316,11 @@ class LinkTile extends StatelessWidget {
                         AspectRatio(
                           aspectRatio: 16 / 9,
                           child: OctoImage(
-                            image:
-                                NetworkImage(link.thumbnail!.split('||').first),
+                            image: NetworkImage(link.thumbnail!.split('||').first),
                             fadeInDuration: 400.milliseconds,
                             fit: BoxFit.cover,
                             alignment: Alignment.center,
-                            placeholderBuilder: (context) =>
-                                _buildShimmer(height: double.infinity),
+                            placeholderBuilder: (context) => _buildShimmer(height: double.infinity),
                           ),
                         ),
                         Positioned(
@@ -355,10 +330,7 @@ class LinkTile extends StatelessWidget {
                             padding: EdgeInsets.all(5),
                             child: SubstringHighlight(
                               textAlign: TextAlign.center,
-                              text: link.message! +
-                                  (link.url.contains('playlist')
-                                      ? ' videos'
-                                      : ''),
+                              text: link.message! + (link.url.contains('playlist') ? ' videos' : ''),
                               term: searchText,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -367,16 +339,12 @@ class LinkTile extends StatelessWidget {
                                 fontSize: 12.5,
                               ),
                               textStyleHighlight: GoogleFonts.poppins(
-                                color:
-                                    themeController.currentTheme.contrastText,
-                                backgroundColor:
-                                    themeController.currentTheme.foreground,
+                                color: themeController.currentTheme.contrastText,
+                                backgroundColor: themeController.currentTheme.foreground,
                               ),
                             ),
                             decoration: BoxDecoration(
-                              color: themeController
-                                  .currentTheme.backgroundColor
-                                  .withOpacity(0.85),
+                              color: themeController.currentTheme.backgroundColor.withOpacity(0.85),
                               borderRadius: BorderRadius.circular(5),
                             ),
                           ),
@@ -428,16 +396,13 @@ class LinkTile extends StatelessWidget {
                                   maxLines: 10,
                                   overflow: TextOverflow.ellipsis,
                                   textStyle: GoogleFonts.poppins(
-                                    color:
-                                        themeController.currentTheme.foreground,
+                                    color: themeController.currentTheme.foreground,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 15,
                                   ),
                                   textStyleHighlight: GoogleFonts.poppins(
-                                    color: themeController
-                                        .currentTheme.contrastText,
-                                    backgroundColor:
-                                        themeController.currentTheme.foreground,
+                                    color: themeController.currentTheme.contrastText,
+                                    backgroundColor: themeController.currentTheme.foreground,
                                   ),
                                 ),
                                 SizedBox(
@@ -450,15 +415,12 @@ class LinkTile extends StatelessWidget {
                                   maxLines: 10,
                                   overflow: TextOverflow.ellipsis,
                                   textStyle: GoogleFonts.poppins(
-                                    color:
-                                        themeController.currentTheme.foreground,
+                                    color: themeController.currentTheme.foreground,
                                     fontSize: 15,
                                   ),
                                   textStyleHighlight: GoogleFonts.poppins(
-                                    color: themeController
-                                        .currentTheme.contrastText,
-                                    backgroundColor:
-                                        themeController.currentTheme.foreground,
+                                    color: themeController.currentTheme.contrastText,
+                                    backgroundColor: themeController.currentTheme.foreground,
                                   ),
                                 ),
                               ],
@@ -518,8 +480,7 @@ class LinkTile extends StatelessWidget {
                   SizedBox(
                     height: 15,
                   ),
-                  if (link.title != null &&
-                      (link.title?.isNotEmpty ?? false)) ...[
+                  if (link.title != null && (link.title?.isNotEmpty ?? false)) ...[
                     SubstringHighlight(
                       text: link.title!,
                       textAlign: TextAlign.center,
@@ -533,8 +494,7 @@ class LinkTile extends StatelessWidget {
                       ),
                       textStyleHighlight: GoogleFonts.poppins(
                         color: themeController.currentTheme.contrastText,
-                        backgroundColor:
-                            themeController.currentTheme.foreground,
+                        backgroundColor: themeController.currentTheme.foreground,
                       ),
                     ),
                     SizedBox(
@@ -542,9 +502,7 @@ class LinkTile extends StatelessWidget {
                     ),
                   ],
                   SubstringHighlight(
-                    text: link.subtitle?.isEmpty ?? true
-                        ? link.url
-                        : link.subtitle!,
+                    text: link.subtitle?.isEmpty ?? true ? link.url : link.subtitle!,
                     term: searchText,
                     textAlign: TextAlign.center,
                     maxLines: 10,
@@ -574,8 +532,7 @@ class LinkTile extends StatelessWidget {
                       ),
                       textStyleHighlight: GoogleFonts.poppins(
                         color: themeController.currentTheme.contrastText,
-                        backgroundColor:
-                            themeController.currentTheme.foreground,
+                        backgroundColor: themeController.currentTheme.foreground,
                       ),
                     ),
                   ]
