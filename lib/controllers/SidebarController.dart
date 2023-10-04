@@ -22,7 +22,7 @@ class SidebarController extends GetxController {
     }
     if (userAvatar.value.length == 0)
       try {
-        final String url = '$avatarApi/${Get.find<UserController>().username}.svg';
+        final String url = '$avatarApi?seed=${Get.find<UserController>().username}';
         final response = await get(Uri.parse(url));
         userAvatar.value = response.bodyBytes;
       } catch (e) {}

@@ -3,7 +3,7 @@ const String invalidEmailError = "Please enter a valid email.";
 const String invalidPasswordError = "Please enter your password.";
 const String passwordTooShortError = "Password must be at least 6 characters long.";
 const String invalidNameError = "Please enter your name.";
-const String avatarApi = "https://avatars.dicebear.com/api/bottts";
+const String avatarApi = "https://api.dicebear.com/7.x/bottts/svg";
 
 const Map<String, String> sortByColumns = {
   'timestamp': 'Date Added',
