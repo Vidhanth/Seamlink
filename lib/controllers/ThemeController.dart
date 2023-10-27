@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
@@ -52,7 +54,7 @@ class ThemeController extends GetxController {
       await setDark();
       mode = Mode.DARK;
     } else if (mode == Mode.DARK) {
-      if (WidgetsBinding.instance.window.platformBrightness == Brightness.dark) {
+      if (PlatformDispatcher.instance.platformBrightness == Brightness.dark) {
         if (!isDark) await setDark();
       } else {
         if (isDark) await setLight();
@@ -94,7 +96,7 @@ class ThemeController extends GetxController {
   }
 
   static ThemeColors _getAutoTheme() {
-    if (WidgetsBinding.instance.window.platformBrightness == Brightness.dark) return darkTheme;
+    if (PlatformDispatcher.instance.platformBrightness == Brightness.dark) return darkTheme;
     return lightTheme;
   }
 }

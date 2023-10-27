@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -264,7 +265,7 @@ class _MainActivityState extends State<MainActivity> with WidgetsBindingObserver
 
   void setAutoTheme() {
     if (ThemeController.isAuto) {
-      if (WidgetsBinding.instance.window.platformBrightness == Brightness.dark) {
+      if (PlatformDispatcher.instance.platformBrightness == Brightness.dark) {
         if (!ThemeController.isDark) Get.find<ThemeController>().setDark();
       } else {
         if (ThemeController.isDark) Get.find<ThemeController>().setLight();
