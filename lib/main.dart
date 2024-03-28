@@ -160,6 +160,7 @@ class _MainActivityState extends State<MainActivity> with WidgetsBindingObserver
           return GetMaterialApp(
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
+              useMaterial3: false,
               canvasColor: themeController.currentTheme.backgroundColor,
               colorScheme: Theme.of(context).colorScheme.copyWith(
                     background: themeController.currentTheme.backgroundColor,
