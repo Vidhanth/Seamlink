@@ -59,15 +59,13 @@ class Home extends StatelessWidget {
                           children: [
                             Column(
                               children: [
-                                if (!isMacOS) ...[
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                    child: SearchBar(),
-                                  ),
-                                ],
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                  child: SearchBar(),
+                                ),
                                 Obx(
                                   () {
                                     SidebarController sidebarController = Get.find();

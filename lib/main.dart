@@ -8,7 +8,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:seamlink/components/custom_titlebar.dart';
 import 'package:seamlink/components/sidebar.dart';
 import 'package:seamlink/components/wipe.dart';
 import 'package:seamlink/controllers/HomeController.dart';
@@ -43,8 +42,6 @@ void main() async {
         doWhenWindowReady(() {
           appWindow.title = 'Seamlink Desktop';
           final initialSize = Size(0.5 * width, 0.7 * height);
-          appWindow.size = initialSize;
-          appWindow.alignment = Alignment.center;
           appWindow.minSize = initialSize;
           appWindow.show();
         });
@@ -181,12 +178,6 @@ class _MainActivityState extends State<MainActivity> with WidgetsBindingObserver
                     Expanded(
                       child: Column(
                         children: [
-                          if (isMacOS) ...[
-                            Obx(() => CustomTitleBar(
-                                  macStyle: Get.find<UserController>().username.isNotEmpty,
-                                  title: Get.find<UserController>().username.value,
-                                ))
-                          ],
                           Expanded(
                             child: FutureBuilder(
                               future: getInitialSharedText(),

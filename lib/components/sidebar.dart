@@ -1,4 +1,3 @@
-import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -43,12 +42,6 @@ class Sidebar extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (isMacOS)
-                Container(
-                  height: 30,
-                  width: isDesktop ? (size.width * 0.2).clamp(200, 400) : (size.width * 0.75),
-                  child: MoveWindow(),
-                ),
               Padding(
                 padding: const EdgeInsets.only(
                   top: 12,

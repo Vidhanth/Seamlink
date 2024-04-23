@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:seamlink/components/avatar.dart';
 import 'package:seamlink/components/color_picker.dart';
-import 'package:seamlink/components/custom_titlebar.dart';
 import 'package:seamlink/components/label_picker.dart';
 import 'package:seamlink/controllers/HomeController.dart';
 import 'package:seamlink/controllers/NewLinkController.dart';
@@ -73,12 +72,6 @@ class _NewLinkState extends State<NewLink> {
       },
       child: Column(
         children: [
-          if (isMacOS) ...[
-            CustomTitleBar(
-              macStyle: false,
-              title: '',
-            ),
-          ],
           Expanded(
             child: Scaffold(
               body: SafeArea(
